@@ -15,6 +15,9 @@
     "client": [
       "world.anhgelus.molehunt.client.MolehuntClient"
     ],
+    "server": [
+
+    ],
     "main": [
       "world.anhgelus.molehunt.Molehunt"
     ]

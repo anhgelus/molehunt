@@ -3,7 +3,9 @@
   "minVersion": "0.8",
   "package": "world.anhgelus.molehunt.mixin",
   "compatibilityLevel": "JAVA_21",
-  "mixins": [],
+  "mixins": [
+    "NoPlayerList"
+  ],
   "injectors": {
     "defaultRequire": 1
   }
