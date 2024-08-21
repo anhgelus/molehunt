@@ -1,5 +1,6 @@
 package world.anhgelus.molehunt;
 
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.network.packet.s2c.play.OverlayMessageS2CPacket;
 import net.minecraft.network.packet.s2c.play.SubtitleS2CPacket;
 import net.minecraft.network.packet.s2c.play.TitleFadeS2CPacket;
@@ -39,8 +40,14 @@ public class Game {
             players.remove(r);
         }
 
-        server.getGameRules().get(GameRules.SHOW_DEATH_MESSAGES).set(false, server);
-        server.getGameRules().get(GameRules.ANNOUNCE_ADVANCEMENTS).set(false, server);
+        final var gamerules = server.getGameRules();
+        // immutable gamerules
+        gamerules.get(GameRules.SHOW_DEATH_MESSAGES).set(false, server);
+        gamerules.get(GameRules.ANNOUNCE_ADVANCEMENTS).set(false, server);
+        // gamerules for the start
+        gamerules.get(GameRules.DO_IMMEDIATE_RESPAWN).set(true, server);
+        gamerules.get(GameRules.DO_ENTITY_DROPS).set(false, server);
+        playerManager.getPlayerList().forEach(LivingEntity::kill);
 
         final var title = new TitleS2CPacket(Text.of("You are..."));
         final var timing = new TitleFadeS2CPacket(20, 40, 20);
@@ -59,8 +66,18 @@ public class Game {
                     } else {
                         p.networkHandler.sendPacket(new TitleS2CPacket(Text.of("Not the Mole!")));
                     }
+                    // reset health and food level
+                    p.setHealth(p.getMaxHealth());
+                    p.getHungerManager().setFoodLevel(20);
+                    p.getHungerManager().setSaturationLevel(5.0f);
                 });
+                // reset gamerules after the start
+                gamerules.get(GameRules.DO_IMMEDIATE_RESPAWN).set(false, server);
+                gamerules.get(GameRules.DO_ENTITY_DROPS).set(true, server);
+                // reset time and weather
                 server.getOverworld().setTimeOfDay(0);
+                server.getOverworld().resetWeather();
+
                 timer.scheduleAtFixedRate(new TimerTask() {
                     @Override
                     public void run() {
