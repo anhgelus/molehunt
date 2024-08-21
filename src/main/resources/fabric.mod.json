@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "molehunt",
+  "version": "${version}",
+  "name": "Molehunt",
+  "description": "Molehunt mod",
+  "authors": [
+    "Anhgelus Morhtuuzh"
+  ],
+  "contact": {},
+  "license": "AGPL-3.0",
+  "icon": "assets/molehunt/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "world.anhgelus.molehunt.client.MolehuntClient"
+    ],
+    "main": [
+      "world.anhgelus.molehunt.Molehunt"
+    ]
+  },
+  "mixins": [
+    "molehunt.mixins.json",
+    {
+      "config": "molehunt.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
