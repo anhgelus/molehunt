@@ -6,6 +6,7 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
+import net.minecraft.network.message.MessageType;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import org.slf4j.Logger;
@@ -55,7 +56,7 @@ public class Molehunt implements ModInitializer {
 
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher.register(command));
 
-//        ServerMessageEvents.ALLOW_CHAT_MESSAGE.register((message, sender, params) -> false);
+        ServerMessageEvents.ALLOW_CHAT_MESSAGE.register((message, sender, params) -> false);
 
         ServerLivingEntityEvents.AFTER_DEATH.register((entity, damageSource) -> {
             if (!(entity instanceof ServerPlayerEntity)) return;
