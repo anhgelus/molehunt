@@ -6,7 +6,7 @@ Molehunt is a Minecraft mod creating the game with the same name in this cubic g
 
 Install the mod on the server and on all clients.
 
-Install Simple Voice Chat.
+Install [Simple Voice Chat](http://modrinth.com/mod/simple-voice-chat).
 
 Start the game with `/molehunt start` and enjoy!
 
@@ -26,6 +26,6 @@ The moles can see the name of other moles with `/molehunt moles`.
 
 ## Technologies
 
-- Java 1.21
+- Java 21
 - Fabric + Fabric API
 - Minecraft with Yarn Mappings
