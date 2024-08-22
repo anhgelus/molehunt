@@ -7,6 +7,7 @@ import net.minecraft.network.packet.s2c.play.TitleS2CPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.text.TextContent;
 import net.minecraft.world.GameMode;
 import net.minecraft.world.GameRules;
 import world.anhgelus.molehunt.utils.TimeUtils;
@@ -34,9 +35,10 @@ public class Game {
     }
 
     public void start() {
+        if (started) return;
         final int n = (server.getCurrentPlayerCount() - server.getCurrentPlayerCount() % 4)/4;
         final var playerManager = server.getPlayerManager();
-        final var players = playerManager.getPlayerList();
+        final var players = new ArrayList<>(playerManager.getPlayerList());
         for (int i = 0; i < n; i++) {
             final var r = ThreadLocalRandom.current().nextInt(0, players.size());
             final var mole = players.get(r);
@@ -53,7 +55,7 @@ public class Game {
         gamerules.get(GameRules.DO_IMMEDIATE_RESPAWN).set(true, server);
         gamerules.get(GameRules.DO_ENTITY_DROPS).set(false, server);
 
-        final var title = new TitleS2CPacket(Text.of("You are..."));
+        final var title = new TitleS2CPacket(Text.of("§eYou are..."));
         playerManager.getPlayerList().forEach(p -> {
             p.kill();
             p.networkHandler.sendPacket(timing);
@@ -69,10 +71,10 @@ public class Game {
                 playerManager.getPlayerList().forEach(p -> {
                     p.networkHandler.sendPacket(timing);
                     if (moles.contains(p)) {
-                        p.networkHandler.sendPacket(new TitleS2CPacket(Text.of("The Mole!")));
-                        p.networkHandler.sendPacket(new SubtitleS2CPacket(Text.of("Get the list of moles with /molehunt moles")));
+                        p.networkHandler.sendPacket(new TitleS2CPacket(Text.of("§cThe Mole!")));
+                        p.networkHandler.sendPacket(new SubtitleS2CPacket(Text.of("§6get the list of moles with /molehunt moles")));
                     } else {
-                        p.networkHandler.sendPacket(new TitleS2CPacket(Text.of("Not the Mole!")));
+                        p.networkHandler.sendPacket(new TitleS2CPacket(Text.of("§aNot the Mole!")));
                     }
                     // reset health and food level
                     p.setHealth(p.getMaxHealth());
@@ -119,7 +121,7 @@ public class Game {
         timer = new Timer();
         started = false;
         final var pm = server.getPlayerManager();
-        final var winnerSuspense = new TitleS2CPacket(Text.of("And the winners are..."));
+        final var winnerSuspense = new TitleS2CPacket(Text.of("§eAnd the winners are..."));
         pm.getPlayerList().forEach(p -> {
             p.networkHandler.sendPacket(timing);
             p.networkHandler.sendPacket(winnerSuspense);
@@ -130,11 +132,11 @@ public class Game {
             public void run() {
                 TitleS2CPacket winner;
                 if (gameWonByMoles()) {
-                    winner = new TitleS2CPacket(Text.of("The Moles!"));
+                    winner = new TitleS2CPacket(Text.of("§cThe Moles!"));
                 } else {
-                    winner = new TitleS2CPacket(Text.of("The survivors!"));
+                    winner = new TitleS2CPacket(Text.of("§aNot the Mole!"));
                 }
-                pm.sendToAll(new SubtitleS2CPacket(Text.of("The moles were " + getMolesAsString())));
+                pm.sendToAll(new SubtitleS2CPacket(Text.of("§6Moles were " + getMolesAsString())));
                 pm.sendToAll(winner);
                 pm.sendToAll(timing);
             }
@@ -158,7 +160,11 @@ public class Game {
     }
 
     public String getMolesAsString() {
-        return moles.stream().map(ServerPlayerEntity::getDisplayName).filter(Objects::nonNull).map(Text::toString).collect(Collectors.joining(", "));
+        return moles.stream()
+                .map(ServerPlayerEntity::getDisplayName)
+                .filter(Objects::nonNull)
+                .map(Text::getString)
+                .collect(Collectors.joining(", "));
     }
 
     public boolean isAMole(ServerPlayerEntity player) {

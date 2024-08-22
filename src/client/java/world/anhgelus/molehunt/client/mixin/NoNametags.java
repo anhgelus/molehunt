@@ -11,11 +11,10 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(EntityRenderer.class)
-public abstract class NoNametags<T extends Entity> {
+public class NoNametags<T extends Entity> {
     @Inject(at = @At("HEAD"), method = "render", cancellable = true)
     private void renderLabelOrNot(T entity, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
         if (!(entity instanceof PlayerEntity)) return;
-
         ci.cancel();
     }
 }
