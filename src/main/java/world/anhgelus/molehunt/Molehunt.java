@@ -49,7 +49,7 @@ public class Molehunt implements ModInitializer {
                     var player = context.getSource().getPlayer();
                     assert player != null;
 
-                    if (game == null || !game.isStarted()) {
+                    if (game == null || !game.hasStarted()) {
                         player.networkHandler.sendPacket(new OverlayMessageS2CPacket(Text.of("§cGame has not started yet")));
                     } else {
                         player.networkHandler.sendPacket(new OverlayMessageS2CPacket(Text.of(game.getShortRemainingText())));
@@ -64,12 +64,12 @@ public class Molehunt implements ModInitializer {
                     return Command.SINGLE_SUCCESS;
                 })
         ));
-        command.then(literal("moles").requires(source -> (game != null) && game.isStarted() && game.isAMole(source.getPlayer())).executes(context -> {
+        command.then(literal("moles").requires(source -> (game != null) && game.hasStarted() && game.isAMole(source.getPlayer())).executes(context -> {
             context.getSource().sendFeedback(() -> Text.literal("List of moles: " + game.getMolesAsString()),false);
             return Command.SINGLE_SUCCESS;
         }));
         command.then(literal("stop").requires(source -> source.hasPermissionLevel(1)).executes(context -> {
-            if (game == null || !game.isStarted()) {
+            if (game == null || !game.hasStarted()) {
                 context.getSource().sendError(Text.of("Game has not started yet"));
             }
 
@@ -89,7 +89,7 @@ public class Molehunt implements ModInitializer {
 
         ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) -> {
             if (game == null) return;
-            if (!game.isStarted()) return;
+            if (!game.hasStarted()) return;
             if (game.getMoles().contains(oldPlayer)) game.updateMole(oldPlayer, newPlayer);
             newPlayer.changeGameMode(GameMode.SPECTATOR);
         });

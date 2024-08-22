@@ -174,7 +174,7 @@ public class Game {
         moles.add(newPlayer);
     }
 
-    public boolean isStarted() {
+    public boolean hasStarted() {
         return started;
     }
 }
