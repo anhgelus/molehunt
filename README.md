@@ -24,6 +24,8 @@ Stop the game when every innocent is dead or when the timer ended (one hour and 
 
 The moles can see the name of other moles with `/molehunt moles`.
 
+You can configure every text with a resource pack (for reference, check out [the default lang file](src/client/resources/assets/molehunt/lang/en_us.json)).
+
 ## Technologies
 
 - Java 21
