@@ -1,13 +1,11 @@
 package world.anhgelus.molehunt;
 
 import com.mojang.brigadier.Command;
-import com.mojang.brigadier.arguments.StringArgumentType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
-import net.minecraft.network.message.MessageType;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.world.GameMode;
@@ -46,9 +44,7 @@ public class Molehunt implements ModInitializer {
             }
             return game.isAMole(source.getPlayer());
         }).executes(context -> {
-            context.getSource().sendFeedback(() -> Text.literal(
-                    "List of moles: " + game.getMoles().stream().map(ServerPlayerEntity::getDisplayName).filter(Objects::nonNull).map(Text::toString).collect(Collectors.joining(", "))),
-                    false);
+            context.getSource().sendFeedback(() -> Text.literal("List of moles: " + game.getMolesAsString()),false);
             return Command.SINGLE_SUCCESS;
         }));
         command.then(literal("stop").requires(source -> source.hasPermissionLevel(1)).executes(context -> {
@@ -61,12 +57,13 @@ public class Molehunt implements ModInitializer {
         ServerMessageEvents.ALLOW_CHAT_MESSAGE.register((message, sender, params) -> false);
 
         ServerLivingEntityEvents.AFTER_DEATH.register((entity, damageSource) -> {
-            if (!(entity instanceof ServerPlayerEntity)) return;
-            if (game == null) return;
-            if (game.gameFinished()) game.end();
+            if (!(entity instanceof ServerPlayerEntity) || game == null) return;
+            if (game.gameWonByMoles()) game.end();
         });
 
         ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) -> {
+            if (game == null) return;
+            if (!game.isStarted()) return;
             newPlayer.changeGameMode(GameMode.SPECTATOR);
         });
     }

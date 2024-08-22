@@ -14,16 +14,21 @@ import world.anhgelus.molehunt.utils.TimeUtils;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 public class Game {
 
-    final private Timer timer = new Timer();
-    final public static int DEFAULT_TIME = 90*60; // 1:30
+    private Timer timer = new Timer();
+    public final static int DEFAULT_TIME = 90*60; // 1:30
     private int remaining = DEFAULT_TIME;
 
-    final private MinecraftServer server;
+    private final MinecraftServer server;
 
-    final private List<ServerPlayerEntity> moles = new ArrayList<>();
+    private final List<ServerPlayerEntity> moles = new ArrayList<>();
+
+    private final TitleFadeS2CPacket timing = new TitleFadeS2CPacket(20, 40, 20);
+
+    private boolean started = false;
 
     public Game(MinecraftServer server) {
         this.server = server;
@@ -48,11 +53,10 @@ public class Game {
         // gamerules for the start
         gamerules.get(GameRules.DO_IMMEDIATE_RESPAWN).set(true, server);
         gamerules.get(GameRules.DO_ENTITY_DROPS).set(false, server);
-        playerManager.getPlayerList().forEach(LivingEntity::kill);
 
         final var title = new TitleS2CPacket(Text.of("You are..."));
-        final var timing = new TitleFadeS2CPacket(20, 40, 20);
         playerManager.getPlayerList().forEach(p -> {
+            p.kill();
             p.networkHandler.sendPacket(timing);
             p.networkHandler.sendPacket(title);
             p.changeGameMode(GameMode.SURVIVAL);
@@ -83,6 +87,8 @@ public class Game {
                 server.getOverworld().setTimeOfDay(0);
                 server.getOverworld().resetWeather();
 
+                started = true;
+
                 timer.scheduleAtFixedRate(new TimerTask() {
                     @Override
                     public void run() {
@@ -93,7 +99,7 @@ public class Game {
                             end();
                         }
                     }
-                }, 4*1000L, 1000L);
+                }, 4*1000, 1000);
             }
         }, 4*1000);
     }
@@ -105,7 +111,29 @@ public class Game {
 
     public void end() {
         timer.cancel();
-        // affiche les gagnants
+        timer = new Timer();
+        started = false;
+        final var pm = server.getPlayerManager();
+        final var winnerSuspense = new TitleS2CPacket(Text.of("And the winners are..."));
+        pm.getPlayerList().forEach(p -> {
+            p.networkHandler.sendPacket(timing);
+            p.networkHandler.sendPacket(winnerSuspense);
+            p.changeGameMode(GameMode.CREATIVE);
+        });
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                TitleS2CPacket winner;
+                if (gameWonByMoles()) {
+                    winner = new TitleS2CPacket(Text.of("The Moles!"));
+                } else {
+                    winner = new TitleS2CPacket(Text.of("Not the Mole!"));
+                }
+                pm.sendToAll(new SubtitleS2CPacket(Text.of("Moles were " + getMolesAsString())));
+                pm.sendToAll(winner);
+                pm.sendToAll(timing);
+            }
+        }, 4*1000);
     }
 
     public int getRemaining() {
@@ -124,11 +152,19 @@ public class Game {
         return moles;
     }
 
+    public String getMolesAsString() {
+        return moles.stream().map(ServerPlayerEntity::getDisplayName).filter(Objects::nonNull).map(Text::toString).collect(Collectors.joining(", "));
+    }
+
     public boolean isAMole(ServerPlayerEntity player) {
         return moles.contains(player);
     }
 
-    public boolean gameFinished() {
+    public boolean gameWonByMoles() {
         return new HashSet<>(moles).containsAll(server.getPlayerManager().getPlayerList());
+    }
+
+    public boolean isStarted() {
+        return started;
     }
 }
