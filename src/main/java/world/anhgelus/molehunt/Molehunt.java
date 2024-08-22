@@ -64,7 +64,7 @@ public class Molehunt implements ModInitializer {
                     return Command.SINGLE_SUCCESS;
                 })
         ));
-        command.then(literal("moles").requires(source -> (game != null) && game.hasStarted() && game.isAMole(source.getPlayer())).executes(context -> {
+        command.then(literal("moles").requires(source -> (game != null) && game.isAMole(source.getPlayer())).executes(context -> {
             context.getSource().sendFeedback(() -> Text.literal("List of moles: " + game.getMolesAsString()),false);
             return Command.SINGLE_SUCCESS;
         }));
