@@ -7,7 +7,6 @@ import net.minecraft.network.packet.s2c.play.TitleS2CPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-import net.minecraft.text.TextContent;
 import net.minecraft.world.GameMode;
 import net.minecraft.world.GameRules;
 import world.anhgelus.molehunt.utils.TimeUtils;
@@ -95,7 +94,13 @@ public class Game {
                     public void run() {
                         remaining--;
                         playerManager.sendToAll(timing);
-                        playerManager.sendToAll(new OverlayMessageS2CPacket(Text.of(getShortRemainingText())));
+
+                        playerManager.getPlayerList().forEach(player -> {
+                            if (Molehunt.timerVisibility.getOrDefault(player, true)) {
+                                player.networkHandler.sendPacket(new OverlayMessageS2CPacket(Text.of(getShortRemainingText())));
+                            }
+                        });
+
                         if (remaining == 0) {
                             end();
                         }
@@ -130,7 +135,7 @@ public class Game {
                 } else {
                     winner = new TitleS2CPacket(Text.of("§aNot the Mole!"));
                 }
-                pm.sendToAll(new SubtitleS2CPacket(Text.of("§6Moles were " + getMolesAsString())));
+                pm.sendToAll(new SubtitleS2CPacket(Text.of("§6The Moles were " + getMolesAsString())));
                 pm.sendToAll(winner);
                 pm.sendToAll(timing);
             }
@@ -174,7 +179,7 @@ public class Game {
         moles.add(newPlayer);
     }
 
-    public boolean isStarted() {
+    public boolean hasStarted() {
         return started;
     }
 }
