@@ -8,6 +8,7 @@ import net.minecraft.network.packet.s2c.play.TitleS2CPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.world.GameMode;
 import net.minecraft.world.GameRules;
 import world.anhgelus.molehunt.utils.TimeUtils;
 
@@ -54,7 +55,11 @@ public class Game {
         playerManager.getPlayerList().forEach(p -> {
             p.networkHandler.sendPacket(timing);
             p.networkHandler.sendPacket(title);
+            p.changeGameMode(GameMode.SURVIVAL);
         });
+
+        server.setDefaultGameMode(GameMode.SPECTATOR);
+
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
