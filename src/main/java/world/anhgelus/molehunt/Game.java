@@ -1,6 +1,5 @@
 package world.anhgelus.molehunt;
 
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.network.packet.s2c.play.OverlayMessageS2CPacket;
 import net.minecraft.network.packet.s2c.play.SubtitleS2CPacket;
 import net.minecraft.network.packet.s2c.play.TitleFadeS2CPacket;
@@ -71,7 +70,7 @@ public class Game {
                     p.networkHandler.sendPacket(timing);
                     if (moles.contains(p)) {
                         p.networkHandler.sendPacket(new TitleS2CPacket(Text.of("The Mole!")));
-                        p.networkHandler.sendPacket(new SubtitleS2CPacket(Text.of("get the list of moles with /molehunt moles")));
+                        p.networkHandler.sendPacket(new SubtitleS2CPacket(Text.of("Get the list of moles with /molehunt moles")));
                     } else {
                         p.networkHandler.sendPacket(new TitleS2CPacket(Text.of("Not the Mole!")));
                     }
@@ -94,7 +93,13 @@ public class Game {
                     public void run() {
                         remaining--;
                         playerManager.sendToAll(timing);
-                        playerManager.sendToAll(new OverlayMessageS2CPacket(Text.of(getShortRemainingText())));
+
+                        playerManager.getPlayerList().forEach(player -> {
+                            if (Molehunt.timerVisibility.getOrDefault(player, true)) {
+                                player.networkHandler.sendPacket(new OverlayMessageS2CPacket(Text.of(getShortRemainingText())));
+                            }
+                        });
+
                         if (remaining == 0) {
                             end();
                         }
@@ -127,9 +132,9 @@ public class Game {
                 if (gameWonByMoles()) {
                     winner = new TitleS2CPacket(Text.of("The Moles!"));
                 } else {
-                    winner = new TitleS2CPacket(Text.of("Not the Mole!"));
+                    winner = new TitleS2CPacket(Text.of("The survivors!"));
                 }
-                pm.sendToAll(new SubtitleS2CPacket(Text.of("Moles were " + getMolesAsString())));
+                pm.sendToAll(new SubtitleS2CPacket(Text.of("The moles were " + getMolesAsString())));
                 pm.sendToAll(winner);
                 pm.sendToAll(timing);
             }
