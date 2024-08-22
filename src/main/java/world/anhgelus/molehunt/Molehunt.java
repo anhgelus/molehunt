@@ -16,8 +16,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 
-import static com.mojang.brigadier.arguments.BoolArgumentType.bool;
-import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
 
 
