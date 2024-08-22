@@ -1,6 +1,5 @@
 package world.anhgelus.molehunt;
 
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.network.packet.s2c.play.OverlayMessageS2CPacket;
 import net.minecraft.network.packet.s2c.play.SubtitleS2CPacket;
 import net.minecraft.network.packet.s2c.play.TitleFadeS2CPacket;
@@ -37,9 +36,8 @@ public class Game {
     public void start() {
         if (started) return;
         final int n = (server.getCurrentPlayerCount() - server.getCurrentPlayerCount() % 4)/4;
-//        final int n = 0;
         final var playerManager = server.getPlayerManager();
-        final var players = playerManager.getPlayerList();
+        final var players = new ArrayList<>(playerManager.getPlayerList());
         for (int i = 0; i < n; i++) {
             final var r = ThreadLocalRandom.current().nextInt(0, players.size());
             final var mole = players.get(r);
