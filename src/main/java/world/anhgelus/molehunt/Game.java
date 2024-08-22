@@ -53,7 +53,7 @@ public class Game {
         gamerules.get(GameRules.DO_IMMEDIATE_RESPAWN).set(true, server);
         gamerules.get(GameRules.DO_ENTITY_DROPS).set(false, server);
 
-        final var title = new TitleS2CPacket(Text.of("You are..."));
+        final var title = new TitleS2CPacket(Text.translatable("molehunt.game.start.suspense"));
         playerManager.getPlayerList().forEach(p -> {
             p.kill();
             p.networkHandler.sendPacket(timing);
@@ -69,10 +69,10 @@ public class Game {
                 playerManager.getPlayerList().forEach(p -> {
                     p.networkHandler.sendPacket(timing);
                     if (moles.contains(p)) {
-                        p.networkHandler.sendPacket(new TitleS2CPacket(Text.of("The Mole!")));
-                        p.networkHandler.sendPacket(new SubtitleS2CPacket(Text.of("Get the list of moles with /molehunt moles")));
+                        p.networkHandler.sendPacket(new TitleS2CPacket(Text.translatable("molehunt.game.start.mole.title")));
+                        p.networkHandler.sendPacket(new SubtitleS2CPacket(Text.translatable("molehunt.game.start.mole.subtitle")));
                     } else {
-                        p.networkHandler.sendPacket(new TitleS2CPacket(Text.of("Not the Mole!")));
+                        p.networkHandler.sendPacket(new TitleS2CPacket(Text.translatable("molehunt.game.start.survivor")));
                     }
                     // reset health and food level
                     p.setHealth(p.getMaxHealth());
@@ -110,7 +110,7 @@ public class Game {
     }
 
     public void stop() {
-        server.getPlayerManager().broadcast(Text.of("Game stopped"), false);
+        server.getPlayerManager().broadcast(Text.translatable("commands.molehunt.stop.success"), false);
         end();
     }
 
@@ -119,7 +119,7 @@ public class Game {
         timer = new Timer();
         started = false;
         final var pm = server.getPlayerManager();
-        final var winnerSuspense = new TitleS2CPacket(Text.of("And the winners are..."));
+        final var winnerSuspense = new TitleS2CPacket(Text.translatable("molehunt.game.end.suspense.title"));
         pm.getPlayerList().forEach(p -> {
             p.networkHandler.sendPacket(timing);
             p.networkHandler.sendPacket(winnerSuspense);
@@ -130,11 +130,11 @@ public class Game {
             public void run() {
                 TitleS2CPacket winner;
                 if (gameWonByMoles()) {
-                    winner = new TitleS2CPacket(Text.of("The Moles!"));
+                    winner = new TitleS2CPacket(Text.translatable("molehunt.game.end.winners.moles.title"));
                 } else {
-                    winner = new TitleS2CPacket(Text.of("The survivors!"));
+                    winner = new TitleS2CPacket(Text.translatable("molehunt.game.end.winners.survivors.title"));
                 }
-                pm.sendToAll(new SubtitleS2CPacket(Text.of("The moles were " + getMolesAsString())));
+                pm.sendToAll(new SubtitleS2CPacket(Text.translatable("molehunt.game.end.winners.subtitle").append(getMolesAsString())));
                 pm.sendToAll(winner);
                 pm.sendToAll(timing);
             }

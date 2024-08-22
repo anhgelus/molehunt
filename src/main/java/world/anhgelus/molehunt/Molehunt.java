@@ -1,6 +1,7 @@
 package world.anhgelus.molehunt;
 
 import com.mojang.brigadier.Command;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
@@ -9,7 +10,7 @@ import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
 import net.minecraft.network.packet.s2c.play.OverlayMessageS2CPacket;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
+import net.minecraft.text.*;
 import net.minecraft.world.GameMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,13 +45,13 @@ public class Molehunt implements ModInitializer {
         command.then(literal("timer").requires(ServerCommandSource::isExecutedByPlayer).then(
                 literal("show").executes(context -> {
                     timerVisibility.put(context.getSource().getPlayer(), true);
-                    context.getSource().sendFeedback(() -> Text.of("Showing molehunt timer"), false);
+                    context.getSource().sendFeedback(() -> Text.translatable("commands.molehunt.timer.show"), false);
 
                     var player = context.getSource().getPlayer();
                     assert player != null;
 
                     if (game == null || !game.hasStarted()) {
-                        player.networkHandler.sendPacket(new OverlayMessageS2CPacket(Text.of("§cGame has not started yet")));
+                        player.networkHandler.sendPacket(new OverlayMessageS2CPacket(Text.translatable("commands.molehunt.stop.failed").setStyle(Style.EMPTY.withColor(16733525))));
                     } else {
                         player.networkHandler.sendPacket(new OverlayMessageS2CPacket(Text.of(game.getShortRemainingText())));
                     }
@@ -60,18 +61,19 @@ public class Molehunt implements ModInitializer {
         ).then(
                 literal("hide").executes(context -> {
                     timerVisibility.put(context.getSource().getPlayer(), false);
-                    context.getSource().sendFeedback(() -> Text.of("Hiding molehunt timer"), false);
+                    context.getSource().sendFeedback(() -> Text.translatable("commands.molehunt.timer.hide"), false);
                     return Command.SINGLE_SUCCESS;
                 })
         ));
         command.then(literal("moles").requires(source -> (game != null) && game.hasStarted() && game.isAMole(source.getPlayer())).executes(context -> {
-            context.getSource().sendFeedback(() -> Text.literal("List of moles: " + game.getMolesAsString()),false);
+            context.getSource().sendFeedback(() -> Text.translatable("commands.molehunt.moles.list").append(" " + game.getMolesAsString()),false);
             return Command.SINGLE_SUCCESS;
         }));
         command.then(literal("stop").requires(source -> source.hasPermissionLevel(1)).executes(context -> {
             if (game == null || !game.hasStarted()) {
-                context.getSource().sendError(Text.of("Game has not started yet"));
-                return Command.SINGLE_SUCCESS;
+                var e = new SimpleCommandExceptionType(Text.translatable("commands.molehunt.stop.failed"));
+
+                throw e.create();
             }
 
             game.stop();
