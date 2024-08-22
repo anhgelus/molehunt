@@ -71,6 +71,7 @@ public class Molehunt implements ModInitializer {
         command.then(literal("stop").requires(source -> source.hasPermissionLevel(1)).executes(context -> {
             if (game == null || !game.hasStarted()) {
                 context.getSource().sendError(Text.of("Game has not started yet"));
+                return Command.SINGLE_SUCCESS;
             }
 
             game.stop();
