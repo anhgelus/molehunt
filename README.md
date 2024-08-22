@@ -29,3 +29,9 @@ The moles can see the name of other moles with `/molehunt moles`.
 - Java 21
 - Fabric + Fabric API
 - Minecraft with Yarn Mappings
+
+## Credits
+
+Creator of the skin used is unknown.
+
+Thanks @leo-210 for the help!
