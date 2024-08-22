@@ -82,18 +82,13 @@ public class Game {
                     @Override
                     public void run() {
                         remaining--;
+                        playerManager.sendToAll(timing);
                         playerManager.sendToAll(new OverlayMessageS2CPacket(Text.of(getShortRemainingText())));
                         if (remaining == 0) {
                             end();
                         }
                     }
-                }, 1000L, 1000L);
-                timer.scheduleAtFixedRate(new TimerTask() {
-                    @Override
-                    public void run() {
-                        playerManager.broadcast(getRemainingText(), false);
-                    }
-                }, 10*60*1000L, 10*60*1000L);
+                }, 4*1000L, 1000L);
             }
         }, 4*1000);
     }
