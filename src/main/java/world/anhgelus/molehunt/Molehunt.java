@@ -64,6 +64,7 @@ public class Molehunt implements ModInitializer {
         ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) -> {
             if (game == null) return;
             if (!game.isStarted()) return;
+            if (game.getMoles().contains(oldPlayer)) game.updateMole(oldPlayer, newPlayer);
             newPlayer.changeGameMode(GameMode.SPECTATOR);
         });
     }

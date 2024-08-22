@@ -164,6 +164,11 @@ public class Game {
         return new HashSet<>(moles).containsAll(server.getPlayerManager().getPlayerList());
     }
 
+    public void updateMole(ServerPlayerEntity oldPlayer, ServerPlayerEntity newPlayer) {
+        moles.remove(oldPlayer);
+        moles.add(newPlayer);
+    }
+
     public boolean isStarted() {
         return started;
     }
