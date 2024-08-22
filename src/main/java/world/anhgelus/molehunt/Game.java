@@ -54,6 +54,7 @@ public class Game {
         gamerules.get(GameRules.DO_ENTITY_DROPS).set(false, server);
 
         final var title = new TitleS2CPacket(Text.of("§eYou are..."));
+        final var title = new TitleS2CPacket(Text.translatable("molehunt.game.start.suspense"));
         playerManager.getPlayerList().forEach(p -> {
             p.kill();
             p.networkHandler.sendPacket(timing);
