@@ -44,10 +44,7 @@ public class Game {
         final var playerManager = server.getPlayerManager();
 
         final var players = new ArrayList<>(playerManager.getPlayerList());
-        for (int i = 0; i < n; i++) {
-            // Can happen if the mole count is greater than the player count
-            if (players.isEmpty()) break;
-
+        for (int i = 0; i < n && !players.isEmpty(); i++) {
             final var r = ThreadLocalRandom.current().nextInt(0, players.size());
             final var mole = players.get(r);
             if (mole == null) throw new IllegalStateException("Mole is null!");
@@ -160,7 +157,11 @@ public class Game {
     }
 
     public String getMolesAsString() {
-        return moles.stream().map(ServerPlayerEntity::getDisplayName).filter(Objects::nonNull).map(Text::toString).collect(Collectors.joining(", "));
+        return moles.stream()
+                .map(ServerPlayerEntity::getDisplayName)
+                .filter(Objects::nonNull)
+                .map(Text::toString)
+                .collect(Collectors.joining(", "));
     }
 
     public boolean isAMole(ServerPlayerEntity player) {

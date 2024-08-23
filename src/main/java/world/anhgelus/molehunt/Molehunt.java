@@ -34,7 +34,6 @@ public class Molehunt implements ModInitializer {
     @Override
     public void onInitialize() {
         LOGGER.info("Initializing Molehunt");
-        LOGGER.info(String.valueOf(CONFIG.GAME_DURATION));
 
         final var command = literal("molehunt");
         command.then(literal("start").requires(source -> source.hasPermissionLevel(1)).executes(context -> {
@@ -71,9 +70,7 @@ public class Molehunt implements ModInitializer {
         }));
         command.then(literal("stop").requires(source -> source.hasPermissionLevel(1)).executes(context -> {
             if (game == null || !game.hasStarted()) {
-                var e = new SimpleCommandExceptionType(Text.translatable("commands.molehunt.stop.failed"));
-
-                throw e.create();
+                throw (new SimpleCommandExceptionType(Text.translatable("commands.molehunt.stop.failed"))).create();
             }
 
             game.stop();
