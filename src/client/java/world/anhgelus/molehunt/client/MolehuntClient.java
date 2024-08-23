@@ -1,20 +1,37 @@
 package world.anhgelus.molehunt.client;
 
-import com.mojang.authlib.GameProfile;
 import net.fabricmc.api.ClientModInitializer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.UUID;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import world.anhgelus.molehunt.config.ConfigPayload;
 
 public class MolehuntClient implements ClientModInitializer {
 
-    public static final String MOD_ID = "molehunt";
-    public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-
-    public final static GameProfile ANONYMOUS_PROFILE = new GameProfile(UUID.fromString("015f3266-4e0a-412e-9b80-1ca76af79453"), "Molehunt");
+    private static boolean SHOW_SKINS = false;
+    private static boolean SHOW_NAMETAGS = false;
+    private static boolean SHOW_TAB = false;
 
     @Override
     public void onInitializeClient() {
+        ClientPlayNetworking.registerGlobalReceiver(ConfigPayload.ID, (payload, context) -> {
+            try (final var client = context.client()) {
+                client.execute(() -> {
+                    SHOW_SKINS = payload.showSkins();
+                    SHOW_NAMETAGS = payload.showNametag();
+                    SHOW_TAB = payload.showNametag();
+                });
+            }
+        });
+    }
+
+    public static boolean showSkins() {
+        return SHOW_SKINS;
+    }
+
+    public static boolean showNameTags() {
+        return SHOW_NAMETAGS;
+    }
+
+    public static boolean showTab() {
+        return SHOW_TAB;
     }
 }

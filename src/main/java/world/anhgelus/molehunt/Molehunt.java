@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.minecraft.network.packet.s2c.play.OverlayMessageS2CPacket;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -15,6 +16,7 @@ import net.minecraft.world.GameMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import world.anhgelus.molehunt.config.Config;
+import world.anhgelus.molehunt.config.ConfigPayload;
 
 import java.util.HashMap;
 
@@ -93,5 +95,7 @@ public class Molehunt implements ModInitializer {
             if (game.getMoles().contains(oldPlayer)) game.updateMole(oldPlayer, newPlayer);
             newPlayer.changeGameMode(GameMode.SPECTATOR);
         });
+
+        PayloadTypeRegistry.playS2C().register(ConfigPayload.ID, ConfigPayload.CODEC);
     }
 }

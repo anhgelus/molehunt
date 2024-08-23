@@ -7,14 +7,14 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import world.anhgelus.molehunt.client.MolehuntClient;
+import world.anhgelus.molehunt.Molehunt;
 
 @Mixin(AbstractClientPlayerEntity.class)
 public class NoSkin {
     @Inject(at = @At("HEAD"), method = "getSkinTextures", cancellable = true)
     public void getSkin(CallbackInfoReturnable<SkinTextures> cir) {
         cir.setReturnValue(new SkinTextures(
-                Identifier.of(MolehuntClient.MOD_ID, "textures/skin.png"),
+                Identifier.of(Molehunt.MOD_ID, "textures/skin.png"),
                 null,
                 null,
                 null,
