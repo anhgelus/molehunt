@@ -1,7 +1,5 @@
 package world.anhgelus.molehunt.config;
 
-import world.anhgelus.molehunt.Molehunt;
-
 public class Config {
     public final int GAME_DURATION;
     public final double MOLE_PERCENTAGE;
