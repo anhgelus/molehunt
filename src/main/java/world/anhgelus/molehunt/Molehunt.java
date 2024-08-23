@@ -102,7 +102,7 @@ public class Molehunt implements ModInitializer {
 
                     if (game == null || !game.hasStarted()) {
                         player.networkHandler.sendPacket(new OverlayMessageS2CPacket(
-                                Text.translatable("commands.molehunt.stop.failed").setStyle(Style.EMPTY.withColor(16733525))
+                            Text.translatable("commands.molehunt.stop.failed").setStyle(Style.EMPTY.withColor(16733525))
                         ));
                     } else {
                         player.networkHandler.sendPacket(new OverlayMessageS2CPacket(Text.of(game.getShortRemainingText())));
@@ -144,6 +144,7 @@ public class Molehunt implements ModInitializer {
 
         ServerLivingEntityEvents.AFTER_DEATH.register((entity, damageSource) -> {
             if (!(entity instanceof ServerPlayerEntity) || game == null) return;
+            if (!game.hasStarted()) return;
             if (game.gameWonByMoles()) game.end();
         });
 

@@ -89,7 +89,6 @@ public class Game {
                 // reset time and weather
                 server.getOverworld().setTimeOfDay(0);
                 server.getOverworld().resetWeather();
-
                 started = true;
 
                 timer.scheduleAtFixedRate(new TimerTask() {
@@ -137,6 +136,7 @@ public class Game {
                 pm.sendToAll(new SubtitleS2CPacket(Text.translatable("molehunt.game.end.winners.subtitle").append(getMolesAsString())));
                 pm.sendToAll(winner);
                 pm.sendToAll(timing);
+                moles.clear();
             }
         }, 4*1000);
     }
@@ -158,7 +158,7 @@ public class Game {
     }
 
     public boolean isAMole(ServerPlayerEntity player) {
-        return hasStarted() && moles.contains(player);
+        return moles.contains(player);
     }
 
     public boolean gameWonByMoles() {
