@@ -30,7 +30,13 @@ skin file](src/client/resources/assets/molehunt/textures/skin.png)).
 
 Also, more server-side values can be changed in the configuration file, located in your server config directory.
 
-Config hot reloadable with `/molehunt reload`
+You can edit the configuration with these gamerules:
+- `gameDuration`
+- `molePercentage`
+- `moleCount`
+- `showNametags`
+- `showTab`
+- `showSkins`
 
 ## Technologies
 

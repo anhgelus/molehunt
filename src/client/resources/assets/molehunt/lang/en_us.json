@@ -11,5 +11,11 @@
   "molehunt.game.start.suspense": "§eYou are...",
   "molehunt.game.start.mole.title": "§cThe Mole!",
   "molehunt.game.start.mole.subtitle": "§eGet the list of moles with §6/molehunt moles",
-  "molehunt.game.start.survivor": "§aNot the Mole!"
+  "molehunt.game.start.survivor": "§aNot the Mole!",
+  "gamerule.gameDuration": "Duration of a game",
+  "gamerule.molePercentage": "Percentage of mole",
+  "gamerule.moleCount": "Number of mole",
+  "gamerule.showNametags": "Show players' nametag",
+  "gamerule.showTab": "Enable the tab",
+  "gamerule.showSkins": "Show players' skin"
 }

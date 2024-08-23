@@ -6,6 +6,9 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.gamerule.v1.GameRuleFactory;
+import net.fabricmc.fabric.api.gamerule.v1.GameRuleRegistry;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
@@ -15,6 +18,7 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.*;
 import net.minecraft.world.GameMode;
+import net.minecraft.world.GameRules;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import world.anhgelus.molehunt.config.Config;
@@ -29,7 +33,41 @@ public class Molehunt implements ModInitializer {
 
     public static final String MOD_ID = "molehunt";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-    public static Config CONFIG = new Config(MOD_ID);
+    public static Config CONFIG;
+
+    public static final GameRules.Key<GameRules.IntRule> GAME_DURATION = GameRuleRegistry.register(
+            "gameDuration", GameRules.Category.MISC, GameRuleFactory.createIntRule(90)
+    );
+    public static final GameRules.Key<GameRules.IntRule> MOLE_PERCENTAGE = GameRuleRegistry.register(
+            "molePercentage", GameRules.Category.MISC, GameRuleFactory.createIntRule(25)
+    );
+    public static final GameRules.Key<GameRules.IntRule> MOLE_COUNT = GameRuleRegistry.register(
+            "moleCount", GameRules.Category.MISC, GameRuleFactory.createIntRule(-1)
+    );
+    public static final GameRules.Key<GameRules.BooleanRule> SHOW_NAMETAGS = GameRuleRegistry.register(
+            "showNametags",
+            GameRules.Category.MISC,
+            GameRuleFactory.createBooleanRule(false, (server, val) -> {
+                if (CONFIG == null) return;
+                CONFIG.sendConfigPayload();
+            })
+    );
+    public static final GameRules.Key<GameRules.BooleanRule> SHOW_TAB = GameRuleRegistry.register(
+            "showTab"
+            , GameRules.Category.MISC,
+            GameRuleFactory.createBooleanRule(false, (server, val) -> {
+                if (CONFIG == null) return;
+                CONFIG.sendConfigPayload();
+            })
+    );
+    public static final GameRules.Key<GameRules.BooleanRule> SHOW_SKINS = GameRuleRegistry.register(
+            "showSkins",
+            GameRules.Category.MISC,
+            GameRuleFactory.createBooleanRule(false, (server, val) -> {
+                if (CONFIG == null) return;
+                CONFIG.sendConfigPayload();
+            })
+    );
 
     public Game game;
 
@@ -54,7 +92,9 @@ public class Molehunt implements ModInitializer {
                     assert player != null;
 
                     if (game == null || !game.hasStarted()) {
-                        player.networkHandler.sendPacket(new OverlayMessageS2CPacket(Text.translatable("commands.molehunt.stop.failed").setStyle(Style.EMPTY.withColor(16733525))));
+                        player.networkHandler.sendPacket(new OverlayMessageS2CPacket(
+                                Text.translatable("commands.molehunt.stop.failed").setStyle(Style.EMPTY.withColor(16733525))
+                        ));
                     } else {
                         player.networkHandler.sendPacket(new OverlayMessageS2CPacket(Text.of(game.getShortRemainingText())));
                     }
@@ -81,17 +121,8 @@ public class Molehunt implements ModInitializer {
 
             return Command.SINGLE_SUCCESS;
         }));
-        command.then(literal("reload").requires(source -> source.hasPermissionLevel(1)).executes(context -> {
-            if (game != null && game.hasStarted()) {
-                game.end();
-                game = null;
-            }
-            CONFIG = new Config(MOD_ID);
-            context.getSource().getServer().getPlayerManager().getPlayerList().forEach(p -> {
-                ServerPlayNetworking.send(p, new ConfigPayload(CONFIG.showNametags, CONFIG.showSkins, CONFIG.showTab));
-            });
-            return Command.SINGLE_SUCCESS;
-        }));
+
+        ServerLifecycleEvents.SERVER_STARTED.register(server -> CONFIG = new Config(MOD_ID, server));
 
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher.register(command));
 
@@ -110,7 +141,10 @@ public class Molehunt implements ModInitializer {
         });
 
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
-            ServerPlayNetworking.send(handler.player, new ConfigPayload(CONFIG.showNametags, CONFIG.showSkins, CONFIG.showTab));
+            ServerPlayNetworking.send(
+                    handler.player,
+                    new ConfigPayload(CONFIG.areNametagsEnabled(), CONFIG.areSkinsEnabled(), CONFIG.isTabEnabled())
+            );
         });
 
         PayloadTypeRegistry.playS2C().register(ConfigPayload.ID, ConfigPayload.CODEC);
