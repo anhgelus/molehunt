@@ -13,13 +13,11 @@ public class MolehuntClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ClientPlayNetworking.registerGlobalReceiver(ConfigPayload.ID, (payload, context) -> {
-            try (final var client = context.client()) {
-                client.execute(() -> {
-                    SHOW_SKINS = payload.showSkins();
-                    SHOW_NAMETAGS = payload.showNametags();
-                    SHOW_TAB = payload.showTab();
-                });
-            }
+            context.client().execute(() -> {
+                SHOW_SKINS = payload.showSkins();
+                SHOW_NAMETAGS = payload.showNametags();
+                SHOW_TAB = payload.showTab();
+            });
         });
     }
 
