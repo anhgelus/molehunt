@@ -158,7 +158,7 @@ public class Game {
     }
 
     public boolean isAMole(ServerPlayerEntity player) {
-        return moles.contains(player);
+        return hasStarted() && moles.contains(player);
     }
 
     public boolean gameWonByMoles() {
