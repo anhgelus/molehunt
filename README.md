@@ -35,12 +35,12 @@ These settings will be applied by default to every new world.
 If you want to customize only one world, use the gamerules.
 
 Every setting can be modified in game with these gamerules:
-- `gameDuration`
-- `molePercentage`
-- `moleCount`
-- `showNametags`
-- `showTab`
-- `showSkins`
+- `molehunt:gameDuration`
+- `molehunt:molePercentage`
+- `molehunt:moleCount`
+- `molehunt:showNametags`
+- `molehunt:showTab`
+- `molehunt:showSkins`
 
 ## Technologies
 
