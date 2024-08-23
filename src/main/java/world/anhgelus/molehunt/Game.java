@@ -43,7 +43,7 @@ public class Game {
 
         final var playerManager = server.getPlayerManager();
 
-        final var players = playerManager.getPlayerList();
+        final var players = new ArrayList<>(playerManager.getPlayerList());
         for (int i = 0; i < n; i++) {
             // Can happen if the mole count is greater than the player count
             if (players.isEmpty()) break;
