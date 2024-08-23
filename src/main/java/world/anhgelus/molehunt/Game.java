@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class Game {
 
     private Timer timer = new Timer();
-    public final int defaultTime = Molehunt.CONFIG.getGameDuration();
+    public final int defaultTime = Molehunt.CONFIG.getGameDuration()*60;
     private int remaining = defaultTime;
 
     private final MinecraftServer server;
@@ -153,7 +153,7 @@ public class Game {
         return moles.stream()
                 .map(ServerPlayerEntity::getDisplayName)
                 .filter(Objects::nonNull)
-                .map(Text::toString)
+                .map(Text::getString)
                 .collect(Collectors.joining(", "));
     }
 
