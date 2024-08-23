@@ -96,19 +96,15 @@ public class Game {
                     @Override
                     public void run() {
                         remaining--;
-                        playerManager.sendToAll(timing);
-
                         playerManager.getPlayerList().forEach(player -> {
                             if (Molehunt.timerVisibility.getOrDefault(player, true)) {
                                 player.networkHandler.sendPacket(new OverlayMessageS2CPacket(Text.of(getShortRemainingText())));
                             }
                         });
-
-                        if (remaining == 0) {
-                            end();
-                        }
+                        playerManager.sendToAll(timing);
+                        if (remaining == 0) end();
                     }
-                }, 4*1000, 1000);
+                }, 5*1000, 1000);
             }
         }, 4*1000);
     }
