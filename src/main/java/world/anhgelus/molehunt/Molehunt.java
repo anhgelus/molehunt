@@ -14,6 +14,7 @@ import net.minecraft.text.*;
 import net.minecraft.world.GameMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import world.anhgelus.molehunt.config.Config;
 
 import java.util.HashMap;
 
@@ -24,6 +25,8 @@ public class Molehunt implements ModInitializer {
 
     public static final String MOD_ID = "molehunt";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+    public static final Config CONFIG = new Config(MOD_ID);
+
     public Game game;
 
     public static HashMap<ServerPlayerEntity, Boolean> timerVisibility = new HashMap<>();
@@ -31,6 +34,7 @@ public class Molehunt implements ModInitializer {
     @Override
     public void onInitialize() {
         LOGGER.info("Initializing Molehunt");
+        LOGGER.info(String.valueOf(CONFIG.GAME_DURATION));
 
         final var command = literal("molehunt");
         command.then(literal("start").requires(source -> source.hasPermissionLevel(1)).executes(context -> {
