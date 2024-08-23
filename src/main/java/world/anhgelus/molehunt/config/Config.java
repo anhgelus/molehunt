@@ -27,10 +27,11 @@ public class Config {
                 # Default : 25 %.
                 mole_percentage = 25
                 
-                # Mole count (absolute)
-                # If set, this setting will overwrite the mole_percentage setting.
-                # Default : not set
-                #mole_count = 2
+                # Mole count (absolute).
+                # This setting will overwrite the mole_percentage setting.
+                # If set below 0, this setting is disabled.
+                # Default : -1.
+                mole_count = -1
                 """;
     }
 }
