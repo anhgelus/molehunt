@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class Game {
 
     private Timer timer = new Timer();
-    public final static int DEFAULT_TIME = Molehunt.CONFIG.GAME_DURATION;
+    public final static int DEFAULT_TIME = Molehunt.CONFIG.gameDuration;
     private int remaining = DEFAULT_TIME;
 
     private final MinecraftServer server;
@@ -35,10 +35,10 @@ public class Game {
 
     public void start() {
         final int n;
-        if (Molehunt.CONFIG.MOLE_COUNT < 0) {
-            n = Math.floorDiv(server.getCurrentPlayerCount(), Math.floorDiv(100, (int) Molehunt.CONFIG.MOLE_PERCENTAGE));
+        if (Molehunt.CONFIG.moleCount < 0) {
+            n = Math.floorDiv(server.getCurrentPlayerCount(), Math.floorDiv(100, (int) Molehunt.CONFIG.molePercentage));
         } else {
-            n = Molehunt.CONFIG.MOLE_COUNT;
+            n = Molehunt.CONFIG.moleCount;
         }
 
         final var playerManager = server.getPlayerManager();

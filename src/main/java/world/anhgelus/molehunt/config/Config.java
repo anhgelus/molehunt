@@ -1,17 +1,17 @@
 package world.anhgelus.molehunt.config;
 
 public class Config {
-    public final int GAME_DURATION;
-    public final double MOLE_PERCENTAGE;
-    public final int MOLE_COUNT;
+    public final int gameDuration;
+    public final double molePercentage;
+    public final int moleCount;
 
     public Config(String fileName) {
         final SimpleConfig CONFIG = SimpleConfig.of(fileName).provider(Config::defaultConfig).request();
 
         // In seconds
-        GAME_DURATION = CONFIG.getOrDefault("game_duration", 90) * 60;
-        MOLE_PERCENTAGE = CONFIG.getOrDefault("mole_percentage", 25);
-        MOLE_COUNT = CONFIG.getOrDefault("mole_count", -1);
+        gameDuration = CONFIG.getOrDefault("game_duration", 90) * 60;
+        molePercentage = CONFIG.getOrDefault("mole_percentage", 25);
+        moleCount = CONFIG.getOrDefault("mole_count", -1);
     }
 
     private static String defaultConfig(String s) {
