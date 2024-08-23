@@ -8,29 +8,10 @@ public class Config {
 
     private final MinecraftServer server;
 
-    public Config(String fileName, MinecraftServer server) {
-        final SimpleConfig CONFIG = SimpleConfig.of(fileName).provider(Config::defaultConfig).request();
-
+    public Config(MinecraftServer server) {
         this.server = server;
 
-        final var rules = server.getGameRules();
-
-        // In seconds
-        final var gameDuration = CONFIG.getOrDefault("game_duration", 90) * 60;
-        rules.get(Molehunt.GAME_DURATION).set(gameDuration/60, server);
-        final var molePercentage = CONFIG.getOrDefault("mole_percentage", 25);
-        rules.get(Molehunt.MOLE_PERCENTAGE).set(molePercentage, server);
-        final var moleCount = CONFIG.getOrDefault("mole_count", -1);
-        rules.get(Molehunt.MOLE_COUNT).set(moleCount, server);
-        // bool
-        final var showNametags = CONFIG.getOrDefault("show_nametags", false);
-        rules.get(Molehunt.SHOW_NAMETAGS).set(showNametags, server);
-        final var showSkins = CONFIG.getOrDefault("show_skins", false);
-        rules.get(Molehunt.SHOW_SKINS).set(showSkins, server);
-        final var showTab = CONFIG.getOrDefault("show_tab", false);
-        rules.get(Molehunt.SHOW_TAB).set(showTab, server);
-
-        sendConfigPayload(showNametags, showSkins, showTab);
+        sendConfigPayload(areNametagsEnabled(), areSkinsEnabled(), isTabEnabled());
     }
 
     public void sendConfigPayload() {
@@ -67,6 +48,10 @@ public class Config {
 
     public boolean isTabEnabled() {
         return server.getGameRules().getBoolean(Molehunt.SHOW_TAB);
+    }
+
+    public static SimpleConfig configFile(String fileName) {
+        return SimpleConfig.of(fileName).provider(Config::defaultConfig).request();
     }
 
     private static String defaultConfig(String s) {

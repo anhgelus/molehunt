@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import world.anhgelus.molehunt.config.Config;
 import world.anhgelus.molehunt.config.ConfigPayload;
+import world.anhgelus.molehunt.config.SimpleConfig;
 
 import java.util.HashMap;
 
@@ -35,19 +36,27 @@ public class Molehunt implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     public static Config CONFIG;
 
+    public static final SimpleConfig CONFIG_FILE = Config.configFile(MOD_ID);
+
     public static final GameRules.Key<GameRules.IntRule> GAME_DURATION = GameRuleRegistry.register(
-            "gameDuration", GameRules.Category.MISC, GameRuleFactory.createIntRule(90)
+            "gameDuration",
+            GameRules.Category.MISC,
+            GameRuleFactory.createIntRule(CONFIG_FILE.getOrDefault("game_duration", 90))
     );
     public static final GameRules.Key<GameRules.IntRule> MOLE_PERCENTAGE = GameRuleRegistry.register(
-            "molePercentage", GameRules.Category.MISC, GameRuleFactory.createIntRule(25)
+            "molePercentage",
+            GameRules.Category.MISC,
+            GameRuleFactory.createIntRule(CONFIG_FILE.getOrDefault("mole_percentage", 25))
     );
     public static final GameRules.Key<GameRules.IntRule> MOLE_COUNT = GameRuleRegistry.register(
-            "moleCount", GameRules.Category.MISC, GameRuleFactory.createIntRule(-1)
+            "moleCount",
+            GameRules.Category.MISC,
+            GameRuleFactory.createIntRule(CONFIG_FILE.getOrDefault("mole_count", -1))
     );
     public static final GameRules.Key<GameRules.BooleanRule> SHOW_NAMETAGS = GameRuleRegistry.register(
             "showNametags",
             GameRules.Category.MISC,
-            GameRuleFactory.createBooleanRule(false, (server, val) -> {
+            GameRuleFactory.createBooleanRule(CONFIG_FILE.getOrDefault("show_nametags", false), (server, val) -> {
                 if (CONFIG == null) return;
                 CONFIG.sendConfigPayload();
             })
@@ -55,7 +64,7 @@ public class Molehunt implements ModInitializer {
     public static final GameRules.Key<GameRules.BooleanRule> SHOW_TAB = GameRuleRegistry.register(
             "showTab"
             , GameRules.Category.MISC,
-            GameRuleFactory.createBooleanRule(false, (server, val) -> {
+            GameRuleFactory.createBooleanRule(CONFIG_FILE.getOrDefault("show_tab", false), (server, val) -> {
                 if (CONFIG == null) return;
                 CONFIG.sendConfigPayload();
             })
@@ -63,7 +72,7 @@ public class Molehunt implements ModInitializer {
     public static final GameRules.Key<GameRules.BooleanRule> SHOW_SKINS = GameRuleRegistry.register(
             "showSkins",
             GameRules.Category.MISC,
-            GameRuleFactory.createBooleanRule(false, (server, val) -> {
+            GameRuleFactory.createBooleanRule(CONFIG_FILE.getOrDefault("show_skins", false), (server, val) -> {
                 if (CONFIG == null) return;
                 CONFIG.sendConfigPayload();
             })
@@ -127,7 +136,7 @@ public class Molehunt implements ModInitializer {
             return Command.SINGLE_SUCCESS;
         }));
 
-        ServerLifecycleEvents.SERVER_STARTED.register(server -> CONFIG = new Config(MOD_ID, server));
+        ServerLifecycleEvents.SERVER_STARTED.register(server -> CONFIG = new Config(server));
 
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher.register(command));
 
@@ -145,12 +154,10 @@ public class Molehunt implements ModInitializer {
             newPlayer.changeGameMode(GameMode.SPECTATOR);
         });
 
-        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
-            ServerPlayNetworking.send(
-                    handler.player,
-                    new ConfigPayload(CONFIG.areNametagsEnabled(), CONFIG.areSkinsEnabled(), CONFIG.isTabEnabled())
-            );
-        });
+        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> ServerPlayNetworking.send(
+                handler.player,
+                new ConfigPayload(CONFIG.areNametagsEnabled(), CONFIG.areSkinsEnabled(), CONFIG.isTabEnabled())
+        ));
 
         PayloadTypeRegistry.playS2C().register(ConfigPayload.ID, ConfigPayload.CODEC);
     }
