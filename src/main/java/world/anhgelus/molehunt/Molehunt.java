@@ -42,10 +42,6 @@ public class Molehunt implements ModInitializer {
             game.start();
             return Command.SINGLE_SUCCESS;
         }));
-//        command.then(literal("time").executes(context -> {
-//            context.getSource().sendFeedback(() -> game.getRemainingText(), false);
-//            return Command.SINGLE_SUCCESS;
-//        }));
         command.then(literal("timer").requires(ServerCommandSource::isExecutedByPlayer).then(
                 literal("show").executes(context -> {
                     timerVisibility.put(context.getSource().getPlayer(), true);

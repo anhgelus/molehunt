@@ -40,7 +40,6 @@ public class Game {
         } else {
             n = Molehunt.CONFIG.MOLE_COUNT;
         }
-//        final int n = (server.getCurrentPlayerCount() - server.getCurrentPlayerCount() % 4)/4;
 
         final var playerManager = server.getPlayerManager();
 
@@ -150,14 +149,6 @@ public class Game {
                 pm.sendToAll(timing);
             }
         }, 4*1000);
-    }
-
-    public int getRemaining() {
-        return remaining;
-    }
-
-    public Text getRemainingText() {
-        return Text.of("Time remaining: "+ TimeUtils.printTime(remaining));
     }
 
     public Text getShortRemainingText() {
