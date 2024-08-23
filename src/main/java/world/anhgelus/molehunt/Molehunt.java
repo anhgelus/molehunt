@@ -39,22 +39,22 @@ public class Molehunt implements ModInitializer {
     public static final SimpleConfig CONFIG_FILE = Config.configFile(MOD_ID);
 
     public static final GameRules.Key<GameRules.IntRule> GAME_DURATION = GameRuleRegistry.register(
-            "gameDuration",
+            MOD_ID +":gameDuration",
             GameRules.Category.MISC,
             GameRuleFactory.createIntRule(CONFIG_FILE.getOrDefault("game_duration", 90))
     );
     public static final GameRules.Key<GameRules.IntRule> MOLE_PERCENTAGE = GameRuleRegistry.register(
-            "molePercentage",
+            MOD_ID +":molePercentage",
             GameRules.Category.MISC,
             GameRuleFactory.createIntRule(CONFIG_FILE.getOrDefault("mole_percentage", 25))
     );
     public static final GameRules.Key<GameRules.IntRule> MOLE_COUNT = GameRuleRegistry.register(
-            "moleCount",
+            MOD_ID +":moleCount",
             GameRules.Category.MISC,
             GameRuleFactory.createIntRule(CONFIG_FILE.getOrDefault("mole_count", -1))
     );
     public static final GameRules.Key<GameRules.BooleanRule> SHOW_NAMETAGS = GameRuleRegistry.register(
-            "showNametags",
+            MOD_ID +":showNametags",
             GameRules.Category.MISC,
             GameRuleFactory.createBooleanRule(CONFIG_FILE.getOrDefault("show_nametags", false), (server, val) -> {
                 if (CONFIG == null) return;
@@ -62,7 +62,7 @@ public class Molehunt implements ModInitializer {
             })
     );
     public static final GameRules.Key<GameRules.BooleanRule> SHOW_TAB = GameRuleRegistry.register(
-            "showTab"
+            MOD_ID +":showTab"
             , GameRules.Category.MISC,
             GameRuleFactory.createBooleanRule(CONFIG_FILE.getOrDefault("show_tab", false), (server, val) -> {
                 if (CONFIG == null) return;
@@ -70,7 +70,7 @@ public class Molehunt implements ModInitializer {
             })
     );
     public static final GameRules.Key<GameRules.BooleanRule> SHOW_SKINS = GameRuleRegistry.register(
-            "showSkins",
+            MOD_ID +":showSkins",
             GameRules.Category.MISC,
             GameRuleFactory.createBooleanRule(CONFIG_FILE.getOrDefault("show_skins", false), (server, val) -> {
                 if (CONFIG == null) return;
