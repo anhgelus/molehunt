@@ -1,0 +1,15 @@
+{
+  "commands.molehunt.stop.failed": "The Molehunt game has not been started yet.",
+  "commands.molehunt.timer.show": "Showing Molehunt timer.",
+  "commands.molehunt.timer.hide": "Hiding Molehunt timer.",
+  "commands.molehunt.moles.list": "List of moles:",
+  "commands.molehunt.stop.success": "The Molehunt game has been stopped.",
+  "molehunt.game.end.suspense.title": "§eAnd the winners are...",
+  "molehunt.game.end.winners.moles.title": "§cThe Moles!",
+  "molehunt.game.end.winners.survivors.title": "§aNot the Moles!",
+  "molehunt.game.end.winners.subtitle": "§6The moles were",
+  "molehunt.game.start.suspense": "§eYou are...",
+  "molehunt.game.start.mole.title": "§cThe Mole!",
+  "molehunt.game.start.mole.subtitle": "§eGet the list of moles with §6/molehunt moles",
+  "molehunt.game.start.survivor": "§aNot the Mole!"
+}
