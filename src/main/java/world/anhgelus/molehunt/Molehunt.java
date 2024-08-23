@@ -29,7 +29,7 @@ public class Molehunt implements ModInitializer {
 
     public static final String MOD_ID = "molehunt";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-    public static final Config CONFIG = new Config(MOD_ID);
+    public static Config CONFIG = new Config(MOD_ID);
 
     public Game game;
 
@@ -79,6 +79,17 @@ public class Molehunt implements ModInitializer {
 
             game.stop();
 
+            return Command.SINGLE_SUCCESS;
+        }));
+        command.then(literal("reload").requires(source -> source.hasPermissionLevel(1)).executes(context -> {
+            if (game != null && game.hasStarted()) {
+                game.end();
+                game = null;
+            }
+            CONFIG = new Config(MOD_ID);
+            context.getSource().getServer().getPlayerManager().getPlayerList().forEach(p -> {
+                ServerPlayNetworking.send(p, new ConfigPayload(CONFIG.showNametags, CONFIG.showSkins, CONFIG.showTab));
+            });
             return Command.SINGLE_SUCCESS;
         }));
 

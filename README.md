@@ -30,6 +30,8 @@ skin file](src/client/resources/assets/molehunt/textures/skin.png)).
 
 Also, more server-side values can be changed in the configuration file, located in your server config directory.
 
+Config hot reloadable with `/molehunt reload`
+
 ## Technologies
 
 - Java 21
