@@ -31,8 +31,10 @@ You can configure every text line and the skin with a resource pack (for referen
 skin file](src/client/resources/assets/molehunt/textures/skin.png)).
 
 Also, more server-side values can be changed in the configuration file, located in your server config directory.
+These settings will be applied by default to every new world.
+If you want to customize only one world, use the gamerules.
 
-The configuration can be modified in game with these gamerules:
+Every setting can be modified in game with these gamerules:
 - `gameDuration`
 - `molePercentage`
 - `moleCount`
