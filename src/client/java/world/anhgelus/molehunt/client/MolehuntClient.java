@@ -16,8 +16,8 @@ public class MolehuntClient implements ClientModInitializer {
             try (final var client = context.client()) {
                 client.execute(() -> {
                     SHOW_SKINS = payload.showSkins();
-                    SHOW_NAMETAGS = payload.showNametag();
-                    SHOW_TAB = payload.showNametag();
+                    SHOW_NAMETAGS = payload.showNametags();
+                    SHOW_TAB = payload.showTab();
                 });
             }
         });
