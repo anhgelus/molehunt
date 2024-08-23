@@ -1,0 +1,21 @@
+{
+  "commands.molehunt.stop.failed": "La partie de Molehunt n'a pas encore commencé.",
+  "commands.molehunt.timer.show": "Affiche le timer.",
+  "commands.molehunt.timer.hide": "Cache le timer.",
+  "commands.molehunt.moles.list": "Liste des taupes:",
+  "commands.molehunt.stop.success": "La partie de Molehunt a été stoppée.",
+  "molehunt.game.end.suspense.title": "§eEt les gagnants sont...",
+  "molehunt.game.end.winners.moles.title": "§cLes Taupes !",
+  "molehunt.game.end.winners.survivors.title": "§aPas les Taupes !",
+  "molehunt.game.end.winners.subtitle": "§Les Taupes sont",
+  "molehunt.game.start.suspense": "§eVous êtes...",
+  "molehunt.game.start.mole.title": "§cLa Taupe !",
+  "molehunt.game.start.mole.subtitle": "§eRécupérer la liste des taupes avec §6/molehunt moles",
+  "molehunt.game.start.survivor": "§aPas la Taupe!",
+  "gamerule.gameDuration": "Durée d'une partie",
+  "gamerule.molePercentage": "Pourcentage de Taupes",
+  "gamerule.moleCount": "Nombre de Taupes",
+  "gamerule.showNametags": "Affiche les nametags des joueurs",
+  "gamerule.showTab": "Active le tab",
+  "gamerule.showSkins": "Affiche les skins des joueurs"
+}
