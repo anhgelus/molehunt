@@ -70,7 +70,7 @@ public class Game {
                             Molehunt.CONFIG.getFinalWorldSize(),
                             (long) (Molehunt.CONFIG.getGameDuration() - Molehunt.CONFIG.getBorderShrinkingStartingTimeOffset()) * 60 * 60);
                 }
-            }, (long) Molehunt.CONFIG.getBorderShrinkingStartingTimeOffset() * 60 * 60);
+            }, (long) Molehunt.CONFIG.getBorderShrinkingStartingTimeOffset() * 60);
         }
 
         final var title = new TitleS2CPacket(Text.translatable("molehunt.game.start.suspense"));
