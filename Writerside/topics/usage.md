@@ -4,12 +4,12 @@
 
 To start a game, execute `/molehunt start` (you must be OP).
 
-The game stops automatically if one of these two condition is met :
+The game ends automatically if one of these two condition is met :
 - Every alive player is a mole.
 - The timer has run out.
 
 The game does not automatically end when every mole is dead to allow for
-funny moments. But if needed, you can stop the game early by using 
+some funny moments. But if needed, you can stop the game early by using 
 `/molehunt stop` (you must be OP).
 
 
