@@ -57,7 +57,10 @@ public class Config {
     private static String defaultConfig(String s) {
         return """
                 # Molehunt mod configuration file
+                # To regenerate the default configuration, delete, move or rename this file.
 
+                # Game settings
+                
                 # The duration of a molehunt game, in minutes.
                 # Default: 90 minutes (1 hour 30 minutes).
                 game_duration = 90
@@ -73,6 +76,9 @@ public class Config {
                 # Default: -1.
                 mole_count = -1
                 
+                
+                # Client-side settings (applies to all players)
+                
                 # Show nametags
                 # Default: false
                 show_nametags = false
@@ -84,6 +90,22 @@ public class Config {
                 # Show tab
                 # Default: false
                 show_tab = false
+                
+                
+                # World border settings :
+                
+                # Initial world size (in blocks).
+                # Default: 200 blocks.
+                initial_world_size = 200
+                
+                # Final world size (in blocks).
+                # Default: 50 blocks.
+                final_world_size = 50
+                
+                # Shrinking starting offset (in minutes)
+                # The time before starting to shrink the world borders.
+                # Default: 10 minutes.
+                border_shrinking_starting_offset = 10
                 """;
     }
 }

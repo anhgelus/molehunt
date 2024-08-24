@@ -39,7 +39,7 @@ public class Molehunt implements ModInitializer {
     public static final SimpleConfig CONFIG_FILE = Config.configFile(MOD_ID);
 
     public static final GameRules.Key<GameRules.IntRule> GAME_DURATION = GameRuleRegistry.register(
-            MOD_ID +":gameDuration",
+            MOD_ID +":gameDurationMinutes",
             GameRules.Category.MISC,
             GameRuleFactory.createIntRule(CONFIG_FILE.getOrDefault("game_duration", 90))
     );
@@ -76,6 +76,21 @@ public class Molehunt implements ModInitializer {
                 if (CONFIG == null) return;
                 CONFIG.sendConfigPayload();
             })
+    );
+    public static final GameRules.Key<GameRules.IntRule> INITIAL_WORLD_SIZE = GameRuleRegistry.register(
+            MOD_ID +":initialWorldSize",
+            GameRules.Category.MISC,
+            GameRuleFactory.createIntRule(CONFIG_FILE.getOrDefault("initial_world_size", 200), 0)
+    );
+    public static final GameRules.Key<GameRules.IntRule> FINAL_WORLD_SIZE = GameRuleRegistry.register(
+            MOD_ID +":finalWorldSize",
+            GameRules.Category.MISC,
+            GameRuleFactory.createIntRule(CONFIG_FILE.getOrDefault("final_world_size", 50), 0)
+    );
+    public static final GameRules.Key<GameRules.IntRule> SHRINKING_STARTING_OFFSET = GameRuleRegistry.register(
+            MOD_ID +":borderShrinkingStartingOffsetMinutes",
+            GameRules.Category.MISC,
+            GameRuleFactory.createIntRule(CONFIG_FILE.getOrDefault("border_shrinking_starting_offset", 10), 0)
     );
 
     public Game game;
