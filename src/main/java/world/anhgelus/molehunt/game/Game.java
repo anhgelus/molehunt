@@ -69,7 +69,7 @@ public class Game {
                     worldBorder.interpolateSize(
                             Molehunt.CONFIG.getInitialWorldSize(),
                             Molehunt.CONFIG.getFinalWorldSize(),
-                            (long) (Molehunt.CONFIG.getGameDuration() - Molehunt.CONFIG.getBorderShrinkingStartingTimeOffset()) * 60);
+                            (long) (Molehunt.CONFIG.getGameDuration() - Molehunt.CONFIG.getBorderShrinkingStartingTimeOffset()) * 60 * 1000);
                 }
             }, (long) Molehunt.CONFIG.getBorderShrinkingStartingTimeOffset() * 60 * 1000);
         }
