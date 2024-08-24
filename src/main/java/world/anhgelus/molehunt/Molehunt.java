@@ -87,10 +87,10 @@ public class Molehunt implements ModInitializer {
             GameRules.Category.MISC,
             GameRuleFactory.createIntRule(CONFIG_FILE.getOrDefault("final_world_size", 50), 0)
     );
-    public static final GameRules.Key<GameRules.IntRule> SHRINKING_STARTING_OFFSET = GameRuleRegistry.register(
-            MOD_ID +":borderShrinkingStartingOffsetMinutes",
+    public static final GameRules.Key<GameRules.IntRule> SHRINKING_STARTING_TIME_OFFSET = GameRuleRegistry.register(
+            MOD_ID +":borderShrinkingStartingTimeOffsetMinutes",
             GameRules.Category.MISC,
-            GameRuleFactory.createIntRule(CONFIG_FILE.getOrDefault("border_shrinking_starting_offset", 10), 0)
+            GameRuleFactory.createIntRule(CONFIG_FILE.getOrDefault("border_shrinking_starting_time_offset", 10), 0)
     );
 
     public Game game;

@@ -16,9 +16,7 @@ public class Config {
 
     public void sendConfigPayload() {
         final var payload = new ConfigPayload(areNametagsEnabled(), areSkinsEnabled(), isTabEnabled());
-        server.getPlayerManager().getPlayerList().forEach(p -> {
-            ServerPlayNetworking.send(p, payload);
-        });
+        server.getPlayerManager().getPlayerList().forEach(p -> ServerPlayNetworking.send(p, payload));
     }
 
     public void sendConfigPayload(boolean showNametags, boolean showSkins, boolean showTab) {
@@ -48,6 +46,18 @@ public class Config {
 
     public boolean isTabEnabled() {
         return server.getGameRules().getBoolean(Molehunt.SHOW_TAB);
+    }
+
+    public int getInitialWorldSize() {
+        return server.getGameRules().getInt(Molehunt.INITIAL_WORLD_SIZE);
+    }
+
+    public int getFinalWorldSize() {
+        return server.getGameRules().getInt(Molehunt.FINAL_WORLD_SIZE);
+    }
+
+    public int getBorderShrinkingStartingTimeOffset() {
+        return server.getGameRules().getInt(Molehunt.SHRINKING_STARTING_TIME_OFFSET);
     }
 
     public static SimpleConfig configFile(String fileName) {
@@ -105,7 +115,7 @@ public class Config {
                 # Shrinking starting offset (in minutes)
                 # The time before starting to shrink the world borders.
                 # Default: 10 minutes.
-                border_shrinking_starting_offset = 10
+                border_shrinking_starting_time_offset = 10
                 """;
     }
 }
