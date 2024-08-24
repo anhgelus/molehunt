@@ -135,8 +135,7 @@ public class Game {
         timer.cancel();
         timer = new Timer();
 
-        borderTimeOffsetTimer.cancel();
-        borderTimeOffsetTimer = new Timer();
+        borderTimeOffsetTask.cancel();
 
         final var worldBorder = server.getOverworld().getWorldBorder();
         // Stops the border shrinking.
