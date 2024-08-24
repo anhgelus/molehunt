@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE instance-profile
+        SYSTEM "https://resources.jetbrains.com/writerside/1.0/product-profile.dtd">
+
+<instance-profile id="md"
+                 name="Molehunt Docs"
+                 start-page="introduction.md">
+
+    <toc-element topic="introduction.md"/>
+    <toc-element topic="configuration.md"/>
+    <toc-element topic="usage.md"/>
+</instance-profile>
