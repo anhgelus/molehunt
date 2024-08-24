@@ -1,5 +1,6 @@
-package world.anhgelus.molehunt;
+package world.anhgelus.molehunt.game;
 
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.packet.s2c.play.OverlayMessageS2CPacket;
 import net.minecraft.network.packet.s2c.play.SubtitleS2CPacket;
 import net.minecraft.network.packet.s2c.play.TitleFadeS2CPacket;
@@ -9,6 +10,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.world.GameMode;
 import net.minecraft.world.GameRules;
+import world.anhgelus.molehunt.Molehunt;
 import world.anhgelus.molehunt.utils.TimeUtils;
 
 import java.util.*;
@@ -104,7 +106,7 @@ public class Game {
                 // reset time and weather
                 server.getOverworld().setTimeOfDay(0);
                 server.getOverworld().resetWeather();
-                started = true;
+                changeState(true);
 
                 timer.scheduleAtFixedRate(new TimerTask() {
                     @Override
@@ -136,7 +138,7 @@ public class Game {
         // Stops the border shrinking.
         worldBorder.setSize(worldBorder.getSize());
 
-        started = false;
+        changeState(false);
         final var pm = server.getPlayerManager();
         final var winnerSuspense = new TitleS2CPacket(Text.translatable("molehunt.game.end.suspense.title"));
         pm.getPlayerList().forEach(p -> {
@@ -194,5 +196,11 @@ public class Game {
 
     public boolean hasStarted() {
         return started;
+    }
+
+    private void changeState(boolean hasStarted) {
+        started = hasStarted;
+        final var payload = new GamePayload(hasStarted);
+        server.getPlayerManager().getPlayerList().forEach(p -> ServerPlayNetworking.send(p, payload));
     }
 }

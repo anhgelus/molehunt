@@ -14,7 +14,7 @@ import world.anhgelus.molehunt.client.MolehuntClient;
 public class NoSkin {
     @Inject(at = @At("HEAD"), method = "getSkinTextures", cancellable = true)
     public void getSkin(CallbackInfoReturnable<SkinTextures> cir) {
-        if (MolehuntClient.showSkins()) return;
+        if (MolehuntClient.showSkins() || !MolehuntClient.gameStarted()) return;
         cir.setReturnValue(new SkinTextures(
             Identifier.of(Molehunt.MOD_ID, "textures/skin.png"),
             null,
