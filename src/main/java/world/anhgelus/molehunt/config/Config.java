@@ -57,7 +57,7 @@ public class Config {
     }
 
     public int getBorderShrinkingStartingTimeOffset() {
-        return server.getGameRules().getInt(Molehunt.SHRINKING_STARTING_TIME_OFFSET);
+        return server.getGameRules().getInt(Molehunt.MOVING_STARTING_TIME_OFFSET);
     }
 
     public static SimpleConfig configFile(String fileName) {
@@ -112,11 +112,11 @@ public class Config {
                 # Default: 50 blocks.
                 final_world_size = 50
                 
-                # Shrinking starting offset (in minutes)
-                # The time before starting to shrink the world borders.
-                # If this value is greater than the game duration, borders will never shrink.
+                # Moving starting time offset (in minutes)
+                # The time before starting to move the world borders.
+                # If this value is greater than the game duration, borders will never move.
                 # Default: 10 minutes.
-                border_shrinking_starting_time_offset = 10
+                border_moving_starting_time_offset = 10
                 """;
     }
 }
