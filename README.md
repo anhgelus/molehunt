@@ -16,33 +16,26 @@ Start the game with `/molehunt start` and enjoy!
 
 Every player has the same skin.
 
-Players' nametag are disabled.
+Players' nametags are disabled.
 
-The tab, the chat and all message commands (`/msg`, `/tell` and `/w`) are disabled.
+The player list, the chat and the message commands (`/msg`, `/tell` and `/w`) are disabled.
 
 Death and advancement messages are disabled.
 
-Stop the game when every innocent is dead or when the timer ended (one hour and half).
+World borders are set when starting and slowly shrink over the entire game.
+
+The mod stops the game when every innocent is dead or when the timer ended.
 
 The moles can see the name of other moles with `/molehunt moles`.
 
+_Almost_ everything in the mod can configured.
+
 ## Configuration
 
-You can configure every text line and the skin with a resource pack (for reference, check out 
-[the default lang file](src/client/resources/assets/molehunt/lang/en_us.json) and [the default
-skin file](src/client/resources/assets/molehunt/textures/skin.png)).
+To change most values, you can play with the gamerules added by the mod with the 
+`/gamerule` command. Every gamerule introduced by the mod starts with `molehunt:`.
 
-Also, more server-side values can be changed in the configuration file, located in your server config directory.
-These settings will be applied by default to every new world.
-If you want to customize only one world, use the gamerules.
-
-Every setting can be modified in game with these gamerules:
-- `molehunt:gameDuration`
-- `molehunt:molePercentage`
-- `molehunt:moleCount`
-- `molehunt:showNametags`
-- `molehunt:showTab`
-- `molehunt:showSkins`
+To dive deeper into the configuration, [an online wiki is available](https://www.anhgelus.world/molehunt/configuration.html).
 
 ## Technologies
 
@@ -52,6 +45,6 @@ Every setting can be modified in game with these gamerules:
 
 ## Credits
 
-Creator of the skin used is unknown.
+Creator of the default skin used is unknown.
 
 Thanks @leo-210 for the help!
