@@ -12,4 +12,3 @@ The mod requires [Fabric-API](https://modrinth.com/mod/fabric-api) to works.
 [Simple Voice Chat](https://modrinth.com/plugin/simple-voice-chat) is highly recommended.
 
 The mod has to be installed on the server *and* on every client.
-
