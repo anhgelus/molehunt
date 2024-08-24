@@ -5,7 +5,7 @@ by this mod starts with the prefix `molehunt:`.
 
 > If plan on making multiple worlds, and don't want to set the gamerules each time,
 > [edit the configuration file](config-file.md) 
-{style=note}
+{style=tip}
 
 Here's a list of all the Molehunt gamerules.
 
