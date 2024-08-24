@@ -8,4 +8,5 @@
 
     <toc-element topic="introduction.md"/>
     <toc-element topic="configuration.md"/>
+    <toc-element topic="usage.md"/>
 </instance-profile>
