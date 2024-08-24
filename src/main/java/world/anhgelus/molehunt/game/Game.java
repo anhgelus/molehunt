@@ -93,7 +93,8 @@ public class Game {
                         p.networkHandler.sendPacket(new TitleS2CPacket(Text.translatable("molehunt.game.start.mole.title")));
                         p.networkHandler.sendPacket(new SubtitleS2CPacket(Text.translatable("molehunt.game.start.mole.subtitle")));
                     } else {
-                        p.networkHandler.sendPacket(new TitleS2CPacket(Text.translatable("molehunt.game.start.survivor")));
+                        p.networkHandler.sendPacket(new TitleS2CPacket(Text.translatable("molehunt.game.start.survivor.title")));
+                        p.networkHandler.sendPacket(new SubtitleS2CPacket(Text.translatable("molehunt.game.start.survivor.subtitle")));
                     }
                     // reset health and food level
                     p.setHealth(p.getMaxHealth());
