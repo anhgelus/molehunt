@@ -114,6 +114,7 @@ public class Config {
                 
                 # Shrinking starting offset (in minutes)
                 # The time before starting to shrink the world borders.
+                # If this value is greater than the game duration, borders will never shrink.
                 # Default: 10 minutes.
                 border_shrinking_starting_time_offset = 10
                 """;

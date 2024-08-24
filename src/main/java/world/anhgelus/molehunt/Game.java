@@ -21,6 +21,8 @@ public class Game {
     public final int defaultTime = Molehunt.CONFIG.getGameDuration()*60;
     private int remaining = defaultTime;
 
+    private Timer borderTimeOffsetTime = new Timer();
+
     private final MinecraftServer server;
 
     private final List<ServerPlayerEntity> moles = new ArrayList<>();
@@ -56,6 +58,20 @@ public class Game {
         // gamerules for the start
         gamerules.get(GameRules.DO_IMMEDIATE_RESPAWN).set(true, server);
         gamerules.get(GameRules.DO_ENTITY_DROPS).set(false, server);
+
+        final var worldBorder = server.getOverworld().getWorldBorder();
+        worldBorder.setSize(Molehunt.CONFIG.getInitialWorldSize());
+        if (Molehunt.CONFIG.getBorderShrinkingStartingTimeOffset() < Molehunt.CONFIG.getGameDuration()) {
+            borderTimeOffsetTime.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    worldBorder.interpolateSize(
+                            Molehunt.CONFIG.getInitialWorldSize(),
+                            Molehunt.CONFIG.getFinalWorldSize(),
+                            (long) (Molehunt.CONFIG.getGameDuration() - Molehunt.CONFIG.getBorderShrinkingStartingTimeOffset()) * 60 * 60);
+                }
+            }, (long) Molehunt.CONFIG.getBorderShrinkingStartingTimeOffset() * 60 * 60);
+        }
 
         final var title = new TitleS2CPacket(Text.translatable("molehunt.game.start.suspense"));
         playerManager.getPlayerList().forEach(p -> {
@@ -116,6 +132,14 @@ public class Game {
     public void end() {
         timer.cancel();
         timer = new Timer();
+
+        borderTimeOffsetTime.cancel();
+        borderTimeOffsetTime = new Timer();
+
+        final var worldBorder = server.getOverworld().getWorldBorder();
+        // Stops the border shrinking.
+        worldBorder.setSize(worldBorder.getSize());
+
         started = false;
         final var pm = server.getPlayerManager();
         final var winnerSuspense = new TitleS2CPacket(Text.translatable("molehunt.game.end.suspense.title"));
