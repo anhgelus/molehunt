@@ -1,13 +1,24 @@
-# Usage
+# Using the mod
 
-To start a game, execute `/molehunt start`.
-You must be OP.
+## Starting and stopping the game
 
-To stop a game, execute `/molehunt stop`.
-You must be OP.
-(They are already an automatic end if there is no more survivors or if the time is over.)
+To start a game, execute `/molehunt start` (you must be OP).
 
-To get the list of moles, use `/molehunt moles`.
-You must be a mole.
+The game stops automatically if one of these two condition is met :
+- Every alive player is a mole.
+- The timer has run out.
 
-To edit the timer above the hotbar, use `/molehunt timer show` to enable and `/molehunt timer hide` to disable.
+The game does not automatically end when every mole is dead to allow for
+funny moments. But if needed, you can stop the game early by using 
+`/molehunt stop` (you must be OP).
+
+
+## Player commands
+
+The mod also provide a few commands for every player.
+
+For moles only, using `/molehunt moles` will give you the list of the moles.
+
+To some people, the timer above you hotbar could be annoying. To hide it,
+use `/molehunt timer hide`. If you want to see it again, use 
+`/molehunt timer show`.
