@@ -21,7 +21,17 @@ public class Game {
     public final int defaultTime = Molehunt.CONFIG.getGameDuration()*60;
     private int remaining = defaultTime;
 
-    private Timer borderTimeOffsetTime = new Timer();
+    private Timer borderTimeOffsetTimer = new Timer();
+    private final TimerTask borderTimeOffsetTask = new TimerTask() {
+        @Override
+        public void run() {
+            final var worldBorder = server.getOverworld().getWorldBorder();
+            worldBorder.interpolateSize(
+                    Molehunt.CONFIG.getInitialWorldSize(),
+                    Molehunt.CONFIG.getFinalWorldSize(),
+                    (long) (Molehunt.CONFIG.getGameDuration() - Molehunt.CONFIG.getBorderShrinkingStartingTimeOffset()) * 60);
+        }
+    };
 
     private final MinecraftServer server;
 
@@ -62,15 +72,7 @@ public class Game {
         final var worldBorder = server.getOverworld().getWorldBorder();
         worldBorder.setSize(Molehunt.CONFIG.getInitialWorldSize());
         if (Molehunt.CONFIG.getBorderShrinkingStartingTimeOffset() < Molehunt.CONFIG.getGameDuration()) {
-            borderTimeOffsetTime.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    worldBorder.interpolateSize(
-                            Molehunt.CONFIG.getInitialWorldSize(),
-                            Molehunt.CONFIG.getFinalWorldSize(),
-                            (long) (Molehunt.CONFIG.getGameDuration() - Molehunt.CONFIG.getBorderShrinkingStartingTimeOffset()) * 60 * 60);
-                }
-            }, (long) Molehunt.CONFIG.getBorderShrinkingStartingTimeOffset() * 60);
+            borderTimeOffsetTimer.schedule(borderTimeOffsetTask, (long) Molehunt.CONFIG.getBorderShrinkingStartingTimeOffset() * 60 * 1000);
         }
 
         final var title = new TitleS2CPacket(Text.translatable("molehunt.game.start.suspense"));
@@ -133,8 +135,8 @@ public class Game {
         timer.cancel();
         timer = new Timer();
 
-        borderTimeOffsetTime.cancel();
-        borderTimeOffsetTime = new Timer();
+        borderTimeOffsetTimer.cancel();
+        borderTimeOffsetTimer = new Timer();
 
         final var worldBorder = server.getOverworld().getWorldBorder();
         // Stops the border shrinking.
