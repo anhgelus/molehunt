@@ -2,7 +2,7 @@
 
 Molehunt is a Minecraft mod creating the game with the same name in this cubic game.
 
-A complete wiki is available [here](https://www.anhgelus.world/molehunt/).
+A complete wiki is available [here](https://www.anhgelus.world/molehunt/introduction.html).
 
 ## Usage
 
