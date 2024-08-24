@@ -11,7 +11,7 @@ import world.anhgelus.molehunt.client.MolehuntClient;
 public class NoPlayerListHud {
     @Inject(at = @At("HEAD"), method = "render", cancellable = true)
     public void render(CallbackInfo ci) {
-        if (MolehuntClient.showTab()) return;
+        if (MolehuntClient.showTab() || !MolehuntClient.gameStarted()) return;
         ci.cancel();
     }
 }

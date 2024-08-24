@@ -24,6 +24,8 @@ import org.slf4j.LoggerFactory;
 import world.anhgelus.molehunt.config.Config;
 import world.anhgelus.molehunt.config.ConfigPayload;
 import world.anhgelus.molehunt.config.SimpleConfig;
+import world.anhgelus.molehunt.game.Game;
+import world.anhgelus.molehunt.game.GamePayload;
 
 import java.util.HashMap;
 
@@ -150,11 +152,18 @@ public class Molehunt implements ModInitializer {
             newPlayer.changeGameMode(GameMode.SPECTATOR);
         });
 
-        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> ServerPlayNetworking.send(
-                handler.player,
-                new ConfigPayload(CONFIG.areNametagsEnabled(), CONFIG.areSkinsEnabled(), CONFIG.isTabEnabled())
-        ));
+        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
+            ServerPlayNetworking.send(
+                    handler.player,
+                    new ConfigPayload(CONFIG.areNametagsEnabled(), CONFIG.areSkinsEnabled(), CONFIG.isTabEnabled())
+            );
+            ServerPlayNetworking.send(
+                    handler.player,
+                    new GamePayload(game != null && game.hasStarted())
+            );
+        });
 
         PayloadTypeRegistry.playS2C().register(ConfigPayload.ID, ConfigPayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(GamePayload.ID, GamePayload.CODEC);
     }
 }
