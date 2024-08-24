@@ -24,6 +24,24 @@ Stop the game when every innocent is dead or when the timer ended (one hour and 
 
 The moles can see the name of other moles with `/molehunt moles`.
 
+## Configuration
+
+You can configure every text line and the skin with a resource pack (for reference, check out 
+[the default lang file](src/client/resources/assets/molehunt/lang/en_us.json) and [the default
+skin file](src/client/resources/assets/molehunt/textures/skin.png)).
+
+Also, more server-side values can be changed in the configuration file, located in your server config directory.
+These settings will be applied by default to every new world.
+If you want to customize only one world, use the gamerules.
+
+Every setting can be modified in game with these gamerules:
+- `molehunt:gameDuration`
+- `molehunt:molePercentage`
+- `molehunt:moleCount`
+- `molehunt:showNametags`
+- `molehunt:showTab`
+- `molehunt:showSkins`
+
 ## Technologies
 
 - Java 21
