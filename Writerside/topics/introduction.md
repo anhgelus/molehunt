@@ -11,4 +11,10 @@ Download the mod for your version.
 The mod requires [Fabric-API](https://modrinth.com/mod/fabric-api) to works.
 [Simple Voice Chat](https://modrinth.com/plugin/simple-voice-chat) is highly recommended.
 
-The mod has to be installed on the server *and* on every client.
+> If you use Simple Voice Chat, make sure to disable private groups, 
+> as they would ruin the immersion.
+{style=tip}
+
+The mod has to be installed on the server *and* on every client. The mod is required 
+to be installed on clients for some client-side features (such as hiding nametags 
+or changing skins).
