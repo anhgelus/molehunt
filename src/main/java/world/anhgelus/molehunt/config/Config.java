@@ -16,9 +16,7 @@ public class Config {
 
     public void sendConfigPayload() {
         final var payload = new ConfigPayload(areNametagsEnabled(), areSkinsEnabled(), isTabEnabled());
-        server.getPlayerManager().getPlayerList().forEach(p -> {
-            ServerPlayNetworking.send(p, payload);
-        });
+        server.getPlayerManager().getPlayerList().forEach(p -> ServerPlayNetworking.send(p, payload));
     }
 
     public void sendConfigPayload(boolean showNametags, boolean showSkins, boolean showTab) {
@@ -50,6 +48,18 @@ public class Config {
         return server.getGameRules().getBoolean(Molehunt.SHOW_TAB);
     }
 
+    public int getInitialWorldSize() {
+        return server.getGameRules().getInt(Molehunt.INITIAL_WORLD_SIZE);
+    }
+
+    public int getFinalWorldSize() {
+        return server.getGameRules().getInt(Molehunt.FINAL_WORLD_SIZE);
+    }
+
+    public int getBorderShrinkingStartingTimeOffset() {
+        return server.getGameRules().getInt(Molehunt.MOVING_STARTING_TIME_OFFSET);
+    }
+
     public static SimpleConfig configFile(String fileName) {
         return SimpleConfig.of(fileName).provider(Config::defaultConfig).request();
     }
@@ -57,7 +67,10 @@ public class Config {
     private static String defaultConfig(String s) {
         return """
                 # Molehunt mod configuration file
+                # To regenerate the default configuration, delete, move or rename this file.
 
+                # Game settings
+                
                 # The duration of a molehunt game, in minutes.
                 # Default: 90 minutes (1 hour 30 minutes).
                 game_duration = 90
@@ -73,6 +86,9 @@ public class Config {
                 # Default: -1.
                 mole_count = -1
                 
+                
+                # Client-side settings (applies to all players)
+                
                 # Show nametags
                 # Default: false
                 show_nametags = false
@@ -84,6 +100,23 @@ public class Config {
                 # Show tab
                 # Default: false
                 show_tab = false
+                
+                
+                # World border settings :
+                
+                # Initial world size (in blocks).
+                # Default: 200 blocks.
+                initial_world_size = 200
+                
+                # Final world size (in blocks).
+                # Default: 50 blocks.
+                final_world_size = 50
+                
+                # Moving starting time offset (in minutes)
+                # The time before starting to move the world borders.
+                # If this value is greater than the game duration, borders will never move.
+                # Default: 10 minutes.
+                border_moving_starting_time_offset = 10
                 """;
     }
 }

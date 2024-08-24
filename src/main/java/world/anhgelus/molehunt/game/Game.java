@@ -59,6 +59,21 @@ public class Game {
         gamerules.get(GameRules.DO_IMMEDIATE_RESPAWN).set(true, server);
         gamerules.get(GameRules.DO_ENTITY_DROPS).set(false, server);
 
+        final var worldBorder = server.getOverworld().getWorldBorder();
+        worldBorder.setSize(Molehunt.CONFIG.getInitialWorldSize());
+        if (Molehunt.CONFIG.getBorderShrinkingStartingTimeOffset() < Molehunt.CONFIG.getGameDuration()) {
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    final var worldBorder = server.getOverworld().getWorldBorder();
+                    worldBorder.interpolateSize(
+                            Molehunt.CONFIG.getInitialWorldSize(),
+                            Molehunt.CONFIG.getFinalWorldSize(),
+                            (long) (Molehunt.CONFIG.getGameDuration() - Molehunt.CONFIG.getBorderShrinkingStartingTimeOffset()) * 60 * 1000);
+                }
+            }, (long) Molehunt.CONFIG.getBorderShrinkingStartingTimeOffset() * 60 * 1000);
+        }
+
         final var title = new TitleS2CPacket(Text.translatable("molehunt.game.start.suspense"));
         playerManager.getPlayerList().forEach(p -> {
             p.kill();
@@ -78,7 +93,8 @@ public class Game {
                         p.networkHandler.sendPacket(new TitleS2CPacket(Text.translatable("molehunt.game.start.mole.title")));
                         p.networkHandler.sendPacket(new SubtitleS2CPacket(Text.translatable("molehunt.game.start.mole.subtitle")));
                     } else {
-                        p.networkHandler.sendPacket(new TitleS2CPacket(Text.translatable("molehunt.game.start.survivor")));
+                        p.networkHandler.sendPacket(new TitleS2CPacket(Text.translatable("molehunt.game.start.survivor.title")));
+                        p.networkHandler.sendPacket(new SubtitleS2CPacket(Text.translatable("molehunt.game.start.survivor.subtitle")));
                     }
                     // reset health and food level
                     p.setHealth(p.getMaxHealth());
@@ -118,6 +134,11 @@ public class Game {
     public void end() {
         timer.cancel();
         timer = new Timer();
+
+        final var worldBorder = server.getOverworld().getWorldBorder();
+        // Stops the border shrinking.
+        worldBorder.setSize(worldBorder.getSize());
+
         changeState(false);
         final var pm = server.getPlayerManager();
         final var winnerSuspense = new TitleS2CPacket(Text.translatable("molehunt.game.end.suspense.title"));
