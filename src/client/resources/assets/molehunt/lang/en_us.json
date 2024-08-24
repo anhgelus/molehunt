@@ -13,10 +13,13 @@
   "molehunt.game.start.mole.title": "§cThe Mole!",
   "molehunt.game.start.mole.subtitle": "§eGet the list of moles with §6/molehunt moles",
   "molehunt.game.start.survivor": "§aNot the Mole!",
-  "gamerule.molehunt:gameDuration": "Duration of a game",
-  "gamerule.molehunt:molePercentage": "Percentage of Mole",
-  "gamerule.molehunt:moleCount": "Number of Mole",
-  "gamerule.molehunt:showNametags": "Show players' nametag",
-  "gamerule.molehunt:showTab": "Enable the tab",
-  "gamerule.molehunt:showSkins": "Show players' skin"
+  "gamerule.molehunt:gameDuration": "Molehunt : Duration of a game",
+  "gamerule.molehunt:molePercentage": "Molehunt : Percentage of Mole",
+  "gamerule.molehunt:moleCount": "Molehunt : Number of Mole",
+  "gamerule.molehunt:showNametags": "Molehunt : Show players' nametag",
+  "gamerule.molehunt:showTab": "Molehunt : Enable the tab",
+  "gamerule.molehunt:showSkins": "Molehunt : Show players' skin",
+  "gamerule.molehunt:initialWorldSize": "Molehunt : Initial world size",
+  "gamerule.molehunt:finalWorldSize": "Molehunt : Final world size",
+  "gamerule.molehunt:borderMovingStartingTimeOffsetMinutes": "Molehunt : Time before moving the borders"
 }
