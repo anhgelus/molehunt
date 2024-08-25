@@ -17,7 +17,8 @@ some funny moments. But if needed, you can stop the game early by using
 
 The mod also provide a few commands for every player.
 
-For moles only, using `/molehunt moles` will give you the list of the moles.
+For moles and spectating players only, using `/molehunt moles` will give 
+you the list of the moles.
 
 To some people, the timer above you hotbar could be annoying. To hide it,
 use `/molehunt timer hide`. If you want to see it again, use 
