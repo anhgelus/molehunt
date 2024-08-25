@@ -94,6 +94,11 @@ public class Molehunt implements ModInitializer {
             GameRules.Category.MISC,
             GameRuleFactory.createIntRule(CONFIG_FILE.getOrDefault("border_moving_starting_time_offset", 10), 0)
     );
+    public static final GameRules.Key<GameRules.BooleanRule> ENABLE_PORTALS = GameRuleRegistry.register(
+            MOD_ID +":enablePortals",
+            GameRules.Category.MISC,
+            GameRuleFactory.createBooleanRule(CONFIG_FILE.getOrDefault("enable_portals", false))
+    );
 
     public Game game;
 

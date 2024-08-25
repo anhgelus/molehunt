@@ -28,6 +28,9 @@ Tab can be used (default: false).
 - Target border size on the end of the game : `final_world_size` (or `finalWorldSize`).
 - Time before moving the borders : `border_moving_starting_time_offset` (or `borderMovingStartingTimeOffsetMinutes`).
 
+### Misc
+- Enable portals (for the nether, the end and the end gateway) : `enable_portals` (or `enablePortals`).
+
 Every clientside rules (nametag, skin and tab) are only used by the client during a game.
 Before and after the game, they are not used.
 
@@ -99,4 +102,8 @@ final_world_size = 50
 # If this value is greater than the game duration, borders will never shrink.
 # Default: 10 minutes.
 border_shrinking_starting_time_offset = 10
+
+# Enable portals (nether, end, end gateway)
+# Default: false
+enable_portals = false
 ```
