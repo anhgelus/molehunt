@@ -46,7 +46,8 @@ Also, you can only set one variable on one line. For exemple, this is incorrect 
 ```yaml
 # This is not a valid config file
 first_setting = 1    second_setting = 2
-# The value must also be on the same line as the setting name. This is incorrect :
+# The value must also be on the same line as the 
+#setting name. This is incorrect :
 another_setting =
 3
 ```
