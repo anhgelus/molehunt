@@ -124,8 +124,8 @@ public class Config {
                 
                 # Other
                 
-                # Enable portals (nether, end, end gateway)
-                # Default: false
+                # Enable portals (nether, end, end gateway).
+                # Default: false.
                 enable_portals = false
                 """;
     }
