@@ -4,7 +4,7 @@ To change the mods behavior, you can change your world's gamerules. Every gameru
 by this mod starts with the prefix `molehunt:`.
 
 > If plan on making multiple worlds, and don't want to set the gamerules each time,
-> [edit the configuration file](config-file.md) 
+> [edit the configuration file](config-file.md).
 {style=tip}
 
 Here's a list of all the Molehunt gamerules.
@@ -31,7 +31,11 @@ Here's a list of all the Molehunt gamerules.
   a custom resource pack](resource-pack.md) (default: `false`).
 - `showTab`: The server player list will be shown (default: `false`).
 
-### World-border settings :
+### Server-side settings :
+
+- `enablePortals`: enables all portals to other dimensions (default: `false`).
+
+#### World-border settings :
 
 - `initialWorldSize`: the world size when starting the game (default: `200 blocks`).
 - `finalWorldSize`: the target world size on the end of the game (default: `50 blocks`).
