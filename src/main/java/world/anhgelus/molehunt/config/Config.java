@@ -60,6 +60,10 @@ public class Config {
         return server.getGameRules().getInt(Molehunt.MOVING_STARTING_TIME_OFFSET);
     }
 
+    public boolean arePortalsEnabled() {
+        return server.getGameRules().getBoolean(Molehunt.ENABLE_PORTALS);
+    }
+
     public static SimpleConfig configFile(String fileName) {
         return SimpleConfig.of(fileName).provider(Config::defaultConfig).request();
     }
@@ -102,7 +106,7 @@ public class Config {
                 show_tab = false
                 
                 
-                # World border settings :
+                # World border settings
                 
                 # Initial world size (in blocks).
                 # Default: 200 blocks.
@@ -117,6 +121,12 @@ public class Config {
                 # If this value is greater than the game duration, borders will never move.
                 # Default: 10 minutes.
                 border_moving_starting_time_offset = 10
+                
+                # Other
+                
+                # Enable portals (nether, end, end gateway)
+                # Default: false
+                enable_portals = false
                 """;
     }
 }

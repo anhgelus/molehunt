@@ -28,6 +28,8 @@ The mod stops the game when every innocent is dead or when the timer ended.
 
 The moles can see the name of other moles with `/molehunt moles`.
 
+Disable the nether, the end and every other portal.
+
 _Almost_ everything in the mod can configured.
 
 ## Configuration
