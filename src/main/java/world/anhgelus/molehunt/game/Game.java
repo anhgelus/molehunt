@@ -57,7 +57,6 @@ public class Game {
         gamerules.get(GameRules.ANNOUNCE_ADVANCEMENTS).set(false, server);
         // gamerules for the start
         gamerules.get(GameRules.DO_IMMEDIATE_RESPAWN).set(true, server);
-        gamerules.get(GameRules.DO_ENTITY_DROPS).set(false, server);
 
         final var worldBorder = server.getOverworld().getWorldBorder();
         worldBorder.setSize(Molehunt.CONFIG.getInitialWorldSize());
@@ -76,6 +75,7 @@ public class Game {
 
         final var title = new TitleS2CPacket(Text.translatable("molehunt.game.start.suspense"));
         playerManager.getPlayerList().forEach(p -> {
+            p.getInventory().clear();
             p.kill();
             p.networkHandler.sendPacket(timing);
             p.networkHandler.sendPacket(title);
@@ -103,7 +103,6 @@ public class Game {
                 });
                 // reset gamerules after the start
                 gamerules.get(GameRules.DO_IMMEDIATE_RESPAWN).set(false, server);
-                gamerules.get(GameRules.DO_ENTITY_DROPS).set(true, server);
                 // reset time and weather
                 server.getOverworld().setTimeOfDay(0);
                 server.getOverworld().resetWeather();
