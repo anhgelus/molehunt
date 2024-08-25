@@ -20,7 +20,8 @@ You can find the `molehunt.properties` file in your server's `config` folder.
 If it is not present, make sure the mod is installed, and start your server.
 
 Every setting available in the config file reflects a gamerule (they have very
-similar names). To know what each setting does, you can check [the gamerules documention](gamerules.md).
+similar names, even though different). To know what each setting does, you can
+check [the gamerules documention](gamerules.md).
 
 The config syntax is very simple :
 - `name_of_the_setting = value` to set a setting to a `value`. Only one setting 
@@ -37,6 +38,20 @@ solutions before making an issue on GitHub.
 
 Make sure the config file you're editing is located in your server's `config` directory,
 and that the file's name is `molehunt.properties`.
+
+### Check that you use the config file's setting names, and not the gamerule names
+
+For example, to change the game duration in the config file :
+```yaml
+# Do this :
+game_duration = 30
+
+# And NOT this :
+gameDurationMinutes = 30
+molehunt:GameDurationMinutes = 30
+```
+
+You can see the list of all config file setting in [the default configuration file](#default-configuration).
 
 ### Make sure the syntax is correct
 
