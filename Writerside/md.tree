@@ -7,6 +7,10 @@
                  start-page="introduction.md">
 
     <toc-element topic="introduction.md"/>
-    <toc-element topic="configuration.md"/>
     <toc-element topic="usage.md"/>
+    <toc-element topic="configuration.md">
+        <toc-element topic="gamerules.md"/>
+        <toc-element topic="config-file.md"/>
+        <toc-element topic="resource-pack.md"/>
+    </toc-element>
 </instance-profile>
