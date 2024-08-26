@@ -106,7 +106,7 @@ supported in `titles` and `subtitles`.
 
 ## Final file tree, and installing your resource pack
 
-If you followed every step of this tutorial, the final resource apck should look like this:
+If you followed every step of this tutorial, the final resource pack should look like this:
 ```
 📁 MyAwesomeResourcePack
 ├── 📄 pack.mcmeta
