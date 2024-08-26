@@ -23,7 +23,7 @@ Every setting available in the config file reflects a gamerule (they have very
 similar names, even though different). To know what each setting does, you can
 check [the gamerules documention](gamerules.md).
 
-The config syntax is very simple :
+The config syntax is very simple:
 - `name_of_the_setting = value` to set a setting to a `value`. Only one setting 
   can be set on a single line
 - A line starting with a `#` is a comment, and will not be counted be the mod. 
@@ -41,12 +41,12 @@ and that the file's name is `molehunt.properties`.
 
 ### Check that you use the config file's setting names, and not the gamerule names
 
-For example, to change the game duration in the config file :
+For example, to change the game duration in the config file:
 ```yaml
-# Do this :
+# Do this:
 game_duration = 30
 
-# And NOT this :
+# And NOT this:
 gameDurationMinutes = 30
 molehunt:GameDurationMinutes = 30
 ```
@@ -57,12 +57,12 @@ You can see the list of all config file setting in [the default configuration fi
 
 A comment line starts with a `#`, not with `//` nor with anything else.
 
-Also, you can only set one variable on one line. For exemple, this is incorrect :
+Also, you can only set one variable on one line. For exemple, this is incorrect:
 ```yaml
 # This is not a valid config file
 first_setting = 1    second_setting = 2
 # The value must also be on the same line as the 
-#setting name. This is incorrect :
+#setting name. This is incorrect:
 another_setting =
 3
 ```

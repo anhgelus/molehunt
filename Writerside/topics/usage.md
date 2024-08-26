@@ -4,7 +4,7 @@
 
 To start a game, execute `/molehunt start` (you must be OP).
 
-The game ends automatically if one of these two condition is met :
+The game ends automatically if one of these two condition is met:
 - Every alive player is a mole.
 - The timer has run out.
 

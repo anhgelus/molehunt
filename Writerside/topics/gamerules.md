@@ -11,14 +11,14 @@ Here's a list of all the Molehunt gamerules.
 
 ## Molehunt gamerule list
 
-### Molehunt game configuration :
+### Molehunt game configuration
 
 - `gameDurationMinutes`: sets the game's duration in minutes (default: `90 minutes`).
 - `molePercentage`: sets the mole percentage among all players (default: `25 %`).
 - `moleCount`: the absolute mole amount. Overwrites `molePercentage`. To disable 
   this setting, set it to `-1` (default: `-1`). 
 
-### Client-side settings :
+### Client-side settings
 
 > These gamerules affect client-side features, but are still applied to all players.
 > 
@@ -31,11 +31,11 @@ Here's a list of all the Molehunt gamerules.
   a custom resource pack](resource-pack.md) (default: `false`).
 - `showTab`: The server player list will be shown (default: `false`).
 
-### Server-side settings :
+### Server-side settings
 
 - `enablePortals`: enables all portals to other dimensions (default: `false`).
 
-#### World-border settings :
+#### World-border settings
 
 - `initialWorldSize`: the world size when starting the game (default: `200 blocks`).
 - `finalWorldSize`: the target world size on the end of the game (default: `50 blocks`).

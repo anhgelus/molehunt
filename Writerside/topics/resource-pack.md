@@ -15,10 +15,10 @@ the mod, and also change to default skin that is applied to all players
 ## First steps
 
 First, create a folder with your resource pack name (it can be whatever you want!). Then,
-inside of this folder, create a file named `pack.mcmeta`. This file is very important : it tells
+inside of this folder, create a file named `pack.mcmeta`. This file is very important: it tells
 the game that it is indeed a resource pack.
 
-Now, edit the `pack.mcmeta` file with your favorite text editor, and write the following :
+Now, edit the `pack.mcmeta` file with your favorite text editor, and write the following:
 ```json
 {
   "pack": {
@@ -36,7 +36,7 @@ Now, edit the `pack.mcmeta` file with your favorite text editor, and write the f
 You can now close the `pack.mcmeta` file. Now, inside your resource pack's main folder, 
 create a folder named `assets`, and inside it make another folder name `molehunt`. 
 
-You file tree you look like that :
+You file tree you look like that:
 ```
 📁 MyAwesomeResourcePack
 ├── 📄 pack.mcmeta
@@ -44,7 +44,7 @@ You file tree you look like that :
     └── 📁 molehunt
 ```
 
-> If you want, you can also add an icon to your resource pack : just add a png file named
+> If you want, you can also add an icon to your resource pack: just add a png file named
 > `pack.png` in your resource pack's main folder.
 {style=tip}
 
@@ -57,7 +57,7 @@ a lot online).
 
 Then grab your skin file (make sure it's a `.png` file!), name it `skin.png`
 and put it inside a `textures` folder, inside the `molehunt` folder. It should 
-look like that :
+look like that:
 ```
 ...
 📁 assets
@@ -82,13 +82,13 @@ First, create a new folder in the `molehunt` folder named `lang`, then create
 a `en_us.json` file.
 
 > If you want to target another language, name the file according to your language
-> and region. For example : `fr_fr.json` for French in France.
+> and region. For example: `fr_fr.json` for French in France.
 {style=note}
 
 Now copy the content of the [default `en_us.json` file](#default-en-us-json-language-file)
 in you language file, and start editing the lines you want to change!
 
-Finally, your file structure should look like that :
+Finally, your file structure should look like that:
 ```
 ...
 📁 assets
@@ -106,7 +106,7 @@ supported in `titles` and `subtitles`.
 
 ## Final file tree, and installing your resource pack
 
-If you followed every step of this tutorial, the final resource apck should look like this :
+If you followed every step of this tutorial, the final resource apck should look like this:
 ```
 📁 MyAwesomeResourcePack
 ├── 📄 pack.mcmeta
