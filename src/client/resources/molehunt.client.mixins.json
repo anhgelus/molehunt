@@ -4,6 +4,7 @@
   "package": "world.anhgelus.molehunt.client.mixin",
   "compatibilityLevel": "JAVA_21",
   "client": [
+    "NoCustomizableSkinOverlay",
     "NoNametags",
     "NoPlayerListHud",
     "NoSkin"
