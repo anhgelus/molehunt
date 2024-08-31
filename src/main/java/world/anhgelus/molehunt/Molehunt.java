@@ -17,6 +17,7 @@ import net.minecraft.network.packet.s2c.play.OverlayMessageS2CPacket;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.*;
+import net.minecraft.util.Formatting;
 import net.minecraft.world.GameMode;
 import net.minecraft.world.GameRules;
 import org.slf4j.Logger;
@@ -124,7 +125,7 @@ public class Molehunt implements ModInitializer {
 
                     if (game == null || !game.hasStarted()) {
                         player.networkHandler.sendPacket(new OverlayMessageS2CPacket(
-                            Text.translatable("commands.molehunt.stop.failed").setStyle(Style.EMPTY.withColor(16733525))
+                            Text.translatable("commands.molehunt.error.game_not_started").formatted(Formatting.RED)
                         ));
                     } else {
                         player.networkHandler.sendPacket(new OverlayMessageS2CPacket(Text.of(game.getShortRemainingText())));
@@ -139,16 +140,32 @@ public class Molehunt implements ModInitializer {
                     return Command.SINGLE_SUCCESS;
                 })
         ));
-        command.then(literal("moles").requires(source ->
-                (game != null && game.isAMole(source.getPlayer())) ||
-                        (source.getPlayer() != null && source.getPlayer().isSpectator())
-        ).executes(context -> {
-            context.getSource().sendFeedback(() -> Text.translatable("commands.molehunt.moles.list").append(" " + game.getMolesAsString()),false);
+        command.then(literal("role").requires(ServerCommandSource::isExecutedByPlayer).executes(context -> {
+            if (game == null || !game.hasStarted()) {
+                throw (new SimpleCommandExceptionType(Text.translatable("commands.molehunt.error.game_not_started"))).create();
+            }
+
+            var source = context.getSource();
+
+            if (game.isAMole(source.getPlayer())) {
+                source.sendFeedback(
+                        () -> Text.translatable("commands.molehunt.role.mole")
+                                .append("\n\n")
+                                .append(Text.translatable("commands.molehunt.role.mole.list", game.getMolesAsString())),
+                        false);
+            } else {
+                source.sendFeedback(
+                        () -> Text.translatable("commands.molehunt.role.survivor")
+                                .append("\n\n")
+                                .append(Text.translatable("commands.molehunt.role.survivor.mole_count", game.getMoles().size())),
+                        false);
+            }
+
             return Command.SINGLE_SUCCESS;
         }));
         command.then(literal("stop").requires(source -> source.hasPermissionLevel(1)).executes(context -> {
             if (game == null || !game.hasStarted()) {
-                throw (new SimpleCommandExceptionType(Text.translatable("commands.molehunt.stop.failed"))).create();
+                throw (new SimpleCommandExceptionType(Text.translatable("commands.molehunt.error.game_not_started"))).create();
             }
 
             game.stop();
