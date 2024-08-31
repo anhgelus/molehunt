@@ -145,13 +145,19 @@ public class Molehunt implements ModInitializer {
                 throw (new SimpleCommandExceptionType(Text.translatable("commands.molehunt.error.game_not_started"))).create();
             }
 
-            var source = context.getSource();
+            final var source = context.getSource();
+            final var player = source.getPlayer();
+            assert player != null;
 
-            if (game.isAMole(source.getPlayer())) {
+            if (game.isAMole(player)) {
                 source.sendFeedback(
                         () -> Text.translatable("commands.molehunt.role.mole")
                                 .append("\n\n")
                                 .append(Text.translatable("commands.molehunt.role.mole.list", game.getMolesAsString())),
+                        false);
+            } else if (player.isSpectator()) {
+                source.sendFeedback(
+                        () -> Text.translatable("commands.molehunt.role.survivor.mole_count", game.getMoles().size()),
                         false);
             } else {
                 source.sendFeedback(

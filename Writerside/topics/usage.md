@@ -20,7 +20,7 @@ The mod also provide a few commands for every player.
 If you forgot your role during the game, you can use `/molehunt role`
 This command will also provide you with some additional information :
 - For survivors, it will give the mole count;
-- For moles, it will give the list of all moles.
+- For moles and spectators, it will give the list of all moles.
 
 To some people, the timer above you hotbar could be annoying. To hide it,
 use `/molehunt timer hide`. If you want to see it again, use 
