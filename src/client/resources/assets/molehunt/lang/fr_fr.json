@@ -1,5 +1,5 @@
 {
-  "commands.molehunt.stop.failed": "La partie de Molehunt n'a pas encore commencé.",
+  "commands.molehunt.error.game_not_started": "La partie de Molehunt n'a pas encore commencé.",
   "commands.molehunt.timer.show": "Le timer est maintenant affiché.",
   "commands.molehunt.timer.hide": "Le timer est maintenant caché.",
   "commands.molehunt.role.mole": "§cVous êtes une taupe.\nTuez tous les survivants avant la fin de la partie..",

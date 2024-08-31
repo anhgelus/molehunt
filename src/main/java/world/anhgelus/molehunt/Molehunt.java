@@ -125,7 +125,7 @@ public class Molehunt implements ModInitializer {
 
                     if (game == null || !game.hasStarted()) {
                         player.networkHandler.sendPacket(new OverlayMessageS2CPacket(
-                            Text.translatable("commands.molehunt.stop.failed").formatted(Formatting.RED)
+                            Text.translatable("commands.molehunt.error.game_not_started").formatted(Formatting.RED)
                         ));
                     } else {
                         player.networkHandler.sendPacket(new OverlayMessageS2CPacket(Text.of(game.getShortRemainingText())));
@@ -142,7 +142,7 @@ public class Molehunt implements ModInitializer {
         ));
         command.then(literal("role").requires(ServerCommandSource::isExecutedByPlayer).executes(context -> {
             if (game == null || !game.hasStarted()) {
-                throw (new SimpleCommandExceptionType(Text.translatable("commands.molehunt.stop.failed"))).create();
+                throw (new SimpleCommandExceptionType(Text.translatable("commands.molehunt.error.game_not_started"))).create();
             }
 
             var source = context.getSource();
@@ -165,7 +165,7 @@ public class Molehunt implements ModInitializer {
         }));
         command.then(literal("stop").requires(source -> source.hasPermissionLevel(1)).executes(context -> {
             if (game == null || !game.hasStarted()) {
-                throw (new SimpleCommandExceptionType(Text.translatable("commands.molehunt.stop.failed"))).create();
+                throw (new SimpleCommandExceptionType(Text.translatable("commands.molehunt.error.game_not_started"))).create();
             }
 
             game.stop();

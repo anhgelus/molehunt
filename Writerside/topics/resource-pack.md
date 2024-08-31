@@ -139,7 +139,7 @@ customize the mod's text lines.
 
 ```json
 {
-  "commands.molehunt.stop.failed": "The Molehunt game has not been started yet.",
+  "commands.molehunt.error.game_not_started": "The Molehunt game has not been started yet.",
   "commands.molehunt.timer.show": "Showing Molehunt timer.",
   "commands.molehunt.timer.hide": "Hiding Molehunt timer.",
   "commands.molehunt.role.mole": "§cYou are a Mole.\nKill all the survivors before the timer runs out.",
