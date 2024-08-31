@@ -83,17 +83,17 @@ public class Molehunt implements ModInitializer {
     public static final GameRules.Key<GameRules.IntRule> INITIAL_WORLD_SIZE = GameRuleRegistry.register(
             MOD_ID +":initialWorldSize",
             GameRules.Category.MISC,
-            GameRuleFactory.createIntRule(CONFIG_FILE.getOrDefault("initial_world_size", 200), 0)
+            GameRuleFactory.createIntRule(CONFIG_FILE.getOrDefault("initial_world_size", 600), 0)
     );
     public static final GameRules.Key<GameRules.IntRule> FINAL_WORLD_SIZE = GameRuleRegistry.register(
             MOD_ID +":finalWorldSize",
             GameRules.Category.MISC,
-            GameRuleFactory.createIntRule(CONFIG_FILE.getOrDefault("final_world_size", 50), 0)
+            GameRuleFactory.createIntRule(CONFIG_FILE.getOrDefault("final_world_size", 100), 0)
     );
     public static final GameRules.Key<GameRules.IntRule> MOVING_STARTING_TIME_OFFSET = GameRuleRegistry.register(
             MOD_ID +":borderMovingStartingTimeOffsetMinutes",
             GameRules.Category.MISC,
-            GameRuleFactory.createIntRule(CONFIG_FILE.getOrDefault("border_moving_starting_time_offset", 10), 0)
+            GameRuleFactory.createIntRule(CONFIG_FILE.getOrDefault("border_moving_starting_time_offset", 30), 0)
     );
     public static final GameRules.Key<GameRules.BooleanRule> ENABLE_PORTALS = GameRuleRegistry.register(
             MOD_ID +":enablePortals",

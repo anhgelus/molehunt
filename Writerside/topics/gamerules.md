@@ -37,8 +37,8 @@ Here's a list of all the Molehunt gamerules.
 
 #### World-border settings
 
-- `initialWorldSize`: the world size when starting the game (default: `200 blocks`).
-- `finalWorldSize`: the target world size on the end of the game (default: `50 blocks`).
-- `borderMovingStartingTimeOffsetMinutes`: the time before the world borders start to move in minutes (default: `5 minutes`).
+- `initialWorldSize`: the world size when starting the game (default: `600 blocks`).
+- `finalWorldSize`: the target world size on the end of the game (default: `100 blocks`).
+- `borderMovingStartingTimeOffsetMinutes`: the time before the world borders start to move in minutes (default: `10 minutes`).
   > Setting this to a value greater than `gameDuration` will make the borders never move.
   {style=note}

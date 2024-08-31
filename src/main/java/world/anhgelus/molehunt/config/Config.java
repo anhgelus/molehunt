@@ -109,18 +109,18 @@ public class Config {
                 # World border settings
                 
                 # Initial world size (in blocks).
-                # Default: 200 blocks.
-                initial_world_size = 200
+                # Default: 600 blocks.
+                initial_world_size = 600
                 
                 # Final world size (in blocks).
-                # Default: 50 blocks.
-                final_world_size = 50
+                # Default: 100 blocks.
+                final_world_size = 100
                 
                 # Moving starting time offset (in minutes)
                 # The time before starting to move the world borders.
                 # If this value is greater than the game duration, borders will never move.
-                # Default: 10 minutes.
-                border_moving_starting_time_offset = 10
+                # Default: 30 minutes.
+                border_moving_starting_time_offset = 30
                 
                 # Other
                 
