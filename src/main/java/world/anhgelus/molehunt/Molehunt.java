@@ -150,13 +150,13 @@ public class Molehunt implements ModInitializer {
                 source.sendFeedback(
                         () -> Text.translatable("commands.molehunt.role.mole")
                                 .append("\n\n")
-                                .append(Text.stringifiedTranslatable("commands.molehunt.role.mole.list", game.getMolesAsString())),
+                                .append(Text.translatable("commands.molehunt.role.mole.list", game.getMolesAsString())),
                         false);
             } else {
                 source.sendFeedback(
                         () -> Text.translatable("commands.molehunt.role.survivor")
                                 .append("\n\n")
-                                .append(Text.stringifiedTranslatable("commands.molehunt.role.survivor.mole_count", game.getMoles().size())),
+                                .append(Text.translatable("commands.molehunt.role.survivor.mole_count", game.getMoles().size())),
                         false);
             }
 
