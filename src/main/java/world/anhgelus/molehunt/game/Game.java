@@ -155,9 +155,7 @@ public class Game {
                 } else {
                     winner = new TitleS2CPacket(Text.translatable("molehunt.game.end.winners.survivors.title"));
                 }
-                pm.sendToAll(new SubtitleS2CPacket(Text.translatable("molehunt.game.end.winners.subtitle")
-                        .append(" " + getMolesAsString()))
-                );
+                pm.sendToAll(new SubtitleS2CPacket(Text.stringifiedTranslatable("molehunt.game.end.winners.subtitle", getMolesAsString())));
                 pm.sendToAll(winner);
                 pm.sendToAll(timing);
                 moles.clear();
