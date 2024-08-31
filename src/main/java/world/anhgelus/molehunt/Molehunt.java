@@ -17,6 +17,7 @@ import net.minecraft.network.packet.s2c.play.OverlayMessageS2CPacket;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.*;
+import net.minecraft.util.Formatting;
 import net.minecraft.world.GameMode;
 import net.minecraft.world.GameRules;
 import org.slf4j.Logger;
@@ -124,7 +125,7 @@ public class Molehunt implements ModInitializer {
 
                     if (game == null || !game.hasStarted()) {
                         player.networkHandler.sendPacket(new OverlayMessageS2CPacket(
-                            Text.translatable("commands.molehunt.stop.failed").withColor(16733525)
+                            Text.translatable("commands.molehunt.stop.failed").formatted(Formatting.RED)
                         ));
                     } else {
                         player.networkHandler.sendPacket(new OverlayMessageS2CPacket(Text.of(game.getShortRemainingText())));
