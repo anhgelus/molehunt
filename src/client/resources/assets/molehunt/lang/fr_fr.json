@@ -3,7 +3,7 @@
   "commands.molehunt.timer.show": "Le timer est maintenant affiché.",
   "commands.molehunt.timer.hide": "Le timer est maintenant caché.",
   "commands.molehunt.role.mole": "§cVous êtes une taupe.\nTuez tous les survivants avant la fin de la partie..",
-  "commands.molehunt.role.mole.list": "§eThe moles are: %s",
+  "commands.molehunt.role.mole.list": "§eLes taupes sont : %s",
   "commands.molehunt.role.survivor": "§aVous n'êtes pas la taupe. \nSurvivez jusqu'à la fin, et découvrez qui sont les moles.",
   "commands.molehunt.role.survivor.mole_count": "§eIl y a %d §etaupes parmi vous.",
   "commands.molehunt.stop.success": "La partie de Molehunt a été arrêtée.",
