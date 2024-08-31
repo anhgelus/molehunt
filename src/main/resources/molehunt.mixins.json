@@ -4,6 +4,7 @@
   "package": "world.anhgelus.molehunt.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "NoJoinLeaveMessage",
     "NoMsgCommand",
     "NoPortals"
   ],
