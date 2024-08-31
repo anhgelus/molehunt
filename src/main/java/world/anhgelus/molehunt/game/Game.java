@@ -184,7 +184,13 @@ public class Game {
     }
 
     public boolean gameWonByMoles() {
-        return new HashSet<>(moles).containsAll(server.getPlayerManager().getPlayerList());
+        return new HashSet<>(moles).containsAll(
+                server.getPlayerManager()
+                        .getPlayerList()
+                        .stream()
+                        .filter(p -> !p.isSpectator())
+                        .toList()
+        );
     }
 
     public void updateMole(ServerPlayerEntity oldPlayer, ServerPlayerEntity newPlayer) {
