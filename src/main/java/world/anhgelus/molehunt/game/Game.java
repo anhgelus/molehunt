@@ -191,7 +191,7 @@ public class Game {
                 server.getPlayerManager()
                         .getPlayerList()
                         .stream()
-                        .filter(p -> !p.isSpectator())
+                        .filter(p -> !p.isSpectator() && !p.isCreative())
                         .toList()
         );
     }
