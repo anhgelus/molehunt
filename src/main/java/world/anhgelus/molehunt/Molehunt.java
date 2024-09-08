@@ -100,6 +100,11 @@ public class Molehunt implements ModInitializer {
             GameRules.Category.MISC,
             GameRuleFactory.createBooleanRule(CONFIG_FILE.getOrDefault("enable_portals", false))
     );
+    public static final GameRules.Key<GameRules.BooleanRule> FOOD_ON_START = GameRuleRegistry.register(
+            MOD_ID +":foodOnStart",
+            GameRules.Category.MISC,
+            GameRuleFactory.createBooleanRule(CONFIG_FILE.getOrDefault("food_on_start", true))
+    );
 
     public Game game;
 

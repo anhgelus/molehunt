@@ -1,6 +1,8 @@
 package world.anhgelus.molehunt.game;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.network.packet.s2c.play.OverlayMessageS2CPacket;
 import net.minecraft.network.packet.s2c.play.SubtitleS2CPacket;
 import net.minecraft.network.packet.s2c.play.TitleFadeS2CPacket;
@@ -80,6 +82,7 @@ public class Game {
             p.networkHandler.sendPacket(timing);
             p.networkHandler.sendPacket(title);
             p.changeGameMode(GameMode.SURVIVAL);
+            if (Molehunt.CONFIG.foodOnStart()) p.giveItemStack(new ItemStack(Items.COOKED_BEEF, 64));
         });
 
         server.setDefaultGameMode(GameMode.SPECTATOR);

@@ -64,6 +64,10 @@ public class Config {
         return server.getGameRules().getBoolean(Molehunt.ENABLE_PORTALS);
     }
 
+    public boolean foodOnStart() {
+        return server.getGameRules().getBoolean(Molehunt.FOOD_ON_START);
+    }
+
     public static SimpleConfig configFile(String fileName) {
         return SimpleConfig.of(fileName).provider(Config::defaultConfig).request();
     }
@@ -89,6 +93,10 @@ public class Config {
                 # If set below 0, this setting is disabled.
                 # Default: -1.
                 mole_count = -1
+                
+                # Give food on start
+                # Default: true
+                food_on_start = true
                 
                 
                 # Client-side settings (applies to all players)
