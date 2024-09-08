@@ -4,7 +4,7 @@ public class TimeUtils {
 
     private record Time(long hours, long minutes, long seconds) {}
 
-    public static String printTime(long time) {
+    public static String generateString(long time) {
         final var pt = generateTime(time);
 
         StringBuilder sb = new StringBuilder();
@@ -19,7 +19,7 @@ public class TimeUtils {
         return sb.toString();
     }
 
-    public static String printShortTime(long time) {
+    public static String generateShortString(long time) {
         final var pt = generateTime(time);
 
         return padLeft(pt.hours) + ":" +

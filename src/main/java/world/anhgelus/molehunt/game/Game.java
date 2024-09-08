@@ -117,7 +117,7 @@ public class Game {
                         remaining--;
                         playerManager.getPlayerList().forEach(player -> {
                             if (Molehunt.timerVisibility.getOrDefault(player, true)) {
-                                player.networkHandler.sendPacket(new OverlayMessageS2CPacket(Text.of(getShortRemainingText())));
+                                player.networkHandler.sendPacket(new OverlayMessageS2CPacket(Text.of(getRemainingText())));
                             }
                         });
                         playerManager.sendToAll(timing);
@@ -153,7 +153,7 @@ public class Game {
             @Override
             public void run() {
                 TitleS2CPacket winner;
-                if (gameWonByMoles()) {
+                if (wonByMoles()) {
                     winner = new TitleS2CPacket(Text.translatable("molehunt.game.end.winners.moles.title"));
                 } else {
                     winner = new TitleS2CPacket(Text.translatable("molehunt.game.end.winners.survivors.title"));
@@ -166,8 +166,8 @@ public class Game {
         }, 4*1000);
     }
 
-    public Text getShortRemainingText() {
-        return Text.of("§c" + TimeUtils.printShortTime(remaining));
+    public Text getRemainingText() {
+        return Text.of("§c" + TimeUtils.generateShortString(remaining));
     }
 
     public List<ServerPlayerEntity> getMoles() {
@@ -182,11 +182,11 @@ public class Game {
                 .collect(Collectors.joining(", "));
     }
 
-    public boolean isAMole(ServerPlayerEntity player) {
+    public boolean isMole(ServerPlayerEntity player) {
         return moles.contains(player);
     }
 
-    public boolean gameWonByMoles() {
+    public boolean wonByMoles() {
         return new HashSet<>(moles).containsAll(
                 server.getPlayerManager()
                         .getPlayerList()
@@ -201,7 +201,7 @@ public class Game {
         moles.add(newPlayer);
     }
 
-    public boolean hasStarted() {
+    public boolean started() {
         return started;
     }
 
