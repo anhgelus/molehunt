@@ -201,7 +201,7 @@ public class Molehunt implements ModInitializer {
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
             ServerPlayNetworking.send(
                     handler.player,
-                    new ConfigPayload(CONFIG.areNametagsEnabled(), CONFIG.areSkinsEnabled(), CONFIG.isTabEnabled())
+                    new ConfigPayload(CONFIG.nametagsEnabled(), CONFIG.skinsEnabled(), CONFIG.tabEnabled())
             );
             ServerPlayNetworking.send(
                     handler.player,

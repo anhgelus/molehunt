@@ -11,11 +11,11 @@ public class Config {
     public Config(MinecraftServer server) {
         this.server = server;
 
-        sendConfigPayload(areNametagsEnabled(), areSkinsEnabled(), isTabEnabled());
+        sendConfigPayload(nametagsEnabled(), skinsEnabled(), tabEnabled());
     }
 
     public void sendConfigPayload() {
-        final var payload = new ConfigPayload(areNametagsEnabled(), areSkinsEnabled(), isTabEnabled());
+        final var payload = new ConfigPayload(nametagsEnabled(), skinsEnabled(), tabEnabled());
         server.getPlayerManager().getPlayerList().forEach(p -> ServerPlayNetworking.send(p, payload));
     }
 
@@ -36,15 +36,15 @@ public class Config {
         return server.getGameRules().getInt(Molehunt.MOLE_COUNT);
     }
 
-    public boolean areNametagsEnabled() {
+    public boolean nametagsEnabled() {
         return server.getGameRules().getBoolean(Molehunt.SHOW_NAMETAGS);
     }
 
-    public boolean areSkinsEnabled() {
+    public boolean skinsEnabled() {
         return server.getGameRules().getBoolean(Molehunt.SHOW_SKINS);
     }
 
-    public boolean isTabEnabled() {
+    public boolean tabEnabled() {
         return server.getGameRules().getBoolean(Molehunt.SHOW_TAB);
     }
 
@@ -60,7 +60,7 @@ public class Config {
         return server.getGameRules().getInt(Molehunt.MOVING_STARTING_TIME_OFFSET);
     }
 
-    public boolean arePortalsEnabled() {
+    public boolean portalsEnabled() {
         return server.getGameRules().getBoolean(Molehunt.ENABLE_PORTALS);
     }
 

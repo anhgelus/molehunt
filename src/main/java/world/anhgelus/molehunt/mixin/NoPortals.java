@@ -13,7 +13,7 @@ import world.anhgelus.molehunt.Molehunt;
 public class NoPortals {
     @Inject(at = @At("HEAD"), method = "tick", cancellable = true)
     public void disableTick(ServerWorld world, Entity entity, boolean canUsePortals, CallbackInfoReturnable<Boolean> cir) {
-        if (Molehunt.CONFIG == null || Molehunt.CONFIG.arePortalsEnabled()) return;
+        if (Molehunt.CONFIG == null || Molehunt.CONFIG.portalsEnabled()) return;
         cir.setReturnValue(false);
     }
 }
