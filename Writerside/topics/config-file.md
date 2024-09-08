@@ -114,6 +114,9 @@ mole_percentage = 25
 # Default: -1.
 mole_count = -1
 
+# Give food on start
+# Default: true
+food_on_start = true
 
 # Client-side settings (applies to all players)
 

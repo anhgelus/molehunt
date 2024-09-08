@@ -17,6 +17,7 @@ Here's a list of all the Molehunt gamerules.
 - `molePercentage`: sets the mole percentage among all players (default: `25 %`).
 - `moleCount`: the absolute mole amount. Overwrites `molePercentage`. To disable 
   this setting, set it to `-1` (default: `-1`). 
+- `foodOnStart`: give food on start
 
 ### Client-side settings
 
