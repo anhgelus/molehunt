@@ -3,7 +3,7 @@ package world.anhgelus.molehunt.client;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.minecraft.entity.player.PlayerModelPart;
+import net.minecraft.world.entity.player.PlayerModelPart;
 import world.anhgelus.molehunt.config.ConfigPayload;
 import world.anhgelus.molehunt.game.GamePayload;
 
@@ -28,13 +28,13 @@ public class MolehuntClient implements ClientModInitializer {
         ClientLifecycleEvents.CLIENT_STARTED.register(client -> {
             var options = client.options;
 
-            options.setPlayerModelPart(PlayerModelPart.CAPE, true);
-            options.setPlayerModelPart(PlayerModelPart.HAT, true);
-            options.setPlayerModelPart(PlayerModelPart.JACKET, true);
-            options.setPlayerModelPart(PlayerModelPart.LEFT_SLEEVE, true);
-            options.setPlayerModelPart(PlayerModelPart.RIGHT_SLEEVE, true);
-            options.setPlayerModelPart(PlayerModelPart.LEFT_PANTS_LEG, true);
-            options.setPlayerModelPart(PlayerModelPart.RIGHT_PANTS_LEG, true);
+            options.setModelPart(PlayerModelPart.CAPE, true);
+            options.setModelPart(PlayerModelPart.HAT, true);
+            options.setModelPart(PlayerModelPart.JACKET, true);
+            options.setModelPart(PlayerModelPart.LEFT_SLEEVE, true);
+            options.setModelPart(PlayerModelPart.RIGHT_SLEEVE, true);
+            options.setModelPart(PlayerModelPart.LEFT_PANTS_LEG, true);
+            options.setModelPart(PlayerModelPart.RIGHT_PANTS_LEG, true);
         });
 
     }

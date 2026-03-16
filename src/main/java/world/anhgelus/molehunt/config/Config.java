@@ -16,56 +16,56 @@ public class Config {
 
     public void sendConfigPayload() {
         final var payload = new ConfigPayload(nametagsEnabled(), skinsEnabled(), tabEnabled());
-        server.getPlayerManager().getPlayerList().forEach(p -> ServerPlayNetworking.send(p, payload));
+        server.getPlayerList().getPlayers().forEach(p -> ServerPlayNetworking.send(p, payload));
     }
 
     public void sendConfigPayload(boolean showNametags, boolean showSkins, boolean showTab) {
         final var payload = new ConfigPayload(showNametags, showSkins, showTab);
-        server.getPlayerManager().getPlayerList().forEach(p -> ServerPlayNetworking.send(p, payload));
+        server.getPlayerList().getPlayers().forEach(p -> ServerPlayNetworking.send(p, payload));
     }
 
     public int getGameDuration() {
-        return server.getOverworld().getGameRules().getValue(Molehunt.GAME_DURATION);
+        return server.overworld().getGameRules().get(Molehunt.GAME_DURATION);
     }
 
     public int getMolePercentage() {
-        return server.getOverworld().getGameRules().getValue(Molehunt.MOLE_PERCENTAGE);
+        return server.overworld().getGameRules().get(Molehunt.MOLE_PERCENTAGE);
     }
 
     public int getMoleCount() {
-        return server.getOverworld().getGameRules().getValue(Molehunt.MOLE_COUNT);
+        return server.overworld().getGameRules().get(Molehunt.MOLE_COUNT);
     }
 
     public boolean nametagsEnabled() {
-        return server.getOverworld().getGameRules().getValue(Molehunt.SHOW_NAMETAGS);
+        return server.overworld().getGameRules().get(Molehunt.SHOW_NAMETAGS);
     }
 
     public boolean skinsEnabled() {
-        return server.getOverworld().getGameRules().getValue(Molehunt.SHOW_SKINS);
+        return server.overworld().getGameRules().get(Molehunt.SHOW_SKINS);
     }
 
     public boolean tabEnabled() {
-        return server.getOverworld().getGameRules().getValue(Molehunt.SHOW_TAB);
+        return server.overworld().getGameRules().get(Molehunt.SHOW_TAB);
     }
 
     public int getInitialWorldSize() {
-        return server.getOverworld().getGameRules().getValue(Molehunt.INITIAL_WORLD_SIZE);
+        return server.overworld().getGameRules().get(Molehunt.INITIAL_WORLD_SIZE);
     }
 
     public int getFinalWorldSize() {
-        return server.getOverworld().getGameRules().getValue(Molehunt.FINAL_WORLD_SIZE);
+        return server.overworld().getGameRules().get(Molehunt.FINAL_WORLD_SIZE);
     }
 
     public int getBorderShrinkingStartingTimeOffset() {
-        return server.getOverworld().getGameRules().getValue(Molehunt.MOVING_STARTING_TIME_OFFSET);
+        return server.overworld().getGameRules().get(Molehunt.MOVING_STARTING_TIME_OFFSET);
     }
 
     public boolean portalsEnabled() {
-        return server.getOverworld().getGameRules().getValue(Molehunt.ENABLE_PORTALS);
+        return server.overworld().getGameRules().get(Molehunt.ENABLE_PORTALS);
     }
 
     public boolean foodOnStart() {
-        return server.getOverworld().getGameRules().getValue(Molehunt.FOOD_ON_START);
+        return server.overworld().getGameRules().get(Molehunt.FOOD_ON_START);
     }
 
     public static SimpleConfig configFile(String fileName) {

@@ -1,10 +1,10 @@
 package world.anhgelus.molehunt.client.mixin;
 
-import net.minecraft.client.network.AbstractClientPlayerEntity;
-import net.minecraft.entity.player.PlayerSkinType;
-import net.minecraft.entity.player.SkinTextures;
-import net.minecraft.util.AssetInfo;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.core.ClientAsset;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.player.PlayerModelType;
+import net.minecraft.world.entity.player.PlayerSkin;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -12,16 +12,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import world.anhgelus.molehunt.Molehunt;
 import world.anhgelus.molehunt.client.MolehuntClient;
 
-@Mixin(AbstractClientPlayerEntity.class)
+@Mixin(AbstractClientPlayer.class)
 public class NoSkin {
     @Inject(at = @At("HEAD"), method = "getSkin", cancellable = true)
-    public void getSkin(CallbackInfoReturnable<SkinTextures> cir) {
+    public void getSkin(CallbackInfoReturnable<PlayerSkin> cir) {
         if (MolehuntClient.showSkins() || !MolehuntClient.gameStarted()) return;
-        cir.setReturnValue(SkinTextures.create(
-                new AssetInfo.TextureAssetInfo(Identifier.of(Molehunt.MOD_ID, "skin")),
+        cir.setReturnValue(new PlayerSkin(
+                new ClientAsset.ResourceTexture(Identifier.fromNamespaceAndPath(Molehunt.MOD_ID, "skin")),
                 null,
                 null,
-                PlayerSkinType.WIDE
+                PlayerModelType.WIDE,
+                true
         ));
     }
 }

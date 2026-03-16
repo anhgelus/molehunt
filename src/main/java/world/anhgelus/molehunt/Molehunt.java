@@ -13,17 +13,17 @@ import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.network.packet.s2c.play.OverlayMessageS2CPacket;
+import net.minecraft.ChatFormatting;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
-import net.minecraft.world.GameMode;
-import net.minecraft.world.rule.GameRule;
-import net.minecraft.world.rule.GameRuleCategory;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.gamerules.GameRule;
+import net.minecraft.world.level.gamerules.GameRuleCategory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import world.anhgelus.molehunt.config.Config;
@@ -35,7 +35,7 @@ import world.anhgelus.molehunt.game.GamePayload;
 import java.util.HashMap;
 import java.util.UUID;
 
-import static net.minecraft.server.command.CommandManager.literal;
+import static net.minecraft.commands.Commands.literal;
 
 
 public class Molehunt implements ModInitializer {
@@ -49,61 +49,61 @@ public class Molehunt implements ModInitializer {
     public static final GameRule<Integer> GAME_DURATION = GameRuleBuilder
             .forInteger(CONFIG_FILE.getOrDefault("game_duration", 90))
             .category(GameRuleCategory.MISC)
-            .buildAndRegister(Identifier.of(MOD_ID, "gameDurationMinutes"));
+            .buildAndRegister(Identifier.fromNamespaceAndPath(MOD_ID, "gameDurationMinutes"));
 
     public static final GameRule<Integer> MOLE_PERCENTAGE = GameRuleBuilder
             .forInteger(CONFIG_FILE.getOrDefault("mole_percentage", 25))
             .range(0, 100)
             .category(GameRuleCategory.MISC)
-            .buildAndRegister(Identifier.of(MOD_ID, "molePercentage"));
+            .buildAndRegister(Identifier.fromNamespaceAndPath(MOD_ID, "molePercentage"));
 
     public static final GameRule<Integer> MOLE_COUNT = GameRuleBuilder
             .forInteger(CONFIG_FILE.getOrDefault("mole_count", -1))
             .category(GameRuleCategory.MISC)
-            .buildAndRegister(Identifier.of(MOD_ID, "moleCount"));
+            .buildAndRegister(Identifier.fromNamespaceAndPath(MOD_ID, "moleCount"));
 
     public static final GameRule<Boolean> SHOW_NAMETAGS = GameRuleBuilder
             .forBoolean(CONFIG_FILE.getOrDefault("show_nametags", false))
             .category(GameRuleCategory.MISC)
-            .buildAndRegister(Identifier.of(MOD_ID, "showNametags"));
+            .buildAndRegister(Identifier.fromNamespaceAndPath(MOD_ID, "showNametags"));
 
     public static final GameRule<Boolean> SHOW_TAB = GameRuleBuilder
             .forBoolean(CONFIG_FILE.getOrDefault("show_tab", false))
             .category(GameRuleCategory.MISC)
-            .buildAndRegister(Identifier.of(MOD_ID, "showTab"));
+            .buildAndRegister(Identifier.fromNamespaceAndPath(MOD_ID, "showTab"));
 
     public static final GameRule<Boolean> SHOW_SKINS = GameRuleBuilder
             .forBoolean(CONFIG_FILE.getOrDefault("show_skins", false))
             .category(GameRuleCategory.MISC)
-            .buildAndRegister(Identifier.of(MOD_ID, "showSkins"));
+            .buildAndRegister(Identifier.fromNamespaceAndPath(MOD_ID, "showSkins"));
 
     public static final GameRule<Integer> INITIAL_WORLD_SIZE = GameRuleBuilder
             .forInteger(CONFIG_FILE.getOrDefault("initial_world_size", 600))
             .minValue(0)
             .category(GameRuleCategory.MISC)
-            .buildAndRegister(Identifier.of(MOD_ID, "initialWorldSize"));
+            .buildAndRegister(Identifier.fromNamespaceAndPath(MOD_ID, "initialWorldSize"));
 
     public static final GameRule<Integer> FINAL_WORLD_SIZE = GameRuleBuilder
             .forInteger(CONFIG_FILE.getOrDefault("final_world_size", 100))
             .minValue(0)
             .category(GameRuleCategory.MISC)
-            .buildAndRegister(Identifier.of(MOD_ID, "finalWorldSize"));
+            .buildAndRegister(Identifier.fromNamespaceAndPath(MOD_ID, "finalWorldSize"));
 
     public static final GameRule<Integer> MOVING_STARTING_TIME_OFFSET = GameRuleBuilder
             .forInteger(CONFIG_FILE.getOrDefault("border_moving_starting_time_offset", 30))
             .minValue(0)
             .category(GameRuleCategory.MISC)
-            .buildAndRegister(Identifier.of(MOD_ID, "borderMovingStartingTimeOffsetMinutes"));
+            .buildAndRegister(Identifier.fromNamespaceAndPath(MOD_ID, "borderMovingStartingTimeOffsetMinutes"));
 
     public static final GameRule<Boolean> ENABLE_PORTALS = GameRuleBuilder
             .forBoolean(CONFIG_FILE.getOrDefault("enable_portals", false))
             .category(GameRuleCategory.MISC)
-            .buildAndRegister(Identifier.of(MOD_ID, "enablePortals"));
+            .buildAndRegister(Identifier.fromNamespaceAndPath(MOD_ID, "enablePortals"));
 
     public static final GameRule<Boolean> FOOD_ON_START = GameRuleBuilder
             .forBoolean(CONFIG_FILE.getOrDefault("food_on_start", true))
             .category(GameRuleCategory.MISC)
-            .buildAndRegister(Identifier.of(MOD_ID, "foodOnStart"));
+            .buildAndRegister(Identifier.fromNamespaceAndPath(MOD_ID, "foodOnStart"));
 
     public Game game;
 
@@ -126,26 +126,26 @@ public class Molehunt implements ModInitializer {
 
         final var command = literal("molehunt");
         command.then(literal("start")
-                .requires(CommandManager.requirePermissionLevel(CommandManager.GAMEMASTERS_CHECK))
+                .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                 .executes(context -> {
             game = new Game(context.getSource().getServer());
             game.start();
             return Command.SINGLE_SUCCESS;
         }));
-        command.then(literal("timer").requires(ServerCommandSource::isExecutedByPlayer).then(
+        command.then(literal("timer").requires(CommandSourceStack::isPlayer).then(
                 literal("show").executes(context -> {
                     var player = context.getSource().getPlayer();
                     assert player != null;
 
-                    timerVisibility.put(player.getUuid(), true);
-                    context.getSource().sendFeedback(() -> Text.translatable("commands.molehunt.timer.show"), false);
+                    timerVisibility.put(player.getUUID(), true);
+                    context.getSource().sendSuccess(() -> Component.translatable("commands.molehunt.timer.show"), false);
 
                     if (game == null || !game.started()) {
-                        player.networkHandler.sendPacket(new OverlayMessageS2CPacket(
-                            Text.translatable("commands.molehunt.error.game_not_started").formatted(Formatting.RED)
+                        player.connection.send(new ClientboundSetActionBarTextPacket(
+                            Component.translatable("commands.molehunt.error.game_not_started").withStyle(ChatFormatting.RED)
                         ));
                     } else {
-                        player.networkHandler.sendPacket(new OverlayMessageS2CPacket(Text.of(game.getRemainingText())));
+                        player.connection.send(new ClientboundSetActionBarTextPacket(Component.translationArg(game.getRemainingText())));
                     }
 
                     return Command.SINGLE_SUCCESS;
@@ -155,16 +155,16 @@ public class Molehunt implements ModInitializer {
                     var player = context.getSource().getPlayer();
                     assert player != null;
 
-                    timerVisibility.put(player.getUuid(), false);
-                    context.getSource().sendFeedback(() -> Text.translatable("commands.molehunt.timer.hide"), false);
+                    timerVisibility.put(player.getUUID(), false);
+                    context.getSource().sendSuccess(() -> Component.translatable("commands.molehunt.timer.hide"), false);
                     return Command.SINGLE_SUCCESS;
                 })
         ));
         command.then(literal("role")
-                .requires(ServerCommandSource::isExecutedByPlayer)
+                .requires(CommandSourceStack::isPlayer)
                 .executes(context -> {
             if (game == null || !game.started()) {
-                throw (new SimpleCommandExceptionType(Text.translatable("commands.molehunt.error.game_not_started"))).create();
+                throw (new SimpleCommandExceptionType(Component.translatable("commands.molehunt.error.game_not_started"))).create();
             }
 
             final var source = context.getSource();
@@ -172,30 +172,30 @@ public class Molehunt implements ModInitializer {
             assert player != null;
 
             if (game.isMole(player)) {
-                source.sendFeedback(
-                        () -> Text.translatable("commands.molehunt.role.mole")
+                source.sendSuccess(
+                        () -> Component.translatable("commands.molehunt.role.mole")
                                 .append("\n\n")
-                                .append(Text.translatable("commands.molehunt.role.mole.list", game.getMolesAsString())),
+                                .append(Component.translatable("commands.molehunt.role.mole.list", game.getMolesAsString())),
                         false);
             } else if (player.isSpectator()) {
-                source.sendFeedback(
-                        () -> Text.translatable("commands.molehunt.role.survivor.mole_count", game.getMoles().size()),
+                source.sendSuccess(
+                        () -> Component.translatable("commands.molehunt.role.survivor.mole_count", game.getMoles().size()),
                         false);
             } else {
-                source.sendFeedback(
-                        () -> Text.translatable("commands.molehunt.role.survivor")
+                source.sendSuccess(
+                        () -> Component.translatable("commands.molehunt.role.survivor")
                                 .append("\n\n")
-                                .append(Text.translatable("commands.molehunt.role.survivor.mole_count", game.getMoles().size())),
+                                .append(Component.translatable("commands.molehunt.role.survivor.mole_count", game.getMoles().size())),
                         false);
             }
 
             return Command.SINGLE_SUCCESS;
         }));
         command.then(literal("stop")
-                .requires(CommandManager.requirePermissionLevel(CommandManager.GAMEMASTERS_CHECK))
+                .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                 .executes(context -> {
             if (game == null || !game.started()) {
-                throw (new SimpleCommandExceptionType(Text.translatable("commands.molehunt.error.game_not_started"))).create();
+                throw (new SimpleCommandExceptionType(Component.translatable("commands.molehunt.error.game_not_started"))).create();
             }
 
             game.stop();
@@ -210,7 +210,7 @@ public class Molehunt implements ModInitializer {
         ServerMessageEvents.ALLOW_CHAT_MESSAGE.register((message, sender, params) -> false);
 
         ServerLivingEntityEvents.AFTER_DEATH.register((entity, damageSource) -> {
-            if (!(entity instanceof ServerPlayerEntity) || game == null) return;
+            if (!(entity instanceof ServerPlayer) || game == null) return;
             if (!game.started()) return;
             if (game.wonByMoles()) game.end();
         });
@@ -218,7 +218,7 @@ public class Molehunt implements ModInitializer {
         ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) -> {
             if (game == null) return;
             if (!game.started()) return;
-            newPlayer.changeGameMode(GameMode.SPECTATOR);
+            newPlayer.setGameMode(GameType.SPECTATOR);
         });
 
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
@@ -232,7 +232,7 @@ public class Molehunt implements ModInitializer {
             );
         });
 
-        PayloadTypeRegistry.playS2C().register(ConfigPayload.ID, ConfigPayload.CODEC);
-        PayloadTypeRegistry.playS2C().register(GamePayload.ID, GamePayload.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(ConfigPayload.ID, ConfigPayload.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(GamePayload.ID, GamePayload.CODEC);
     }
 }

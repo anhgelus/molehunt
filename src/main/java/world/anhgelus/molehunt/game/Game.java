@@ -1,19 +1,19 @@
 package world.anhgelus.molehunt.game;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.network.packet.s2c.play.OverlayMessageS2CPacket;
-import net.minecraft.network.packet.s2c.play.SubtitleS2CPacket;
-import net.minecraft.network.packet.s2c.play.TitleFadeS2CPacket;
-import net.minecraft.network.packet.s2c.play.TitleS2CPacket;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
+import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket;
+import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
+import net.minecraft.network.protocol.game.ClientboundSetTitlesAnimationPacket;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.world.GameMode;
-import net.minecraft.world.rule.GameRules;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.gamerules.GameRules;
 import world.anhgelus.molehunt.Molehunt;
 import world.anhgelus.molehunt.timer.TickTask;
 import world.anhgelus.molehunt.timer.TimerAccess;
@@ -25,12 +25,12 @@ import java.util.stream.Collectors;
 
 public class Game {
 
-    public final int defaultTime = Molehunt.CONFIG.getGameDuration() * 60;
+    public final int DEFAULT_TIME = Molehunt.CONFIG.getGameDuration() * 60;
     private final MinecraftServer server;
     private final List<UUID> moles = new ArrayList<>();
-    private final TitleFadeS2CPacket timing = new TitleFadeS2CPacket(20, 40, 20);
-    private int remaining = defaultTime;
+    private final ClientboundSetTitlesAnimationPacket timing = new ClientboundSetTitlesAnimationPacket(20, 40, 20);
     private boolean started = false;
+    private int remaining = DEFAULT_TIME;
 
     public Game(MinecraftServer server) {
         this.server = server;
@@ -38,33 +38,32 @@ public class Game {
 
     public void start() {
         final int n = Molehunt.CONFIG.getMoleCount() < 0
-                ? Math.floorDiv(server.getCurrentPlayerCount(), Math.floorDiv(100, Molehunt.CONFIG.getMolePercentage()))
+                ? Math.floorDiv(server.getPlayerCount(), Math.floorDiv(100, Molehunt.CONFIG.getMolePercentage()))
                 : Molehunt.CONFIG.getMoleCount();
 
-        final var playerManager = server.getPlayerManager();
+        final var playerManager = server.getPlayerList();
 
-        final var players = new ArrayList<>(playerManager.getPlayerList());
+        final var players = new ArrayList<>(playerManager.getPlayers());
         for (int i = 0; i < n && !players.isEmpty(); i++) {
             final var r = ThreadLocalRandom.current().nextInt(0, players.size());
             final var mole = players.get(r);
-            if (mole == null) throw new IllegalStateException("Mole is null!");
-            moles.add(mole.getUuid());
+            moles.add(mole.getUUID());
             players.remove(r);
         }
 
-        final var gamerules = server.getOverworld().getGameRules();
+        final var gamerules = server.overworld().getGameRules();
         // immutable gamerules
-        gamerules.setValue(GameRules.SHOW_DEATH_MESSAGES, false, server);
-        gamerules.setValue(GameRules.ANNOUNCE_ADVANCEMENTS, false, server);
+        gamerules.set(GameRules.SHOW_DEATH_MESSAGES, false, server);
+        gamerules.set(GameRules.SHOW_ADVANCEMENT_MESSAGES, false, server);
         // gamerules for the start
-        gamerules.setValue(GameRules.DO_IMMEDIATE_RESPAWN, true, server);
+        gamerules.set(GameRules.IMMEDIATE_RESPAWN, true, server);
 
         final var timer = TimerAccess.getTimerFromOverworld(server);
 
-        final var worldBorder = server.getOverworld().getWorldBorder();
+        final var worldBorder = server.overworld().getWorldBorder();
         worldBorder.setSize(Molehunt.CONFIG.getInitialWorldSize());
         if (Molehunt.CONFIG.getBorderShrinkingStartingTimeOffset() < Molehunt.CONFIG.getGameDuration()) {
-            timer.dds_runTask(new TickTask(() -> worldBorder.interpolateSize(
+            timer.dds_runTask(new TickTask(() -> worldBorder.lerpSizeBetween(
                     Molehunt.CONFIG.getInitialWorldSize(),
                     Molehunt.CONFIG.getFinalWorldSize(),
                     (long) (Molehunt.CONFIG.getGameDuration() - Molehunt.CONFIG.getBorderShrinkingStartingTimeOffset()) * 60 * 1000,
@@ -72,54 +71,56 @@ public class Game {
             ), (long) Molehunt.CONFIG.getBorderShrinkingStartingTimeOffset() * 60 * 1000));
         }
 
-        final var title = new TitleS2CPacket(Text.translatable("molehunt.game.start.suspense"));
-        playerManager.getPlayerList().forEach(p -> {
-            p.getInventory().clear();
-            p.kill(p.getEntityWorld());
-            p.networkHandler.sendPacket(timing);
-            p.networkHandler.sendPacket(title);
-            p.changeGameMode(GameMode.SURVIVAL);
-            if (Molehunt.CONFIG.foodOnStart()) p.giveItemStack(new ItemStack(Items.COOKED_BEEF, 64));
+        final var title = new ClientboundSetTitleTextPacket(Component.translatable("molehunt.game.start.suspense"));
+        playerManager.getPlayers().forEach(p -> {
+            p.getInventory().clearContent();
+            p.kill(p.level());
+            p.connection.send(timing);
+            p.connection.send(title);
+            p.setGameMode(GameType.SURVIVAL);
+            if (Molehunt.CONFIG.foodOnStart()) p.addItem(new ItemStack(Items.COOKED_BEEF, 64));
         });
 
-        server.setDefaultGameMode(GameMode.SPECTATOR);
+        server.setDefaultGameType(GameType.SPECTATOR);
 
         timer.dds_runTask(new TickTask(() -> {
-            playerManager.getPlayerList().forEach(p -> {
-                p.networkHandler.sendPacket(timing);
-                if (moles.contains(p.getUuid())) {
-                    p.networkHandler.sendPacket(new TitleS2CPacket(Text.translatable("molehunt.game.start.mole.title")));
-                    p.networkHandler.sendPacket(new SubtitleS2CPacket(Text.translatable("molehunt.game.start.mole.subtitle")));
+            playerManager.getPlayers().forEach(p -> {
+                p.connection.send(timing);
+                if (moles.contains(p.getUUID())) {
+                    p.connection.send(new ClientboundSetTitleTextPacket(Component.translatable("molehunt.game.start.mole.title")));
+                    p.connection.send(new ClientboundSetSubtitleTextPacket(Component.translatable("molehunt.game.start.mole.subtitle")));
                 } else {
-                    p.networkHandler.sendPacket(new TitleS2CPacket(Text.translatable("molehunt.game.start.survivor.title")));
-                    p.networkHandler.sendPacket(new SubtitleS2CPacket(Text.translatable("molehunt.game.start.survivor.subtitle")));
+                    p.connection.send(new ClientboundSetTitleTextPacket(Component.translatable("molehunt.game.start.survivor.title")));
+                    p.connection.send(new ClientboundSetSubtitleTextPacket(Component.translatable("molehunt.game.start.survivor.subtitle")));
                 }
                 // reset health and food level
                 p.setHealth(p.getMaxHealth());
-                p.getHungerManager().setFoodLevel(20);
-                p.getHungerManager().setSaturationLevel(5.0f);
+                p.getFoodData().setFoodLevel(20);
+                p.getFoodData().setSaturation(5.0f);
             });
             // reset gamerules after the start
-            gamerules.setValue(GameRules.DO_IMMEDIATE_RESPAWN, false, server);
+            gamerules.set(GameRules.IMMEDIATE_RESPAWN, false, server);
             // reset time and weather
-            server.getOverworld().setTimeOfDay(0);
-            server.getOverworld().resetWeather();
+            final var overworld = server.overworld();
+            server.clockManager()
+                    .setTotalTicks(overworld.getLevel().dimensionType().defaultClock().orElseThrow(), 0);
+            overworld.resetWeatherCycle();
             changeState(true);
             timer.dds_runTask(new TickTask(() -> {
                 remaining--;
-                playerManager.getPlayerList().forEach(player -> {
-                    if (Molehunt.timerVisibility.getOrDefault(player.getUuid(), true)) {
-                        player.networkHandler.sendPacket(new OverlayMessageS2CPacket(Text.of(getRemainingText())));
+                playerManager.getPlayers().forEach(player -> {
+                    if (Molehunt.timerVisibility.getOrDefault(player.getUUID(), true)) {
+                        player.connection.send(new ClientboundSetActionBarTextPacket(Component.translationArg(getRemainingText())));
                     }
                 });
-                playerManager.sendToAll(timing);
+                playerManager.broadcastAll(timing);
                 if (remaining == 0) end();
             }, 5 * 1000, 1000));
         }, 4 * 1000));
     }
 
     public void stop() {
-        server.getPlayerManager().broadcast(Text.translatable("commands.molehunt.stop.success"), false);
+        server.getPlayerList().broadcastSystemMessage(Component.translatable("commands.molehunt.stop.success"), false);
         end();
     }
 
@@ -127,39 +128,40 @@ public class Game {
         final var timer = TimerAccess.getTimerFromOverworld(server);
         timer.dds_cancel();
 
-        final var worldBorder = server.getOverworld().getWorldBorder();
+        final var worldBorder = server.overworld().getWorldBorder();
         // Stops the border shrinking.
         worldBorder.setSize(worldBorder.getSize());
 
         changeState(false);
-        final var pm = server.getPlayerManager();
-        final var winnerSuspense = new TitleS2CPacket(Text.translatable("molehunt.game.end.suspense.title"));
-        pm.getPlayerList().forEach(p -> {
-            p.networkHandler.sendPacket(timing);
-            p.networkHandler.sendPacket(winnerSuspense);
-            p.changeGameMode(GameMode.CREATIVE);
+        final var pm = server.getPlayerList();
+        final var winnerSuspense = new ClientboundSetTitleTextPacket(Component.translatable("molehunt.game.end.suspense.title"));
+        pm.getPlayers().forEach(p -> {
+            p.connection.send(timing);
+            p.connection.send(winnerSuspense);
+            p.setGameMode(GameType.CREATIVE);
         });
+
         timer.dds_runTask(new TickTask(() -> {
-            TitleS2CPacket winner;
+            ClientboundSetTitleTextPacket winner;
             if (wonByMoles()) {
-                winner = new TitleS2CPacket(Text.translatable("molehunt.game.end.winners.moles.title"));
+                winner = new ClientboundSetTitleTextPacket(Component.translatable("molehunt.game.end.winners.moles.title"));
             } else {
-                winner = new TitleS2CPacket(Text.translatable("molehunt.game.end.winners.survivors.title"));
+                winner = new ClientboundSetTitleTextPacket(Component.translatable("molehunt.game.end.winners.survivors.title"));
             }
-            pm.sendToAll(new SubtitleS2CPacket(Text.translatable("molehunt.game.end.winners.subtitle", getMolesAsString())));
-            pm.sendToAll(winner);
-            pm.sendToAll(timing);
+            pm.broadcastAll(new ClientboundSetSubtitleTextPacket(Component.translatable("molehunt.game.end.winners.subtitle", getMolesAsString())));
+            pm.broadcastAll(winner);
+            pm.broadcastAll(timing);
             moles.clear();
         }, 4 * 1000));
     }
 
-    public Text getRemainingText() {
-        return Text.of("§c" + TimeUtils.generateShortString(remaining));
+    public Component getRemainingText() {
+        return Component.nullToEmpty("§c" + TimeUtils.generateShortString(remaining));
     }
 
-    public List<ServerPlayerEntity> getMoles() {
+    public List<ServerPlayer> getMoles() {
         return moles.stream()
-                .map(uuid -> server.getPlayerManager().getPlayer(uuid))
+                .map(uuid -> server.getPlayerList().getPlayer(uuid))
                 .filter(Objects::nonNull)
                 .filter(p -> !p.isSpectator())
                 .toList();
@@ -167,23 +169,22 @@ public class Game {
 
     public String getMolesAsString() {
         return getMoles().stream()
-                .map(PlayerEntity::getDisplayName)
-                .filter(Objects::nonNull)
+                .map(Player::getDisplayName)
                 .map(Object::toString)
                 .collect(Collectors.joining(", "));
     }
 
-    public boolean isMole(ServerPlayerEntity player) {
-        return moles.contains(player.getUuid());
+    public boolean isMole(ServerPlayer player) {
+        return moles.contains(player.getUUID());
     }
 
     public boolean wonByMoles() {
         return new HashSet<>(moles).containsAll(
-                server.getPlayerManager()
-                        .getPlayerList()
+                server.getPlayerList()
+                        .getPlayers()
                         .stream()
                         .filter(p -> !p.isSpectator() && !p.isCreative())
-                        .map(Entity::getUuid)
+                        .map(Entity::getUUID)
                         .toList()
         );
     }
@@ -195,6 +196,6 @@ public class Game {
     private void changeState(boolean hasStarted) {
         started = hasStarted;
         final var payload = new GamePayload(hasStarted);
-        server.getPlayerManager().getPlayerList().forEach(p -> ServerPlayNetworking.send(p, payload));
+        server.getPlayerList().getPlayers().forEach(p -> ServerPlayNetworking.send(p, payload));
     }
 }
