@@ -160,7 +160,9 @@ public class Molehunt implements ModInitializer {
                     return Command.SINGLE_SUCCESS;
                 })
         ));
-        command.then(literal("role").requires(ServerCommandSource::isExecutedByPlayer).executes(context -> {
+        command.then(literal("role")
+                .requires(ServerCommandSource::isExecutedByPlayer)
+                .executes(context -> {
             if (game == null || !game.started()) {
                 throw (new SimpleCommandExceptionType(Text.translatable("commands.molehunt.error.game_not_started"))).create();
             }
@@ -216,7 +218,6 @@ public class Molehunt implements ModInitializer {
         ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) -> {
             if (game == null) return;
             if (!game.started()) return;
-            if (game.getMoles().contains(oldPlayer)) game.updateMole(oldPlayer, newPlayer);
             newPlayer.changeGameMode(GameMode.SPECTATOR);
         });
 

@@ -1,6 +1,8 @@
 package world.anhgelus.molehunt.game;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.network.packet.s2c.play.OverlayMessageS2CPacket;
@@ -27,7 +29,7 @@ public class Game {
 
     private final MinecraftServer server;
 
-    private final List<ServerPlayerEntity> moles = new ArrayList<>();
+    private final List<UUID> moles = new ArrayList<>();
 
     private final TitleFadeS2CPacket timing = new TitleFadeS2CPacket(20, 40, 20);
 
@@ -49,7 +51,7 @@ public class Game {
             final var r = ThreadLocalRandom.current().nextInt(0, players.size());
             final var mole = players.get(r);
             if (mole == null) throw new IllegalStateException("Mole is null!");
-            moles.add(mole);
+            moles.add(mole.getUuid());
             players.remove(r);
         }
 
@@ -94,7 +96,7 @@ public class Game {
             public void run() {
                 playerManager.getPlayerList().forEach(p -> {
                     p.networkHandler.sendPacket(timing);
-                    if (moles.contains(p)) {
+                    if (moles.contains(p.getUuid())) {
                         p.networkHandler.sendPacket(new TitleS2CPacket(Text.translatable("molehunt.game.start.mole.title")));
                         p.networkHandler.sendPacket(new SubtitleS2CPacket(Text.translatable("molehunt.game.start.mole.subtitle")));
                     } else {
@@ -118,7 +120,7 @@ public class Game {
                     public void run() {
                         remaining--;
                         playerManager.getPlayerList().forEach(player -> {
-                            if (Molehunt.timerVisibility.getOrDefault(player, true)) {
+                            if (Molehunt.timerVisibility.getOrDefault(player.getUuid(), true)) {
                                 player.networkHandler.sendPacket(new OverlayMessageS2CPacket(Text.of(getRemainingText())));
                             }
                         });
@@ -173,19 +175,23 @@ public class Game {
     }
 
     public List<ServerPlayerEntity> getMoles() {
-        return moles;
+        return moles.stream()
+                .map(uuid -> server.getPlayerManager().getPlayer(uuid))
+                .filter(Objects::nonNull)
+                .filter(p -> !p.isSpectator())
+                .toList();
     }
 
     public String getMolesAsString() {
-        return moles.stream()
-                .map(ServerPlayerEntity::getDisplayName)
+        return getMoles().stream()
+                .map(PlayerEntity::getDisplayName)
                 .filter(Objects::nonNull)
-                .map(Text::getString)
+                .map(Object::toString)
                 .collect(Collectors.joining(", "));
     }
 
     public boolean isMole(ServerPlayerEntity player) {
-        return moles.contains(player);
+        return moles.contains(player.getUuid());
     }
 
     public boolean wonByMoles() {
@@ -194,13 +200,9 @@ public class Game {
                         .getPlayerList()
                         .stream()
                         .filter(p -> !p.isSpectator() && !p.isCreative())
+                        .map(Entity::getUuid)
                         .toList()
         );
-    }
-
-    public void updateMole(ServerPlayerEntity oldPlayer, ServerPlayerEntity newPlayer) {
-        moles.remove(oldPlayer);
-        moles.add(newPlayer);
     }
 
     public boolean started() {
