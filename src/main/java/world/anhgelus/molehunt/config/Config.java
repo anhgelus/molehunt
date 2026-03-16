@@ -25,47 +25,47 @@ public class Config {
     }
 
     public int getGameDuration() {
-        return server.getGameRules().getInt(Molehunt.GAME_DURATION);
+        return server.getOverworld().getGameRules().getValue(Molehunt.GAME_DURATION);
     }
 
     public int getMolePercentage() {
-        return server.getGameRules().getInt(Molehunt.MOLE_PERCENTAGE);
+        return server.getOverworld().getGameRules().getValue(Molehunt.MOLE_PERCENTAGE);
     }
 
     public int getMoleCount() {
-        return server.getGameRules().getInt(Molehunt.MOLE_COUNT);
+        return server.getOverworld().getGameRules().getValue(Molehunt.MOLE_COUNT);
     }
 
     public boolean nametagsEnabled() {
-        return server.getGameRules().getBoolean(Molehunt.SHOW_NAMETAGS);
+        return server.getOverworld().getGameRules().getValue(Molehunt.SHOW_NAMETAGS);
     }
 
     public boolean skinsEnabled() {
-        return server.getGameRules().getBoolean(Molehunt.SHOW_SKINS);
+        return server.getOverworld().getGameRules().getValue(Molehunt.SHOW_SKINS);
     }
 
     public boolean tabEnabled() {
-        return server.getGameRules().getBoolean(Molehunt.SHOW_TAB);
+        return server.getOverworld().getGameRules().getValue(Molehunt.SHOW_TAB);
     }
 
     public int getInitialWorldSize() {
-        return server.getGameRules().getInt(Molehunt.INITIAL_WORLD_SIZE);
+        return server.getOverworld().getGameRules().getValue(Molehunt.INITIAL_WORLD_SIZE);
     }
 
     public int getFinalWorldSize() {
-        return server.getGameRules().getInt(Molehunt.FINAL_WORLD_SIZE);
+        return server.getOverworld().getGameRules().getValue(Molehunt.FINAL_WORLD_SIZE);
     }
 
     public int getBorderShrinkingStartingTimeOffset() {
-        return server.getGameRules().getInt(Molehunt.MOVING_STARTING_TIME_OFFSET);
+        return server.getOverworld().getGameRules().getValue(Molehunt.MOVING_STARTING_TIME_OFFSET);
     }
 
     public boolean portalsEnabled() {
-        return server.getGameRules().getBoolean(Molehunt.ENABLE_PORTALS);
+        return server.getOverworld().getGameRules().getValue(Molehunt.ENABLE_PORTALS);
     }
 
     public boolean foodOnStart() {
-        return server.getGameRules().getBoolean(Molehunt.FOOD_ON_START);
+        return server.getOverworld().getGameRules().getValue(Molehunt.FOOD_ON_START);
     }
 
     public static SimpleConfig configFile(String fileName) {

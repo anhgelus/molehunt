@@ -12,7 +12,7 @@ public record GamePayload(boolean gameLaunched) implements CustomPayload {
 
     public static final CustomPayload.Id<GamePayload> ID = new CustomPayload.Id<>(GAME_PACKET_ID);
     public static final PacketCodec<RegistryByteBuf, GamePayload> CODEC = PacketCodec.tuple(
-            PacketCodecs.BOOL, GamePayload::gameLaunched,
+            PacketCodecs.BOOLEAN, GamePayload::gameLaunched,
             GamePayload::new
     );
 

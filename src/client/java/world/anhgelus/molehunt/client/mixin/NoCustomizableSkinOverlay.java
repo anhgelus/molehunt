@@ -14,7 +14,7 @@ public abstract class NoCustomizableSkinOverlay {
     @Shadow
     private void setPlayerModelPart(PlayerModelPart part, boolean enabled) {}
 
-    @Inject(at = @At("HEAD"), method = "togglePlayerModelPart", cancellable = true)
+    @Inject(at = @At("HEAD"), method = "setPlayerModelPart", cancellable = true)
     public void togglePlayerModelPart(PlayerModelPart part, boolean enabled, CallbackInfo ci) {
         if (MolehuntClient.showSkins()) return;
         setPlayerModelPart(part, true);

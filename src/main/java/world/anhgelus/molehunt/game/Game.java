@@ -11,7 +11,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.world.GameMode;
-import net.minecraft.world.GameRules;
+import net.minecraft.world.rule.GameRules;
 import world.anhgelus.molehunt.Molehunt;
 import world.anhgelus.molehunt.utils.TimeUtils;
 
@@ -53,12 +53,12 @@ public class Game {
             players.remove(r);
         }
 
-        final var gamerules = server.getGameRules();
+        final var gamerules = server.getOverworld().getGameRules();
         // immutable gamerules
-        gamerules.get(GameRules.SHOW_DEATH_MESSAGES).set(false, server);
-        gamerules.get(GameRules.ANNOUNCE_ADVANCEMENTS).set(false, server);
+        gamerules.setValue(GameRules.SHOW_DEATH_MESSAGES, false, server);
+        gamerules.setValue(GameRules.ANNOUNCE_ADVANCEMENTS, false, server);
         // gamerules for the start
-        gamerules.get(GameRules.DO_IMMEDIATE_RESPAWN).set(true, server);
+        gamerules.setValue(GameRules.DO_IMMEDIATE_RESPAWN, true, server);
 
         final var worldBorder = server.getOverworld().getWorldBorder();
         worldBorder.setSize(Molehunt.CONFIG.getInitialWorldSize());
@@ -70,7 +70,9 @@ public class Game {
                     worldBorder.interpolateSize(
                             Molehunt.CONFIG.getInitialWorldSize(),
                             Molehunt.CONFIG.getFinalWorldSize(),
-                            (long) (Molehunt.CONFIG.getGameDuration() - Molehunt.CONFIG.getBorderShrinkingStartingTimeOffset()) * 60 * 1000);
+                            (long) (Molehunt.CONFIG.getGameDuration() - Molehunt.CONFIG.getBorderShrinkingStartingTimeOffset()) * 60 * 1000,
+                            0L
+                        );
                 }
             }, (long) Molehunt.CONFIG.getBorderShrinkingStartingTimeOffset() * 60 * 1000);
         }
@@ -78,7 +80,7 @@ public class Game {
         final var title = new TitleS2CPacket(Text.translatable("molehunt.game.start.suspense"));
         playerManager.getPlayerList().forEach(p -> {
             p.getInventory().clear();
-            p.kill();
+            p.kill(p.getEntityWorld());
             p.networkHandler.sendPacket(timing);
             p.networkHandler.sendPacket(title);
             p.changeGameMode(GameMode.SURVIVAL);
@@ -105,7 +107,7 @@ public class Game {
                     p.getHungerManager().setSaturationLevel(5.0f);
                 });
                 // reset gamerules after the start
-                gamerules.get(GameRules.DO_IMMEDIATE_RESPAWN).set(false, server);
+                gamerules.setValue(GameRules.DO_IMMEDIATE_RESPAWN, false, server);
                 // reset time and weather
                 server.getOverworld().setTimeOfDay(0);
                 server.getOverworld().resetWeather();

@@ -12,9 +12,9 @@ public record ConfigPayload(boolean showNametags, boolean showSkins, boolean sho
 
     public static final CustomPayload.Id<ConfigPayload> ID = new CustomPayload.Id<>(CONFIG_PACKET_ID);
     public static final PacketCodec<RegistryByteBuf, ConfigPayload> CODEC = PacketCodec.tuple(
-            PacketCodecs.BOOL, ConfigPayload::showNametags,
-            PacketCodecs.BOOL, ConfigPayload::showSkins,
-            PacketCodecs.BOOL, ConfigPayload::showTab,
+            PacketCodecs.BOOLEAN, ConfigPayload::showNametags,
+            PacketCodecs.BOOLEAN, ConfigPayload::showSkins,
+            PacketCodecs.BOOLEAN, ConfigPayload::showTab,
             ConfigPayload::new
     );
 

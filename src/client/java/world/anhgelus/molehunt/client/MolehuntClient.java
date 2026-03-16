@@ -28,13 +28,13 @@ public class MolehuntClient implements ClientModInitializer {
         ClientLifecycleEvents.CLIENT_STARTED.register(client -> {
             var options = client.options;
 
-            options.togglePlayerModelPart(PlayerModelPart.CAPE, true);
-            options.togglePlayerModelPart(PlayerModelPart.HAT, true);
-            options.togglePlayerModelPart(PlayerModelPart.JACKET, true);
-            options.togglePlayerModelPart(PlayerModelPart.LEFT_SLEEVE, true);
-            options.togglePlayerModelPart(PlayerModelPart.RIGHT_SLEEVE, true);
-            options.togglePlayerModelPart(PlayerModelPart.LEFT_PANTS_LEG, true);
-            options.togglePlayerModelPart(PlayerModelPart.RIGHT_PANTS_LEG, true);
+            options.setPlayerModelPart(PlayerModelPart.CAPE, true);
+            options.setPlayerModelPart(PlayerModelPart.HAT, true);
+            options.setPlayerModelPart(PlayerModelPart.JACKET, true);
+            options.setPlayerModelPart(PlayerModelPart.LEFT_SLEEVE, true);
+            options.setPlayerModelPart(PlayerModelPart.RIGHT_SLEEVE, true);
+            options.setPlayerModelPart(PlayerModelPart.LEFT_PANTS_LEG, true);
+            options.setPlayerModelPart(PlayerModelPart.RIGHT_PANTS_LEG, true);
         });
 
     }

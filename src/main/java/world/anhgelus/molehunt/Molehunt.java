@@ -7,19 +7,23 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.fabricmc.fabric.api.gamerule.v1.GameRuleFactory;
-import net.fabricmc.fabric.api.gamerule.v1.GameRuleRegistry;
+import net.fabricmc.fabric.api.gamerule.v1.GameRuleBuilder;
+import net.fabricmc.fabric.api.gamerule.v1.GameRuleEvents;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.packet.s2c.play.OverlayMessageS2CPacket;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.GameMode;
-import net.minecraft.world.GameRules;
+import net.minecraft.world.rule.GameRule;
+import net.minecraft.world.rule.GameRuleCategory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import world.anhgelus.molehunt.config.Config;
@@ -29,6 +33,7 @@ import world.anhgelus.molehunt.game.Game;
 import world.anhgelus.molehunt.game.GamePayload;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 import static net.minecraft.server.command.CommandManager.literal;
 
@@ -41,92 +46,99 @@ public class Molehunt implements ModInitializer {
 
     public static final SimpleConfig CONFIG_FILE = Config.configFile(MOD_ID);
 
-    public static final GameRules.Key<GameRules.IntRule> GAME_DURATION = GameRuleRegistry.register(
-            MOD_ID +":gameDurationMinutes",
-            GameRules.Category.MISC,
-            GameRuleFactory.createIntRule(CONFIG_FILE.getOrDefault("game_duration", 90))
-    );
-    public static final GameRules.Key<GameRules.IntRule> MOLE_PERCENTAGE = GameRuleRegistry.register(
-            MOD_ID +":molePercentage",
-            GameRules.Category.MISC,
-            GameRuleFactory.createIntRule(CONFIG_FILE.getOrDefault("mole_percentage", 25))
-    );
-    public static final GameRules.Key<GameRules.IntRule> MOLE_COUNT = GameRuleRegistry.register(
-            MOD_ID +":moleCount",
-            GameRules.Category.MISC,
-            GameRuleFactory.createIntRule(CONFIG_FILE.getOrDefault("mole_count", -1))
-    );
-    public static final GameRules.Key<GameRules.BooleanRule> SHOW_NAMETAGS = GameRuleRegistry.register(
-            MOD_ID +":showNametags",
-            GameRules.Category.MISC,
-            GameRuleFactory.createBooleanRule(CONFIG_FILE.getOrDefault("show_nametags", false), (server, val) -> {
-                if (CONFIG == null) return;
-                CONFIG.sendConfigPayload();
-            })
-    );
-    public static final GameRules.Key<GameRules.BooleanRule> SHOW_TAB = GameRuleRegistry.register(
-            MOD_ID +":showTab"
-            , GameRules.Category.MISC,
-            GameRuleFactory.createBooleanRule(CONFIG_FILE.getOrDefault("show_tab", false), (server, val) -> {
-                if (CONFIG == null) return;
-                CONFIG.sendConfigPayload();
-            })
-    );
-    public static final GameRules.Key<GameRules.BooleanRule> SHOW_SKINS = GameRuleRegistry.register(
-            MOD_ID +":showSkins",
-            GameRules.Category.MISC,
-            GameRuleFactory.createBooleanRule(CONFIG_FILE.getOrDefault("show_skins", false), (server, val) -> {
-                if (CONFIG == null) return;
-                CONFIG.sendConfigPayload();
-            })
-    );
-    public static final GameRules.Key<GameRules.IntRule> INITIAL_WORLD_SIZE = GameRuleRegistry.register(
-            MOD_ID +":initialWorldSize",
-            GameRules.Category.MISC,
-            GameRuleFactory.createIntRule(CONFIG_FILE.getOrDefault("initial_world_size", 600), 0)
-    );
-    public static final GameRules.Key<GameRules.IntRule> FINAL_WORLD_SIZE = GameRuleRegistry.register(
-            MOD_ID +":finalWorldSize",
-            GameRules.Category.MISC,
-            GameRuleFactory.createIntRule(CONFIG_FILE.getOrDefault("final_world_size", 100), 0)
-    );
-    public static final GameRules.Key<GameRules.IntRule> MOVING_STARTING_TIME_OFFSET = GameRuleRegistry.register(
-            MOD_ID +":borderMovingStartingTimeOffsetMinutes",
-            GameRules.Category.MISC,
-            GameRuleFactory.createIntRule(CONFIG_FILE.getOrDefault("border_moving_starting_time_offset", 30), 0)
-    );
-    public static final GameRules.Key<GameRules.BooleanRule> ENABLE_PORTALS = GameRuleRegistry.register(
-            MOD_ID +":enablePortals",
-            GameRules.Category.MISC,
-            GameRuleFactory.createBooleanRule(CONFIG_FILE.getOrDefault("enable_portals", false))
-    );
-    public static final GameRules.Key<GameRules.BooleanRule> FOOD_ON_START = GameRuleRegistry.register(
-            MOD_ID +":foodOnStart",
-            GameRules.Category.MISC,
-            GameRuleFactory.createBooleanRule(CONFIG_FILE.getOrDefault("food_on_start", true))
-    );
+    public static final GameRule<Integer> GAME_DURATION = GameRuleBuilder
+            .forInteger(CONFIG_FILE.getOrDefault("game_duration", 90))
+            .category(GameRuleCategory.MISC)
+            .buildAndRegister(Identifier.of(MOD_ID, "gameDurationMinutes"));
+
+    public static final GameRule<Integer> MOLE_PERCENTAGE = GameRuleBuilder
+            .forInteger(CONFIG_FILE.getOrDefault("mole_percentage", 25))
+            .range(0, 100)
+            .category(GameRuleCategory.MISC)
+            .buildAndRegister(Identifier.of(MOD_ID, "molePercentage"));
+
+    public static final GameRule<Integer> MOLE_COUNT = GameRuleBuilder
+            .forInteger(CONFIG_FILE.getOrDefault("mole_count", -1))
+            .category(GameRuleCategory.MISC)
+            .buildAndRegister(Identifier.of(MOD_ID, "moleCount"));
+
+    public static final GameRule<Boolean> SHOW_NAMETAGS = GameRuleBuilder
+            .forBoolean(CONFIG_FILE.getOrDefault("show_nametags", false))
+            .category(GameRuleCategory.MISC)
+            .buildAndRegister(Identifier.of(MOD_ID, "showNametags"));
+
+    public static final GameRule<Boolean> SHOW_TAB = GameRuleBuilder
+            .forBoolean(CONFIG_FILE.getOrDefault("show_tab", false))
+            .category(GameRuleCategory.MISC)
+            .buildAndRegister(Identifier.of(MOD_ID, "showTab"));
+
+    public static final GameRule<Boolean> SHOW_SKINS = GameRuleBuilder
+            .forBoolean(CONFIG_FILE.getOrDefault("show_skins", false))
+            .category(GameRuleCategory.MISC)
+            .buildAndRegister(Identifier.of(MOD_ID, "showSkins"));
+
+    public static final GameRule<Integer> INITIAL_WORLD_SIZE = GameRuleBuilder
+            .forInteger(CONFIG_FILE.getOrDefault("initial_world_size", 600))
+            .minValue(0)
+            .category(GameRuleCategory.MISC)
+            .buildAndRegister(Identifier.of(MOD_ID, "initialWorldSize"));
+
+    public static final GameRule<Integer> FINAL_WORLD_SIZE = GameRuleBuilder
+            .forInteger(CONFIG_FILE.getOrDefault("final_world_size", 100))
+            .minValue(0)
+            .category(GameRuleCategory.MISC)
+            .buildAndRegister(Identifier.of(MOD_ID, "finalWorldSize"));
+
+    public static final GameRule<Integer> MOVING_STARTING_TIME_OFFSET = GameRuleBuilder
+            .forInteger(CONFIG_FILE.getOrDefault("border_moving_starting_time_offset", 30))
+            .minValue(0)
+            .category(GameRuleCategory.MISC)
+            .buildAndRegister(Identifier.of(MOD_ID, "borderMovingStartingTimeOffsetMinutes"));
+
+    public static final GameRule<Boolean> ENABLE_PORTALS = GameRuleBuilder
+            .forBoolean(CONFIG_FILE.getOrDefault("enable_portals", false))
+            .category(GameRuleCategory.MISC)
+            .buildAndRegister(Identifier.of(MOD_ID, "enablePortals"));
+
+    public static final GameRule<Boolean> FOOD_ON_START = GameRuleBuilder
+            .forBoolean(CONFIG_FILE.getOrDefault("food_on_start", true))
+            .category(GameRuleCategory.MISC)
+            .buildAndRegister(Identifier.of(MOD_ID, "foodOnStart"));
 
     public Game game;
 
-    public static HashMap<ServerPlayerEntity, Boolean> timerVisibility = new HashMap<>();
+    public static HashMap<UUID, Boolean> timerVisibility = new HashMap<>();
+
+    private static <T> void sendConfigPayload(T v, MinecraftServer server) {
+        if (CONFIG == null) return;
+        CONFIG.sendConfigPayload();
+    }
+
+    static {
+        GameRuleEvents.changeCallback(SHOW_NAMETAGS).register(Molehunt::sendConfigPayload);
+        GameRuleEvents.changeCallback(SHOW_TAB).register(Molehunt::sendConfigPayload);
+        GameRuleEvents.changeCallback(SHOW_SKINS).register(Molehunt::sendConfigPayload);
+    }
 
     @Override
     public void onInitialize() {
         LOGGER.info("Initializing Molehunt");
 
         final var command = literal("molehunt");
-        command.then(literal("start").requires(source -> source.hasPermissionLevel(1)).executes(context -> {
+        command.then(literal("start")
+                .requires(CommandManager.requirePermissionLevel(CommandManager.GAMEMASTERS_CHECK))
+                .executes(context -> {
             game = new Game(context.getSource().getServer());
             game.start();
             return Command.SINGLE_SUCCESS;
         }));
         command.then(literal("timer").requires(ServerCommandSource::isExecutedByPlayer).then(
                 literal("show").executes(context -> {
-                    timerVisibility.put(context.getSource().getPlayer(), true);
-                    context.getSource().sendFeedback(() -> Text.translatable("commands.molehunt.timer.show"), false);
-
                     var player = context.getSource().getPlayer();
                     assert player != null;
+
+                    timerVisibility.put(player.getUuid(), true);
+                    context.getSource().sendFeedback(() -> Text.translatable("commands.molehunt.timer.show"), false);
 
                     if (game == null || !game.started()) {
                         player.networkHandler.sendPacket(new OverlayMessageS2CPacket(
@@ -140,7 +152,10 @@ public class Molehunt implements ModInitializer {
                 })
         ).then(
                 literal("hide").executes(context -> {
-                    timerVisibility.put(context.getSource().getPlayer(), false);
+                    var player = context.getSource().getPlayer();
+                    assert player != null;
+
+                    timerVisibility.put(player.getUuid(), false);
                     context.getSource().sendFeedback(() -> Text.translatable("commands.molehunt.timer.hide"), false);
                     return Command.SINGLE_SUCCESS;
                 })
@@ -174,7 +189,9 @@ public class Molehunt implements ModInitializer {
 
             return Command.SINGLE_SUCCESS;
         }));
-        command.then(literal("stop").requires(source -> source.hasPermissionLevel(1)).executes(context -> {
+        command.then(literal("stop")
+                .requires(CommandManager.requirePermissionLevel(CommandManager.GAMEMASTERS_CHECK))
+                .executes(context -> {
             if (game == null || !game.started()) {
                 throw (new SimpleCommandExceptionType(Text.translatable("commands.molehunt.error.game_not_started"))).create();
             }
