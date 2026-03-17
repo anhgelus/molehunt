@@ -2,7 +2,7 @@
 
 Molehunt is a Minecraft mod creating the game with the same name in this cubic game.
 
-A complete wiki is available [here](https://www.anhgelus.world/molehunt/introduction.html).
+A complete wiki is available [here](https://william.herges.fr/molehunt/introduction.html).
 
 ## Usage
 
@@ -34,10 +34,11 @@ _Almost_ everything in the mod can configured.
 
 ## Configuration
 
-To change most values, you can play with the gamerules added by the mod with the 
+To change most values, you can play with the gamerules added by the mod with the
 `/gamerule` command. Every gamerule introduced by the mod starts with `molehunt:`.
 
-To dive deeper into the configuration, [an online wiki is available](https://www.anhgelus.world/molehunt/configuration.html).
+To dive deeper into the
+configuration, [an online wiki is available](https://william.herges.fr/molehunt/configuration.html).
 
 ## Technologies
 
