@@ -5,6 +5,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
+import org.jetbrains.annotations.NotNull;
 import world.anhgelus.molehunt.Molehunt;
 
 public record GamePayload(boolean gameLaunched) implements CustomPacketPayload {
@@ -17,6 +18,7 @@ public record GamePayload(boolean gameLaunched) implements CustomPacketPayload {
     );
 
     @Override
+    @NotNull
     public Type<? extends CustomPacketPayload> type() {
         return ID;
     }

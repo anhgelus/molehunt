@@ -1,33 +1,18 @@
 package world.anhgelus.molehunt.utils;
 
+import org.jetbrains.annotations.NotNull;
+
 public class TimeUtils {
 
-    private record Time(long hours, long minutes, long seconds) {}
-
-    public static String generateString(long time) {
-        final var pt = generateTime(time);
-
-        StringBuilder sb = new StringBuilder();
-        if (pt.hours != 0) {
-            sb.append(pt.hours).append(" hours ");
+    public record Time(long hours, long minutes, long seconds) {
+        public @NotNull String toString() {
+            return padLeft(hours) + ":" +
+                    padLeft(minutes) + ":" +
+                    padLeft(seconds);
         }
-        if (pt.minutes != 0 || pt.hours != 0) {
-            sb.append(pt.minutes).append(" minutes ");
-        }
-        sb.append(pt.seconds).append(" seconds");
-
-        return sb.toString();
     }
 
-    public static String generateShortString(long time) {
-        final var pt = generateTime(time);
-
-        return padLeft(pt.hours) + ":" +
-                padLeft(pt.minutes) + ":" +
-                padLeft(pt.seconds);
-    }
-
-    private static Time generateTime(long time) {
+    public static Time toTime(long time) {
         long hours = 0;
         if (time > 3600) {
             hours = Math.floorDiv(time, 3600);

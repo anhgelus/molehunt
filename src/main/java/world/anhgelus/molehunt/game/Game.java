@@ -156,7 +156,7 @@ public class Game {
     }
 
     public Component getRemainingText() {
-        return Component.nullToEmpty("§c" + TimeUtils.generateShortString(remaining));
+        return Component.nullToEmpty("§c" + TimeUtils.toTime(remaining));
     }
 
     public List<ServerPlayer> getMoles() {
@@ -180,12 +180,10 @@ public class Game {
 
     public boolean wonByMoles() {
         return new HashSet<>(moles).containsAll(
-                server.getPlayerList()
-                        .getPlayers()
-                        .stream()
-                        .filter(p -> !p.isSpectator() && !p.isCreative())
+                server.getPlayerList().getPlayers().stream()
+                        .filter(p -> p.gameMode.isSurvival())
                         .map(Entity::getUUID)
-                        .toList()
+                        .collect(Collectors.toSet())
         );
     }
 

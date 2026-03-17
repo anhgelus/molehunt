@@ -5,6 +5,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
+import org.jetbrains.annotations.NotNull;
 import world.anhgelus.molehunt.Molehunt;
 
 public record ConfigPayload(boolean showNametags, boolean showSkins, boolean showTab) implements CustomPacketPayload {
@@ -19,6 +20,7 @@ public record ConfigPayload(boolean showNametags, boolean showSkins, boolean sho
     );
 
     @Override
+    @NotNull
     public Type<? extends CustomPacketPayload> type() {
         return ID;
     }
