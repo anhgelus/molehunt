@@ -6,7 +6,8 @@
   "mixins": [
     "NoJoinLeaveMessage",
     "NoMsgCommand",
-    "NoPortals"
+    "NoPortals",
+    "WorldTimerAccess"
   ],
   "injectors": {
     "defaultRequire": 1
