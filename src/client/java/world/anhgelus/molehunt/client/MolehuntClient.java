@@ -1,14 +1,16 @@
 package world.anhgelus.molehunt.client;
 
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.minecraft.client.Minecraft;
-import net.minecraft.world.entity.player.PlayerModelPart;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import world.anhgelus.molehunt.Molehunt;
 import world.anhgelus.molehunt.config.ConfigPayload;
 import world.anhgelus.molehunt.game.GamePayload;
 
 public class MolehuntClient implements ClientModInitializer {
+
+    public static final Logger LOGGER = LoggerFactory.getLogger(Molehunt.MOD_ID + " - client");
 
     private static boolean SHOW_SKINS = false;
     private static boolean SHOW_NAMETAGS = false;
@@ -32,33 +34,16 @@ public class MolehuntClient implements ClientModInitializer {
         return GAME_STARTED;
     }
 
-    public static void updateClient(Minecraft client) {
-        if (SHOW_SKINS) return;
-        var options = client.options;
-
-        options.setModelPart(PlayerModelPart.CAPE, true);
-        options.setModelPart(PlayerModelPart.HAT, true);
-        options.setModelPart(PlayerModelPart.JACKET, true);
-        options.setModelPart(PlayerModelPart.LEFT_SLEEVE, true);
-        options.setModelPart(PlayerModelPart.RIGHT_SLEEVE, true);
-        options.setModelPart(PlayerModelPart.LEFT_PANTS_LEG, true);
-        options.setModelPart(PlayerModelPart.RIGHT_PANTS_LEG, true);
-    }
-
     @Override
     public void onInitializeClient() {
+        LOGGER.info("Initializing client");
         ClientPlayNetworking.registerGlobalReceiver(ConfigPayload.ID, (payload, context) -> {
-            try (final var client = context.client()) {
-                SHOW_SKINS = payload.showSkins();
-                SHOW_NAMETAGS = payload.showNametags();
-                SHOW_TAB = payload.showTab();
-
-                updateClient(client);
-            }
+            SHOW_SKINS = payload.showSkins();
+            SHOW_NAMETAGS = payload.showNametags();
+            SHOW_TAB = payload.showTab();
         });
-        ClientPlayNetworking.registerGlobalReceiver(GamePayload.ID, (payload, context) -> GAME_STARTED = payload.gameLaunched());
-
-        // Needed because else `client.options` is null
-        ClientLifecycleEvents.CLIENT_STARTED.register(MolehuntClient::updateClient);
+        ClientPlayNetworking.registerGlobalReceiver(GamePayload.ID, (payload, context) -> {
+            GAME_STARTED = payload.gameLaunched();
+        });
     }
 }
