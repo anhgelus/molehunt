@@ -12,7 +12,6 @@ import net.fabricmc.fabric.api.gamerule.v1.GameRuleEvents;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -115,6 +114,10 @@ public class Molehunt implements ModInitializer {
         command.then(literal("start")
                 .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                 .executes(context -> {
+                    if (game != null && game.started())
+                        throw (new SimpleCommandExceptionType(
+                                Component.translatable("commands.molehunt.error.game_already_started")
+                        )).create();
                     game = new Game(context.getSource().getServer());
                     game.start();
                     return Command.SINGLE_SUCCESS;
@@ -150,9 +153,10 @@ public class Molehunt implements ModInitializer {
         command.then(literal("role")
                 .requires(CommandSourceStack::isPlayer)
                 .executes(context -> {
-                    if (game == null || !game.started()) {
-                        throw (new SimpleCommandExceptionType(Component.translatable("commands.molehunt.error.game_not_started"))).create();
-                    }
+                    if (game == null || !game.started())
+                        throw (new SimpleCommandExceptionType(
+                                Component.translatable("commands.molehunt.error.game_not_started")
+                        )).create();
 
                     final var source = context.getSource();
                     final var player = source.getPlayer();
@@ -180,10 +184,11 @@ public class Molehunt implements ModInitializer {
                 }));
         command.then(literal("stop")
                 .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
-                .executes(context -> {
-                    if (game == null || !game.started()) {
-                        throw (new SimpleCommandExceptionType(Component.translatable("commands.molehunt.error.game_not_started"))).create();
-                    }
+                .executes(_ -> {
+                    if (game == null || !game.started())
+                        throw (new SimpleCommandExceptionType(
+                                Component.translatable("commands.molehunt.error.game_not_started")
+                        )).create();
 
                     game.stop();
 
@@ -192,31 +197,25 @@ public class Molehunt implements ModInitializer {
 
         ServerLifecycleEvents.SERVER_STARTED.register(server -> CONFIG = new Config(server));
 
-        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> dispatcher.register(command));
+        CommandRegistrationCallback.EVENT.register((dispatcher, _, _) -> dispatcher.register(command));
 
-        ServerMessageEvents.ALLOW_CHAT_MESSAGE.register((message, sender, params) -> false);
+        ServerMessageEvents.ALLOW_CHAT_MESSAGE.register((_, _, _) -> false);
 
-        ServerLivingEntityEvents.AFTER_DEATH.register((entity, damageSource) -> {
+        ServerLivingEntityEvents.AFTER_DEATH.register((entity, _) -> {
             if (!(entity instanceof ServerPlayer) || game == null) return;
             if (!game.started()) return;
             if (game.wonByMoles()) game.end();
         });
 
-        ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) -> {
+        ServerPlayerEvents.AFTER_RESPAWN.register((_, newPlayer, _) -> {
             if (game == null) return;
             if (!game.started()) return;
             newPlayer.setGameMode(GameType.SPECTATOR);
         });
 
-        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
-            ServerPlayNetworking.send(
-                    handler.player,
-                    new ConfigPayload(CONFIG.nametagsEnabled(), CONFIG.skinsEnabled(), CONFIG.tabEnabled())
-            );
-            ServerPlayNetworking.send(
-                    handler.player,
-                    new GamePayload(game != null && game.started())
-            );
+        ServerPlayConnectionEvents.JOIN.register((_, sender, _) -> {
+            sender.sendPacket(new ConfigPayload(CONFIG.nametagsEnabled(), CONFIG.skinsEnabled(), CONFIG.tabEnabled()));
+            sender.sendPacket(new GamePayload(game != null && game.started()));
         });
 
         PayloadTypeRegistry.clientboundPlay().register(ConfigPayload.ID, ConfigPayload.CODEC);
