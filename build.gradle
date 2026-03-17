@@ -39,15 +39,18 @@ dependencies {
 }
 
 processResources {
+    String mc_version = project.minecraft_version.replace("pre-", "pre.")
+    getLogger().info("version: {}", mc_version)
+
     inputs.property "version", project.version
-    inputs.property "minecraft_version", project.minecraft_version
+    inputs.property "minecraft_version", mc_version
     inputs.property "loader_version", project.loader_version
     filteringCharset "UTF-8"
 
     filesMatching("fabric.mod.json") {
-        expand "version": project.version,
-                "minecraft_version": project.minecraft_version,
-                "loader_version": project.loader_version
+        expand "version": inputs.properties.version,
+                "minecraft_version": inputs.properties.minecraft_version,
+                "loader_version": inputs.properties.loader_version
     }
 }
 
@@ -65,7 +68,7 @@ java {
 
 jar {
     from("LICENSE") {
-        rename { "${it}_${inputs.properties.archivesName}"}
+        rename { "${it}_${inputs.properties.archivesName}" }
     }
 }
 
