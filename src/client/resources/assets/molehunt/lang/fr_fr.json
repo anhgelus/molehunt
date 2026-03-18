@@ -17,13 +17,13 @@
 	"molehunt.game.start.mole.subtitle": "§eRécupérer la liste des taupes avec §6/molehunt moles",
 	"molehunt.game.start.survivor.title": "§aPas la taupe!",
 	"molehunt.game.start.survivor.subtitle": "§eEssaye de survivre et de trouver qui est la taupe !",
-	"gamerule.molehunt:gameDuration": "Molehunt : Durée d'une partie",
-	"gamerule.molehunt:molePercentage": "Molehunt : Pourcentage de Taupes",
-	"gamerule.molehunt:moleCount": "Molehunt : Nombre de Taupes",
-	"gamerule.molehunt:showNametags": "Molehunt : Affiche les nametags des joueurs",
-	"gamerule.molehunt:showTab": "Molehunt : Active la liste des joueurs",
-	"gamerule.molehunt:showSkins": "Molehunt : Affiche les skins des joueurs",
-	"gamerule.molehunt:initialWorldSize": "Molehunt : Taille initiale du monde",
-	"gamerule.molehunt:finalWorldSize": "Molehunt : Taille finale du monde",
-	"gamerule.molehunt:borderMovingStartingTimeOffsetMinutes": "Molehunt : Temps avant de bouger les bordures du monde"
+	"gamerule.molehunt.game_duration": "Molehunt : Durée d'une partie",
+	"gamerule.molehunt.mole_percentage": "Molehunt : Pourcentage de Taupes",
+	"gamerule.molehunt.mole_count": "Molehunt : Nombre de Taupes",
+	"gamerule.molehunt.show_nametags": "Molehunt : Affiche les nametags des joueurs",
+	"gamerule.molehunt.show_tab": "Molehunt : Active la liste des joueurs",
+	"gamerule.molehunt.show_skins": "Molehunt : Affiche les skins des joueurs",
+	"gamerule.molehunt.initial_world_zize": "Molehunt : Taille finale du monde",
+	"gamerule.molehunt.final_world_size": "Molehunt: Final world size",
+	"gamerule.molehunt.border_moving_starting_time_offset_minutes": "Molehunt : Temps avant de bouger les bordures du monde"
 }
