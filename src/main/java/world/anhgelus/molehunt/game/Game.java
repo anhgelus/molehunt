@@ -28,7 +28,7 @@ public class Game {
 
 	public final int DEFAULT_TIME = Molehunt.CONFIG.getGameDuration() * 60;
 	private final MinecraftServer server;
-	private final List<UUID> moles = new ArrayList<>();
+	private final Set<UUID> moles = new HashSet<>();
 	private final ClientboundSetTitlesAnimationPacket timing = new ClientboundSetTitlesAnimationPacket(20, 40, 20);
 	private boolean started = false;
 	private int remaining = DEFAULT_TIME;
@@ -87,7 +87,7 @@ public class Game {
 		timer.dds_runTask(new TickTask(() -> {
 			playerManager.getPlayers().forEach(p -> {
 				p.connection.send(timing);
-				if (moles.contains(p.getUUID())) {
+				if (isMole(p)) {
 					p.connection.send(new ClientboundSetTitleTextPacket(Component.translatable("molehunt.game.start.mole.title")));
 					p.connection.send(new ClientboundSetSubtitleTextPacket(Component.translatable("molehunt.game.start.mole.subtitle")));
 				} else {
@@ -182,8 +182,8 @@ public class Game {
 	}
 
 	public boolean wonByMoles() {
-		final var moles = getMoles().map(Player::getUUID).toList();
-		return !moles.isEmpty() && new HashSet<>(moles).containsAll(
+		final var moles = getMoles().map(Player::getUUID).collect(Collectors.toSet());
+		return !moles.isEmpty() && moles.containsAll(
 			server.getPlayerList()
 				.getPlayers()
 				.stream()
@@ -196,7 +196,7 @@ public class Game {
 	private void changeState(boolean hasStarted) {
 		started = hasStarted;
 		final var payload = new GamePayload(hasStarted);
-		server.getPlayerList().getPlayers().forEach(p -> ServerPlayNetworking.send(p, payload));
+		server.getPlayerList().broadcastAll(ServerPlayNetworking.createClientboundPacket(payload));
 	}
 
 	public boolean started() {
