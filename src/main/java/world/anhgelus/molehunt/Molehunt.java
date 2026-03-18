@@ -46,51 +46,51 @@ public class Molehunt implements ModInitializer {
 	public static final GameRule<Integer> GAME_DURATION = GameRuleBuilder
 		.forInteger(CONFIG_FILE.getOrDefault("game_duration", 90))
 		.category(GameRuleCategory.MISC)
-		.buildAndRegister(Identifier.of(MOD_ID, "gameDurationMinutes"));
+		.buildAndRegister(Identifier.of(MOD_ID, "game_duration_minutes"));
 	public static final GameRule<Integer> MOLE_PERCENTAGE = GameRuleBuilder
 		.forInteger(CONFIG_FILE.getOrDefault("mole_percentage", 25))
 		.range(0, 100)
 		.category(GameRuleCategory.MISC)
-		.buildAndRegister(Identifier.of(MOD_ID, "molePercentage"));
+		.buildAndRegister(Identifier.of(MOD_ID, "mole_percentage"));
 	public static final GameRule<Integer> MOLE_COUNT = GameRuleBuilder
 		.forInteger(CONFIG_FILE.getOrDefault("mole_count", -1))
 		.category(GameRuleCategory.MISC)
-		.buildAndRegister(Identifier.of(MOD_ID, "moleCount"));
+		.buildAndRegister(Identifier.of(MOD_ID, "mole_count"));
 	public static final GameRule<Boolean> SHOW_NAMETAGS = GameRuleBuilder
 		.forBoolean(CONFIG_FILE.getOrDefault("show_nametags", false))
 		.category(GameRuleCategory.MISC)
-		.buildAndRegister(Identifier.of(MOD_ID, "showNametags"));
+		.buildAndRegister(Identifier.of(MOD_ID, "show_nametags"));
 	public static final GameRule<Boolean> SHOW_TAB = GameRuleBuilder
 		.forBoolean(CONFIG_FILE.getOrDefault("show_tab", false))
 		.category(GameRuleCategory.MISC)
-		.buildAndRegister(Identifier.of(MOD_ID, "showTab"));
+		.buildAndRegister(Identifier.of(MOD_ID, "show_tab"));
 	public static final GameRule<Boolean> SHOW_SKINS = GameRuleBuilder
 		.forBoolean(CONFIG_FILE.getOrDefault("show_skins", false))
 		.category(GameRuleCategory.MISC)
-		.buildAndRegister(Identifier.of(MOD_ID, "showSkins"));
+		.buildAndRegister(Identifier.of(MOD_ID, "show_skins"));
 	public static final GameRule<Integer> INITIAL_WORLD_SIZE = GameRuleBuilder
 		.forInteger(CONFIG_FILE.getOrDefault("initial_world_size", 600))
 		.minValue(0)
 		.category(GameRuleCategory.MISC)
-		.buildAndRegister(Identifier.of(MOD_ID, "initialWorldSize"));
+		.buildAndRegister(Identifier.of(MOD_ID, "initial_world_size"));
 	public static final GameRule<Integer> FINAL_WORLD_SIZE = GameRuleBuilder
 		.forInteger(CONFIG_FILE.getOrDefault("final_world_size", 100))
 		.minValue(0)
 		.category(GameRuleCategory.MISC)
-		.buildAndRegister(Identifier.of(MOD_ID, "finalWorldSize"));
+		.buildAndRegister(Identifier.of(MOD_ID, "final_world_size"));
 	public static final GameRule<Integer> MOVING_STARTING_TIME_OFFSET = GameRuleBuilder
 		.forInteger(CONFIG_FILE.getOrDefault("border_moving_starting_time_offset", 30))
 		.minValue(0)
 		.category(GameRuleCategory.MISC)
-		.buildAndRegister(Identifier.of(MOD_ID, "borderMovingStartingTimeOffsetMinutes"));
+		.buildAndRegister(Identifier.of(MOD_ID, "border_moving_starting_time_offset_minutes"));
 	public static final GameRule<Boolean> ENABLE_PORTALS = GameRuleBuilder
 		.forBoolean(CONFIG_FILE.getOrDefault("enable_portals", false))
 		.category(GameRuleCategory.MISC)
-		.buildAndRegister(Identifier.of(MOD_ID, "enablePortals"));
+		.buildAndRegister(Identifier.of(MOD_ID, "enable_portals"));
 	public static final GameRule<Boolean> FOOD_ON_START = GameRuleBuilder
 		.forBoolean(CONFIG_FILE.getOrDefault("food_on_start", true))
 		.category(GameRuleCategory.MISC)
-		.buildAndRegister(Identifier.of(MOD_ID, "foodOnStart"));
+		.buildAndRegister(Identifier.of(MOD_ID, "food_on_start"));
 	public static Config CONFIG;
 	public static HashMap<UUID, Boolean> timerVisibility = new HashMap<>();
 
