@@ -1,7 +1,6 @@
 package world.anhgelus.molehunt.timer;
 
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.World;
 
 import java.util.List;
 
@@ -13,10 +12,7 @@ public interface TimerAccess {
 	 * @return TimerAccess linked to the overworld
 	 */
 	static TimerAccess getTimerFromOverworld(MinecraftServer server) {
-		final var timer = (TimerAccess) server.getWorld(World.OVERWORLD);
-		if (timer == null)
-			throw new NullPointerException("Impossible to get TimerAccess from the overworld (it is null)");
-		return timer;
+		return (TimerAccess) server.overworld();
 	}
 
 	/**

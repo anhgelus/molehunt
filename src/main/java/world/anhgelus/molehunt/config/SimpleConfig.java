@@ -84,9 +84,10 @@ public class SimpleConfig {
 	}
 
 	private void createConfig() throws IOException {
-
 		// try creating missing files
-		request.file.getParentFile().mkdirs();
+		final var parent = request.file.getParentFile();
+		if (parent == null) throw new IOException("Cannot get parent file of the config");
+		parent.mkdirs();
 		Files.createFile(request.file.toPath());
 
 		// write default config data
@@ -114,15 +115,7 @@ public class SimpleConfig {
 		}
 	}
 
-	/**
-	 * Queries a value from config, returns `null` if the
-	 * key does not exist.
-	 *
-	 * @return value corresponding to the given key
-	 * @see SimpleConfig#getOrDefault
-	 */
-	@Deprecated
-	public String get(String key) {
+	private String get(String key) {
 		return config.get(key);
 	}
 

@@ -1,23 +1,25 @@
 package world.anhgelus.molehunt.game;
 
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
-import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.util.Identifier;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.Identifier;
+import org.jetbrains.annotations.NotNull;
 import world.anhgelus.molehunt.Molehunt;
 
-public record GamePayload(boolean gameLaunched) implements CustomPayload {
-	public static final Identifier GAME_PACKET_ID = Identifier.of(Molehunt.MOD_ID, "game");
+public record GamePayload(boolean gameLaunched) implements CustomPacketPayload {
+	public static final Identifier GAME_PACKET_ID = Identifier.fromNamespaceAndPath(Molehunt.MOD_ID, "game");
 
-	public static final CustomPayload.Id<GamePayload> ID = new CustomPayload.Id<>(GAME_PACKET_ID);
-	public static final PacketCodec<RegistryByteBuf, GamePayload> CODEC = PacketCodec.tuple(
-		PacketCodecs.BOOLEAN, GamePayload::gameLaunched,
+	public static final CustomPacketPayload.Type<GamePayload> ID = new CustomPacketPayload.Type<>(GAME_PACKET_ID);
+	public static final StreamCodec<RegistryFriendlyByteBuf, GamePayload> CODEC = StreamCodec.composite(
+		ByteBufCodecs.BOOL, GamePayload::gameLaunched,
 		GamePayload::new
 	);
 
 	@Override
-	public Id<? extends CustomPayload> getId() {
+	@NotNull
+	public Type<? extends CustomPacketPayload> type() {
 		return ID;
 	}
 }
