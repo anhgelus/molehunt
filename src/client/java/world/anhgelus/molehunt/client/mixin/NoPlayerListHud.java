@@ -9,9 +9,9 @@ import world.anhgelus.molehunt.client.MolehuntClient;
 
 @Mixin(PlayerListHud.class)
 public class NoPlayerListHud {
-    @Inject(at = @At("HEAD"), method = "render", cancellable = true)
-    public void render(CallbackInfo ci) {
-        if (MolehuntClient.showTab() || !MolehuntClient.gameStarted()) return;
-        ci.cancel();
-    }
+	@Inject(at = @At("HEAD"), method = "render", cancellable = true)
+	public void render(CallbackInfo ci) {
+		if (MolehuntClient.showTab() || !MolehuntClient.gameStarted()) return;
+		ci.cancel();
+	}
 }

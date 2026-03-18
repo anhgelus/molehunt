@@ -7,7 +7,6 @@ import net.minecraft.client.render.state.CameraRenderState;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.player.PlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -16,9 +15,10 @@ import world.anhgelus.molehunt.client.MolehuntClient;
 
 @Mixin(EntityRenderer.class)
 public class NoNametags<T extends Entity, S extends EntityRenderState> {
-    @Inject(at = @At("HEAD"), method = "render", cancellable = true)
-    private void renderLabelOrNot(S state, MatrixStack matrices, OrderedRenderCommandQueue queue, CameraRenderState cameraState, CallbackInfo ci) {
-        if (EntityType.PLAYER != state.entityType || MolehuntClient.showNameTags() || !MolehuntClient.gameStarted()) return;
-        ci.cancel();
-    }
+	@Inject(at = @At("HEAD"), method = "render", cancellable = true)
+	private void renderLabelOrNot(S state, MatrixStack matrices, OrderedRenderCommandQueue queue, CameraRenderState cameraState, CallbackInfo ci) {
+		if (EntityType.PLAYER != state.entityType || MolehuntClient.showNameTags() || !MolehuntClient.gameStarted())
+			return;
+		ci.cancel();
+	}
 }

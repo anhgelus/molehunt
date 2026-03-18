@@ -8,18 +8,18 @@ import net.minecraft.util.Identifier;
 import world.anhgelus.molehunt.Molehunt;
 
 public record ConfigPayload(boolean showNametags, boolean showSkins, boolean showTab) implements CustomPayload {
-    public static final Identifier CONFIG_PACKET_ID = Identifier.of(Molehunt.MOD_ID, "config");
+	public static final Identifier CONFIG_PACKET_ID = Identifier.of(Molehunt.MOD_ID, "config");
 
-    public static final CustomPayload.Id<ConfigPayload> ID = new CustomPayload.Id<>(CONFIG_PACKET_ID);
-    public static final PacketCodec<RegistryByteBuf, ConfigPayload> CODEC = PacketCodec.tuple(
-            PacketCodecs.BOOLEAN, ConfigPayload::showNametags,
-            PacketCodecs.BOOLEAN, ConfigPayload::showSkins,
-            PacketCodecs.BOOLEAN, ConfigPayload::showTab,
-            ConfigPayload::new
-    );
+	public static final CustomPayload.Id<ConfigPayload> ID = new CustomPayload.Id<>(CONFIG_PACKET_ID);
+	public static final PacketCodec<RegistryByteBuf, ConfigPayload> CODEC = PacketCodec.tuple(
+		PacketCodecs.BOOLEAN, ConfigPayload::showNametags,
+		PacketCodecs.BOOLEAN, ConfigPayload::showSkins,
+		PacketCodecs.BOOLEAN, ConfigPayload::showTab,
+		ConfigPayload::new
+	);
 
-    @Override
-    public Id<? extends CustomPayload> getId() {
-        return ID;
-    }
+	@Override
+	public Id<? extends CustomPayload> getId() {
+		return ID;
+	}
 }

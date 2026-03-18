@@ -9,10 +9,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerManager.class)
 public class NoJoinLeaveMessage {
-    @Inject(at = @At("HEAD"), method = "broadcast*", cancellable = true)
-    public void broadcastNoJoinLeaveMessage(Text message, boolean overlay, CallbackInfo ci) {
-        final var content = message.getContent().toString();
-        if (content.startsWith("translation{key='multiplayer.player.joined")) ci.cancel();
-        else if (content.startsWith("translation{key='multiplayer.player.left")) ci.cancel();
-    }
+	@Inject(at = @At("HEAD"), method = "broadcast*", cancellable = true)
+	public void broadcastNoJoinLeaveMessage(Text message, boolean overlay, CallbackInfo ci) {
+		final var content = message.getContent().toString();
+		if (content.startsWith("translation{key='multiplayer.player.joined")) ci.cancel();
+		else if (content.startsWith("translation{key='multiplayer.player.left")) ci.cancel();
+	}
 }

@@ -1,15 +1,15 @@
 {
-  "required": true,
-  "minVersion": "0.8",
-  "package": "world.anhgelus.molehunt.mixin",
-  "compatibilityLevel": "JAVA_21",
-  "mixins": [
-    "NoJoinLeaveMessage",
-    "NoMsgCommand",
-    "NoPortals",
-    "WorldTimerAccess"
-  ],
-  "injectors": {
-    "defaultRequire": 1
-  }
+	"required": true,
+	"minVersion": "0.8",
+	"package": "world.anhgelus.molehunt.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+		"NoJoinLeaveMessage",
+		"NoMsgCommand",
+		"NoPortals",
+		"WorldTimerAccess"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
 }

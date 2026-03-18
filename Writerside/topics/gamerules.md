@@ -1,11 +1,11 @@
 # Gamerules
 
-To change the mods behavior, you can change your world's gamerules. Every gamerule added 
+To change the mods behavior, you can change your world's gamerules. Every gamerule added
 by this mod starts with the prefix `molehunt:`.
 
 > If plan on making multiple worlds, and don't want to set the gamerules each time,
 > [edit the configuration file](config-file.md).
-{style=tip}
+> {style=tip}
 
 Here's a list of all the Molehunt gamerules.
 
@@ -15,16 +15,16 @@ Here's a list of all the Molehunt gamerules.
 
 - `gameDurationMinutes`: sets the game's duration in minutes (default: `90 minutes`).
 - `molePercentage`: sets the mole percentage among all players (default: `25 %`).
-- `moleCount`: the absolute mole amount. Overwrites `molePercentage`. To disable 
-  this setting, set it to `-1` (default: `-1`). 
+- `moleCount`: the absolute mole amount. Overwrites `molePercentage`. To disable
+  this setting, set it to `-1` (default: `-1`).
 - `foodOnStart`: give food on start
 
 ### Client-side settings
 
 > These gamerules affect client-side features, but are still applied to all players.
-> 
+>
 > Also, they will only be effective when the game starts.
-{style=note}
+> {style=note}
 
 - `showNametags`: players' nametags are shown (default: `false`).
 - `showSkins`: players' custom skin is visible. Setting this to false will
@@ -40,6 +40,7 @@ Here's a list of all the Molehunt gamerules.
 
 - `initialWorldSize`: the world size when starting the game (default: `600 blocks`).
 - `finalWorldSize`: the target world size on the end of the game (default: `100 blocks`).
-- `borderMovingStartingTimeOffsetMinutes`: the time before the world borders start to move in minutes (default: `10 minutes`).
+- `borderMovingStartingTimeOffsetMinutes`: the time before the world borders start to move in minutes (default:
+  `10 minutes`).
   > Setting this to a value greater than `gameDuration` will make the borders never move.
   {style=note}

@@ -34,10 +34,11 @@ _Almost_ everything in the mod can configured.
 
 ## Configuration
 
-To change most values, you can play with the gamerules added by the mod with the 
+To change most values, you can play with the gamerules added by the mod with the
 `/gamerule` command. Every gamerule introduced by the mod starts with `molehunt:`.
 
-To dive deeper into the configuration, [an online wiki is available](https://www.anhgelus.world/molehunt/configuration.html).
+To dive deeper into the
+configuration, [an online wiki is available](https://www.anhgelus.world/molehunt/configuration.html).
 
 ## Technologies
 

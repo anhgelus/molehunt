@@ -14,14 +14,14 @@ import world.anhgelus.molehunt.client.MolehuntClient;
 
 @Mixin(AbstractClientPlayerEntity.class)
 public class NoSkin {
-    @Inject(at = @At("HEAD"), method = "getSkin", cancellable = true)
-    public void getSkin(CallbackInfoReturnable<SkinTextures> cir) {
-        if (MolehuntClient.showSkins() || !MolehuntClient.gameStarted()) return;
-        cir.setReturnValue(SkinTextures.create(
-                new AssetInfo.TextureAssetInfo(Identifier.of(Molehunt.MOD_ID, "skin")),
-                null,
-                null,
-                PlayerSkinType.WIDE
-        ));
-    }
+	@Inject(at = @At("HEAD"), method = "getSkin", cancellable = true)
+	public void getSkin(CallbackInfoReturnable<SkinTextures> cir) {
+		if (MolehuntClient.showSkins() || !MolehuntClient.gameStarted()) return;
+		cir.setReturnValue(SkinTextures.create(
+			new AssetInfo.TextureAssetInfo(Identifier.of(Molehunt.MOD_ID, "skin")),
+			null,
+			null,
+			PlayerSkinType.WIDE
+		));
+	}
 }
