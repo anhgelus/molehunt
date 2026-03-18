@@ -9,19 +9,19 @@ import org.jetbrains.annotations.NotNull;
 import world.anhgelus.molehunt.Molehunt;
 
 public record ConfigPayload(boolean showNametags, boolean showSkins, boolean showTab) implements CustomPacketPayload {
-    public static final Identifier CONFIG_PACKET_ID = Identifier.fromNamespaceAndPath(Molehunt.MOD_ID, "config");
+	public static final Identifier CONFIG_PACKET_ID = Identifier.fromNamespaceAndPath(Molehunt.MOD_ID, "config");
 
-    public static final CustomPacketPayload.Type<ConfigPayload> ID = new CustomPacketPayload.Type<>(CONFIG_PACKET_ID);
-    public static final StreamCodec<RegistryFriendlyByteBuf, ConfigPayload> CODEC = StreamCodec.composite(
-            ByteBufCodecs.BOOL, ConfigPayload::showNametags,
-            ByteBufCodecs.BOOL, ConfigPayload::showSkins,
-            ByteBufCodecs.BOOL, ConfigPayload::showTab,
-            ConfigPayload::new
-    );
+	public static final CustomPacketPayload.Type<ConfigPayload> ID = new CustomPacketPayload.Type<>(CONFIG_PACKET_ID);
+	public static final StreamCodec<RegistryFriendlyByteBuf, ConfigPayload> CODEC = StreamCodec.composite(
+		ByteBufCodecs.BOOL, ConfigPayload::showNametags,
+		ByteBufCodecs.BOOL, ConfigPayload::showSkins,
+		ByteBufCodecs.BOOL, ConfigPayload::showTab,
+		ConfigPayload::new
+	);
 
-    @Override
-    @NotNull
-    public Type<? extends CustomPacketPayload> type() {
-        return ID;
-    }
+	@Override
+	@NotNull
+	public Type<? extends CustomPacketPayload> type() {
+		return ID;
+	}
 }

@@ -11,9 +11,9 @@ import world.anhgelus.molehunt.Molehunt;
 
 @Mixin(PortalProcessor.class)
 public class NoPortals {
-    @Inject(at = @At("HEAD"), method = "processPortalTeleportation", cancellable = true)
-    public void disableTick(ServerLevel world, Entity entity, boolean canUsePortals, CallbackInfoReturnable<Boolean> cir) {
-        if (Molehunt.CONFIG == null || Molehunt.CONFIG.portalsEnabled()) return;
-        cir.setReturnValue(false);
-    }
+	@Inject(at = @At("HEAD"), method = "processPortalTeleportation", cancellable = true)
+	public void disableTick(ServerLevel world, Entity entity, boolean canUsePortals, CallbackInfoReturnable<Boolean> cir) {
+		if (Molehunt.CONFIG == null || Molehunt.CONFIG.portalsEnabled()) return;
+		cir.setReturnValue(false);
+	}
 }

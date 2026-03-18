@@ -10,40 +10,40 @@ import world.anhgelus.molehunt.game.GamePayload;
 
 public class MolehuntClient implements ClientModInitializer {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(Molehunt.MOD_ID + " - client");
+	public static final Logger LOGGER = LoggerFactory.getLogger(Molehunt.MOD_ID + " - client");
 
-    private static boolean SHOW_SKINS = false;
-    private static boolean SHOW_NAMETAGS = false;
-    private static boolean SHOW_TAB = false;
+	private static boolean SHOW_SKINS = false;
+	private static boolean SHOW_NAMETAGS = false;
+	private static boolean SHOW_TAB = false;
 
-    private static boolean GAME_STARTED = false;
+	private static boolean GAME_STARTED = false;
 
-    public static boolean showSkins() {
-        return SHOW_SKINS;
-    }
+	public static boolean showSkins() {
+		return SHOW_SKINS;
+	}
 
-    public static boolean showNameTags() {
-        return SHOW_NAMETAGS;
-    }
+	public static boolean showNameTags() {
+		return SHOW_NAMETAGS;
+	}
 
-    public static boolean showTab() {
-        return SHOW_TAB;
-    }
+	public static boolean showTab() {
+		return SHOW_TAB;
+	}
 
-    public static boolean gameStarted() {
-        return GAME_STARTED;
-    }
+	public static boolean gameStarted() {
+		return GAME_STARTED;
+	}
 
-    @Override
-    public void onInitializeClient() {
-        LOGGER.info("Initializing client");
-        ClientPlayNetworking.registerGlobalReceiver(ConfigPayload.ID, (payload, context) -> {
-            SHOW_SKINS = payload.showSkins();
-            SHOW_NAMETAGS = payload.showNametags();
-            SHOW_TAB = payload.showTab();
-        });
-        ClientPlayNetworking.registerGlobalReceiver(GamePayload.ID, (payload, context) -> {
-            GAME_STARTED = payload.gameLaunched();
-        });
-    }
+	@Override
+	public void onInitializeClient() {
+		LOGGER.info("Initializing client");
+		ClientPlayNetworking.registerGlobalReceiver(ConfigPayload.ID, (payload, context) -> {
+			SHOW_SKINS = payload.showSkins();
+			SHOW_NAMETAGS = payload.showNametags();
+			SHOW_TAB = payload.showTab();
+		});
+		ClientPlayNetworking.registerGlobalReceiver(GamePayload.ID, (payload, context) -> {
+			GAME_STARTED = payload.gameLaunched();
+		});
+	}
 }

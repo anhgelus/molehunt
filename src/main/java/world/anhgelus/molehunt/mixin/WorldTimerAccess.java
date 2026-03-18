@@ -1,6 +1,6 @@
 package world.anhgelus.molehunt.mixin;
 
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -12,34 +12,34 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BooleanSupplier;
 
-@Mixin(ServerWorld.class)
+@Mixin(ServerLevel.class)
 public class WorldTimerAccess implements TimerAccess {
-    @Unique
-    private final List<TickTask> tasks = new ArrayList<>();
+	@Unique
+	private final List<TickTask> tasks = new ArrayList<>();
 
-    @Unique
-    private final List<TimerAccess.TickTask> tasksToAdd = new ArrayList<>();
+	@Unique
+	private final List<TimerAccess.TickTask> tasksToAdd = new ArrayList<>();
 
-    @Inject(method = "tick", at = @At("TAIL"))
-    private void onTick(BooleanSupplier shouldKeepTicking, CallbackInfo ci) {
-        tasks.stream().filter(TickTask::isRunning).forEach(TickTask::tick);
-        tasks.addAll(tasksToAdd);
-        tasksToAdd.clear();
-    }
+	@Inject(method = "tick", at = @At("TAIL"))
+	private void onTick(BooleanSupplier shouldKeepTicking, CallbackInfo ci) {
+		tasks.stream().filter(TickTask::isRunning).forEach(TickTask::tick);
+		tasks.addAll(tasksToAdd);
+		tasksToAdd.clear();
+	}
 
-    @Override
-    public void dds_runTask(TimerAccess.TickTask task) {
-        tasksToAdd.add(task);
-    }
+	@Override
+	public void dds_runTask(TimerAccess.TickTask task) {
+		tasksToAdd.add(task);
+	}
 
-    @Override
-    public void dds_cancel() {
-        tasks.stream().filter(TickTask::isRunning).forEach(TickTask::cancel);
-        tasks.clear();
-    }
+	@Override
+	public void dds_cancel() {
+		tasks.stream().filter(TickTask::isRunning).forEach(TickTask::cancel);
+		tasks.clear();
+	}
 
-    @Override
-    public List<TickTask> dds_getTasks() {
-        return tasks.stream().filter(TickTask::isRunning).toList();
-    }
+	@Override
+	public List<TickTask> dds_getTasks() {
+		return tasks.stream().filter(TickTask::isRunning).toList();
+	}
 }

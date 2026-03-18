@@ -15,41 +15,41 @@ import world.anhgelus.molehunt.client.MolehuntClient;
 
 @Mixin(Options.class)
 public abstract class NoCustomizableSkinOverlay {
-    @Unique
-    private static int fullParts;
+	@Unique
+	private static int fullParts;
 
-    static {
-        for (PlayerModelPart part : PlayerModelPart.values()) {
-            fullParts |= part.getMask();
-        }
-    }
-    
-    @Shadow
-    protected Minecraft minecraft;
+	static {
+		for (PlayerModelPart part : PlayerModelPart.values()) {
+			fullParts |= part.getMask();
+		}
+	}
 
-    @Inject(at = @At("HEAD"), method = "setModelPart", cancellable = true)
-    public void togglePlayerModelPart(PlayerModelPart part, boolean enabled, CallbackInfo ci) {
-        if (MolehuntClient.showSkins()) return;
-        ci.cancel();
-    }
+	@Shadow
+	protected Minecraft minecraft;
 
-    @Inject(at = @At("RETURN"), method = "buildPlayerInformation", cancellable = true)
-    public void buildPlayerInformation(CallbackInfoReturnable<ClientInformation> cir) {
-        if (MolehuntClient.showSkins()) return;
-        final var opts = (Options) (Object) this;
+	@Inject(at = @At("HEAD"), method = "setModelPart", cancellable = true)
+	public void togglePlayerModelPart(PlayerModelPart part, boolean enabled, CallbackInfo ci) {
+		if (MolehuntClient.showSkins()) return;
+		ci.cancel();
+	}
 
-        cir.setReturnValue(
-                new ClientInformation(
-                        opts.languageCode,
-                        opts.renderDistance().get(),
-                        opts.chatVisibility().get(),
-                        opts.chatColors().get(),
-                        fullParts,
-                        opts.mainHand().get(),
-                        this.minecraft.isTextFilteringEnabled(),
-                        opts.allowServerListing().get(),
-                        opts.particles().get()
-                )
-        );
-    }
+	@Inject(at = @At("RETURN"), method = "buildPlayerInformation", cancellable = true)
+	public void buildPlayerInformation(CallbackInfoReturnable<ClientInformation> cir) {
+		if (MolehuntClient.showSkins()) return;
+		final var opts = (Options) (Object) this;
+
+		cir.setReturnValue(
+			new ClientInformation(
+				opts.languageCode,
+				opts.renderDistance().get(),
+				opts.chatVisibility().get(),
+				opts.chatColors().get(),
+				fullParts,
+				opts.mainHand().get(),
+				this.minecraft.isTextFilteringEnabled(),
+				opts.allowServerListing().get(),
+				opts.particles().get()
+			)
+		);
+	}
 }

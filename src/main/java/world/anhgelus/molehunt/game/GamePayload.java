@@ -9,17 +9,17 @@ import org.jetbrains.annotations.NotNull;
 import world.anhgelus.molehunt.Molehunt;
 
 public record GamePayload(boolean gameLaunched) implements CustomPacketPayload {
-    public static final Identifier GAME_PACKET_ID = Identifier.fromNamespaceAndPath(Molehunt.MOD_ID, "game");
+	public static final Identifier GAME_PACKET_ID = Identifier.fromNamespaceAndPath(Molehunt.MOD_ID, "game");
 
-    public static final CustomPacketPayload.Type<GamePayload> ID = new CustomPacketPayload.Type<>(GAME_PACKET_ID);
-    public static final StreamCodec<RegistryFriendlyByteBuf, GamePayload> CODEC = StreamCodec.composite(
-            ByteBufCodecs.BOOL, GamePayload::gameLaunched,
-            GamePayload::new
-    );
+	public static final CustomPacketPayload.Type<GamePayload> ID = new CustomPacketPayload.Type<>(GAME_PACKET_ID);
+	public static final StreamCodec<RegistryFriendlyByteBuf, GamePayload> CODEC = StreamCodec.composite(
+		ByteBufCodecs.BOOL, GamePayload::gameLaunched,
+		GamePayload::new
+	);
 
-    @Override
-    @NotNull
-    public Type<? extends CustomPacketPayload> type() {
-        return ID;
-    }
+	@Override
+	@NotNull
+	public Type<? extends CustomPacketPayload> type() {
+		return ID;
+	}
 }

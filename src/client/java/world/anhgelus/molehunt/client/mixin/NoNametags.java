@@ -12,9 +12,9 @@ import world.anhgelus.molehunt.client.MolehuntClient;
 
 @Mixin(EntityRenderer.class)
 public class NoNametags<T extends Entity, S extends EntityRenderState> {
-    @Inject(at = @At("HEAD"), method = "shouldShowName", cancellable = true)
-    private void renderLabelOrNot(T entity, double distanceToCameraSq, CallbackInfoReturnable<Boolean> cir) {
-        if (!(entity instanceof Player) || MolehuntClient.showNameTags() || !MolehuntClient.gameStarted()) return;
-        cir.setReturnValue(false);
-    }
+	@Inject(at = @At("HEAD"), method = "shouldShowName", cancellable = true)
+	private void renderLabelOrNot(T entity, double distanceToCameraSq, CallbackInfoReturnable<Boolean> cir) {
+		if (!(entity instanceof Player) || MolehuntClient.showNameTags() || !MolehuntClient.gameStarted()) return;
+		cir.setReturnValue(false);
+	}
 }

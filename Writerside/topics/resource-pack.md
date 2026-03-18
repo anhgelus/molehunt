@@ -3,14 +3,13 @@
 If you want to customize visual elements of the mod, you can create
 your own custom resource pack.
 
-Doing so will enable you to change or translate every text line used by 
+Doing so will enable you to change or translate every text line used by
 the mod, and also change to default skin that is applied to all players
 (if the [gamerule `showSkins`](gamerules.md#client-side-settings) is set to true).
 
 > After creating your resource pack, you can either force its use by setting it as
 > the server's resource pack, or make it optional (it's purely visuals anyway!)
-{style=tip}
-
+> {style=tip}
 
 ## First steps
 
@@ -19,6 +18,7 @@ inside of this folder, create a file named `pack.mcmeta`. This file is very impo
 the game that it is indeed a resource pack.
 
 Now, edit the `pack.mcmeta` file with your favorite text editor, and write the following:
+
 ```json
 {
   "pack": {
@@ -28,15 +28,16 @@ Now, edit the `pack.mcmeta` file with your favorite text editor, and write the f
 }
 ```
 
-> Note that the `pack_format` used here (34) corresponds to minecraft version 1.21.x. If you 
-> are making the resource pack for another version, you can check which pack format to use 
+> Note that the `pack_format` used here (34) corresponds to minecraft version 1.21.x. If you
+> are making the resource pack for another version, you can check which pack format to use
 > [on the wiki](https://minecraft.wiki/w/Pack_format).
-{style=note}
+> {style=note}
 
-You can now close the `pack.mcmeta` file. Now, inside your resource pack's main folder, 
-create a folder named `assets`, and inside it make another folder name `molehunt`. 
+You can now close the `pack.mcmeta` file. Now, inside your resource pack's main folder,
+create a folder named `assets`, and inside it make another folder name `molehunt`.
 
 You file tree you look like that:
+
 ```
 📁 MyAwesomeResourcePack
 ├── 📄 pack.mcmeta
@@ -46,18 +47,18 @@ You file tree you look like that:
 
 > If you want, you can also add an icon to your resource pack: just add a png file named
 > `pack.png` in your resource pack's main folder.
-{style=tip}
-
+> {style=tip}
 
 ## Adding a custom skin
 
 To add a custom skin, first you need to make one. You can either use
-your own skin, or make a new one using a minecraft skin editor (there are 
+your own skin, or make a new one using a minecraft skin editor (there are
 a lot online).
 
 Then grab your skin file (make sure it's a `.png` file!), name it `skin.png`
-and put it inside a `textures` folder, inside the `molehunt` folder. It should 
+and put it inside a `textures` folder, inside the `molehunt` folder. It should
 look like that:
+
 ```
 ...
 📁 assets
@@ -68,27 +69,27 @@ look like that:
 
 Now everyone in the game will be wearing your custom skin!
 
-
 ## Changing the mod's text
 
 Finally, if the mod's text doesn't suit you, or if you want to translate
-it to another language, you can! 
+it to another language, you can!
 
 > Note that french is already supported by default, so no need to translate
 > to it.
-{style=tip}
+> {style=tip}
 
 First, create a new folder in the `molehunt` folder named `lang`, then create
 a `en_us.json` file.
 
 > If you want to target another language, name the file according to your language
 > and region. For example: `fr_fr.json` for French in France.
-{style=note}
+> {style=note}
 
 Now copy the content of the [default `en_us.json` file](#default-en-us-json-language-file)
 in you language file, and start editing the lines you want to change!
 
 Finally, your file structure should look like that:
+
 ```
 ...
 📁 assets
@@ -98,15 +99,16 @@ Finally, your file structure should look like that:
         └── 📄 en_pt.json
         └── etc.
 ```
+
 (You can have only one, or multiple language files, it doesn't matter)
 
-[Minecraft formatting codes](https://minecraft.wiki/w/Formatting_codes) are 
+[Minecraft formatting codes](https://minecraft.wiki/w/Formatting_codes) are
 supported in `titles` and `subtitles`.
-
 
 ## Final file tree, and installing your resource pack
 
 If you followed every step of this tutorial, the final resource pack should look like this:
+
 ```
 📁 MyAwesomeResourcePack
 ├── 📄 pack.mcmeta
@@ -121,21 +123,20 @@ If you followed every step of this tutorial, the final resource pack should look
             └── etc.
 ```
 
-To install it on your client, simply put your awesome resource pack in the `resourcepacks` folder 
+To install it on your client, simply put your awesome resource pack in the `resourcepacks` folder
 of [your `.minecraft` folder](https://minecraft.wiki/w/.minecraft).
 
 If you want, you can zip it to make sharing it easier, but it is not required.
-
 
 ## Default `en_us.json` language file
 
 Here's the default `en_us.json` file. You can use it as a template to
 customize the mod's text lines.
 
-> The weird `§` and the character after it corresponds to a minecraft 
-> formatting code. It can change the text's color and format. You can 
-> learn more [on the wiki](https://minecraft.wiki/w/Formatting_codes). 
-{style=tip}
+> The weird `§` and the character after it corresponds to a minecraft
+> formatting code. It can change the text's color and format. You can
+> learn more [on the wiki](https://minecraft.wiki/w/Formatting_codes).
+> {style=tip}
 
 ```json
 {
