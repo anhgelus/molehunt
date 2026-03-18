@@ -67,9 +67,9 @@ public class Game {
             timer.dds_runTask(new TickTask(() -> worldBorder.interpolateSize(
                     Molehunt.CONFIG.getInitialWorldSize(),
                     Molehunt.CONFIG.getFinalWorldSize(),
-                    (long) (Molehunt.CONFIG.getGameDuration() - Molehunt.CONFIG.getBorderShrinkingStartingTimeOffset()) * 60 * 1000,
+                    (Molehunt.CONFIG.getGameDuration() - Molehunt.CONFIG.getBorderShrinkingStartingTimeOffset()) * 60 * 20L,
                     0L
-            ), (long) Molehunt.CONFIG.getBorderShrinkingStartingTimeOffset() * 60 * 1000));
+            ), Molehunt.CONFIG.getBorderShrinkingStartingTimeOffset() * 60 * 20L));
         }
 
         final var title = new TitleS2CPacket(Text.translatable("molehunt.game.start.suspense"));
@@ -114,8 +114,8 @@ public class Game {
                 });
                 playerManager.sendToAll(timing);
                 if (remaining == 0) end();
-            }, 5 * 1000, 1000));
-        }, 4 * 1000));
+            }, 5 * 20, 20));
+        }, 4 * 20));
     }
 
     public void stop() {
@@ -150,7 +150,7 @@ public class Game {
             pm.sendToAll(winner);
             pm.sendToAll(timing);
             moles.clear();
-        }, 4 * 1000));
+        }, 4 * 20));
     }
 
     public Text getRemainingText() {
