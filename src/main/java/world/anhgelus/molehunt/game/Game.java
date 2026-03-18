@@ -22,6 +22,7 @@ import world.anhgelus.molehunt.utils.TimeUtils;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Game {
 
@@ -157,17 +158,19 @@ public class Game {
 		return Text.of("§c" + TimeUtils.generateShortString(remaining));
 	}
 
-	public List<ServerPlayerEntity> getMoles() {
+	private Stream<ServerPlayerEntity> getMoles() {
 		return moles.stream()
 			.map(uuid -> server.getPlayerManager().getPlayer(uuid))
 			.filter(Objects::nonNull)
-			.filter(p -> !p.isSpectator())
-			.toList();
+			.filter(p -> !p.isSpectator() && !p.isCreative());
+	}
+
+	public int getMolesCount() {
+		return getMoles().toArray().length;
 	}
 
 	public String getMolesAsString() {
-		return getMoles().stream()
-			.map(PlayerEntity::getDisplayName)
+		return getMoles().map(PlayerEntity::getDisplayName)
 			.filter(Objects::nonNull)
 			.map(Object::toString)
 			.collect(Collectors.joining(", "));
@@ -178,7 +181,8 @@ public class Game {
 	}
 
 	public boolean wonByMoles() {
-		return new HashSet<>(moles).containsAll(
+		final var moles = getMoles().map(PlayerEntity::getUuid).toList();
+		return !moles.isEmpty() && new HashSet<>(moles).containsAll(
 			server.getPlayerManager()
 				.getPlayerList()
 				.stream()
@@ -195,6 +199,6 @@ public class Game {
 	private void changeState(boolean hasStarted) {
 		started = hasStarted;
 		final var payload = new GamePayload(hasStarted);
-		server.getPlayerManager().getPlayerList().forEach(p -> ServerPlayNetworking.send(p, payload));
+		server.getPlayerManager().sendToAll(ServerPlayNetworking.createS2CPacket(payload));
 	}
 }

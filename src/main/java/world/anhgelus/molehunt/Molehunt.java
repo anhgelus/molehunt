@@ -166,13 +166,13 @@ public class Molehunt implements ModInitializer {
 						false);
 				} else if (player.isSpectator()) {
 					source.sendFeedback(
-						() -> Text.translatable("commands.molehunt.role.survivor.mole_count", game.getMoles().size()),
+						() -> Text.translatable("commands.molehunt.role.survivor.mole_count", game.getMolesCount()),
 						false);
 				} else {
 					source.sendFeedback(
 						() -> Text.translatable("commands.molehunt.role.survivor")
 							.append("\n\n")
-							.append(Text.translatable("commands.molehunt.role.survivor.mole_count", game.getMoles().size())),
+							.append(Text.translatable("commands.molehunt.role.survivor.mole_count", game.getMolesCount())),
 						false);
 				}
 
